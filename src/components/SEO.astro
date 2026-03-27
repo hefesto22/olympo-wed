@@ -1,0 +1,211 @@
+---
+// src/components/SEO.astro
+// Uso: <SEO title="..." description="..." breadcrumbs={[...]} faq={[...]} />
+
+interface BreadcrumbItem {
+  name: string;
+  url:  string;
+}
+
+interface FAQItem {
+  question: string;
+  answer:   string;
+}
+
+interface Props {
+  title:        string;
+  description?: string;
+  image?:       string;
+  type?:        'website' | 'article';
+  canonical?:   string;
+  noindex?:     boolean;
+  breadcrumbs?: BreadcrumbItem[];
+  faq?:         FAQItem[];
+}
+
+const SITE_URL  = 'https://olympohn.com';
+const SITE_NAME = 'Olympo Code';
+const DEFAULT_DESC = 'Empresa de desarrollo de software en Santa Rosa de Copán, Honduras. Sistemas a medida, apps móviles, POS, ERP, CRM, automatizaciones e infraestructura cloud para empresas hondureñas.';
+const DEFAULT_IMG  = `${SITE_URL}/og-image.webp`;
+
+const {
+  title,
+  description = DEFAULT_DESC,
+  image       = DEFAULT_IMG,
+  type        = 'website',
+  canonical   = Astro.url.href,
+  noindex     = false,
+  breadcrumbs = [],
+  faq         = [],
+} = Astro.props;
+
+const fullTitle = title.includes('Olympo') ? title : `${title} — ${SITE_NAME}`;
+
+// ── Schema principal ──
+const graphItems: Record<string, any>[] = [
+  {
+    '@type':       ['Organization', 'LocalBusiness', 'ProfessionalService'],
+    '@id':         `${SITE_URL}/#organization`,
+    name:          SITE_NAME,
+    alternateName: ['Olympo', 'Olympo Honduras', 'Grupo Olympo'],
+    url:           SITE_URL,
+    logo: {
+      '@type':    'ImageObject',
+      url:        `${SITE_URL}/logo.webp`,
+      width:      200,
+      height:     64,
+    },
+    image:         DEFAULT_IMG,
+    description:   DEFAULT_DESC,
+    telephone:     '+50433012826',
+    email:         'info@olympohn.com',
+    foundingDate:  '2020',
+    currenciesAccepted: 'HNL, USD',
+    paymentAccepted:    'Transferencia bancaria, Efectivo',
+    areaServed: [
+      { '@type': 'City',              name: 'Santa Rosa de Copán' },
+      { '@type': 'AdministrativeArea', name: 'Copán' },
+      { '@type': 'Country',           name: 'Honduras' },
+      { '@type': 'AdministrativeArea', name: 'América Central' },
+    ],
+    priceRange: '$$',
+    address: {
+      '@type':           'PostalAddress',
+      streetAddress:     'Santa Rosa de Copán',
+      addressLocality:   'Santa Rosa de Copán',
+      addressRegion:     'Copán',
+      addressCountry:    'HN',
+      postalCode:        '41101',
+    },
+    geo: {
+      '@type':     'GeoCoordinates',
+      latitude:    14.7667,
+      longitude:   -88.7833,
+    },
+    sameAs: [
+      'https://github.com/olympo-code',
+      'https://www.linkedin.com/company/olympo-code',
+    ],
+    knowsAbout: [
+      'Desarrollo de Software',
+      'Desarrollo de Software Honduras',
+      'Software a medida',
+      'Aplicaciones Móviles',
+      'Sistemas POS',
+      'Sistemas ERP',
+      'Sistemas CRM',
+      'APIs e Integraciones',
+      'Automatizaciones N8N',
+      'Infraestructura Cloud',
+      'Consultoría IT',
+      'Laravel', 'React', 'Node.js', 'PostgreSQL', 'Docker',
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name:    'Servicios de Desarrollo de Software en Honduras',
+      itemListElement: [
+        { '@type': 'Offer', name: 'Software a Medida — POS, ERP, CRM',   url: `${SITE_URL}/servicios#software-medida` },
+        { '@type': 'Offer', name: 'Aplicaciones Móviles iOS y Android',   url: `${SITE_URL}/servicios#apps-moviles` },
+        { '@type': 'Offer', name: 'APIs e Integraciones',                 url: `${SITE_URL}/servicios#apis-integraciones` },
+        { '@type': 'Offer', name: 'Automatizaciones N8N y Make',          url: `${SITE_URL}/servicios#automatizaciones` },
+        { '@type': 'Offer', name: 'Infraestructura y Servidores Cloud',   url: `${SITE_URL}/servicios#infraestructura` },
+        { '@type': 'Offer', name: 'Consultoría IT y Arquitectura',        url: `${SITE_URL}/servicios#consultoria` },
+      ],
+    },
+  },
+  {
+    '@type':    'WebSite',
+    '@id':      `${SITE_URL}/#website`,
+    url:        SITE_URL,
+    name:       SITE_NAME,
+    description: DEFAULT_DESC,
+    publisher:  { '@id': `${SITE_URL}/#organization` },
+    inLanguage: 'es-HN',
+  },
+  {
+    '@type':       'WebPage',
+    '@id':         `${canonical}#webpage`,
+    url:           canonical,
+    name:          fullTitle,
+    description:   description,
+    isPartOf:      { '@id': `${SITE_URL}/#website` },
+    about:         { '@id': `${SITE_URL}/#organization` },
+    inLanguage:    'es-HN',
+    dateModified:  new Date().toISOString().split('T')[0],
+  },
+];
+
+// ── Breadcrumbs schema ──
+if (breadcrumbs.length > 0) {
+  graphItems.push({
+    '@type':          'BreadcrumbList',
+    '@id':            `${canonical}#breadcrumb`,
+    itemListElement:  breadcrumbs.map((item, i) => ({
+      '@type':  'ListItem',
+      position: i + 1,
+      name:     item.name,
+      item:     item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url}`,
+    })),
+  });
+}
+
+// ── FAQ schema ──
+if (faq.length > 0) {
+  graphItems.push({
+    '@type':      'FAQPage',
+    '@id':        `${canonical}#faq`,
+    mainEntity:   faq.map(item => ({
+      '@type': 'Question',
+      name:    item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:    item.answer,
+      },
+    })),
+  });
+}
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph':   graphItems,
+};
+---
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta name="title"       content={fullTitle} />
+<meta name="description" content={description} />
+<meta name="robots"      content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+<meta name="author"      content={SITE_NAME} />
+<meta name="keywords"    content="desarrollo de software Honduras, desarrollo de software Copán, desarrollo de software Santa Rosa de Copán, empresa de software Honduras, software a medida Honduras, software a medida Copán, sistema POS Honduras, sistema POS Santa Rosa de Copán, sistema ERP Honduras, sistema CRM Honduras, apps móviles Honduras, aplicaciones móviles Copán, desarrollo web Honduras, automatizaciones N8N Honduras, consultoría IT Honduras, empresa tecnología Copán, programadores Honduras, Olympo Code, olympohn" />
+<link rel="canonical"    href={canonical} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type"         content={type} />
+<meta property="og:url"          content={canonical} />
+<meta property="og:title"        content={fullTitle} />
+<meta property="og:description"  content={description} />
+<meta property="og:image"        content={image} />
+<meta property="og:image:width"  content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt"    content={fullTitle} />
+<meta property="og:site_name"    content={SITE_NAME} />
+<meta property="og:locale"       content="es_HN" />
+
+<!-- Twitter -->
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:url"         content={canonical} />
+<meta name="twitter:title"       content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image"       content={image} />
+
+<!-- Geo targeting Honduras -->
+<meta name="geo.region"       content="HN-CP" />
+<meta name="geo.placename"    content="Santa Rosa de Copán, Copán, Honduras" />
+<meta name="geo.position"     content="14.7667;-88.7833" />
+<meta name="ICBM"             content="14.7667, -88.7833" />
+<meta name="language"         content="Spanish" />
+<meta name="content-language" content="es-HN" />
+
+<!-- JSON-LD Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

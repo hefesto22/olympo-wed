@@ -1,0 +1,215 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const regions = [
+  { name: 'Copán', desc: 'Santa Rosa de Copán, Copán Ruinas, La Entrada' },
+  { name: 'San Pedro Sula', desc: 'Zona industrial y comercial del norte' },
+  { name: 'Tegucigalpa', desc: 'Capital y zona metropolitana' },
+  { name: 'La Ceiba', desc: 'Costa atlántica y turismo' },
+  { name: 'Comayagua', desc: 'Centro logístico del país' },
+  { name: 'Occidente', desc: 'Lempira, Ocotepeque, Santa Bárbara' },
+];
+
+const faqs = [
+  {
+    question: '¿Cuál es la mejor empresa de desarrollo de software en Honduras?',
+    answer: 'Olympo Code es una empresa de desarrollo de software con sede en Santa Rosa de Copán que trabaja con clientes en todo Honduras. Nos especializamos en software a medida, apps móviles, sistemas POS, ERP, CRM, automatizaciones e infraestructura cloud con calidad internacional y precios competitivos.'
+  },
+  {
+    question: '¿Cuánto cuesta desarrollar una app o sistema en Honduras?',
+    answer: 'Los costos dependen del alcance y complejidad del proyecto. Un sistema POS puede comenzar desde $1,000 USD, mientras que una app móvil completa puede ir desde $3,000 USD. Ofrecemos una consulta gratuita donde analizamos tu caso y te damos un presupuesto detallado.'
+  },
+  {
+    question: '¿Puedo contratar desarrollo de software desde cualquier ciudad de Honduras?',
+    answer: 'Sí. Aunque nuestra oficina está en Santa Rosa de Copán, trabajamos con clientes en Tegucigalpa, San Pedro Sula, La Ceiba, Comayagua y todo el país. Usamos herramientas de colaboración remota y ofrecemos reuniones virtuales.'
+  },
+  {
+    question: '¿Qué tecnologías usan para desarrollar software?',
+    answer: 'Trabajamos con tecnologías modernas y probadas: Laravel y Node.js para backend, React y React Native para frontend y apps móviles, PostgreSQL para bases de datos, Docker para infraestructura, y N8N para automatizaciones. Elegimos la tecnología que mejor se adapte a tu proyecto.'
+  },
+  {
+    question: '¿Hacen desarrollo web además de software a medida?',
+    answer: 'Sí. Además de sistemas complejos como ERP y CRM, también desarrollamos sitios web corporativos, landing pages, plataformas e-commerce y portales web con las mejores prácticas de rendimiento y SEO.'
+  },
+];
+---
+
+<Layout
+  title="Desarrollo de Software en Honduras | Empresa de Tecnología — Olympo Code"
+  description="Empresa hondureña de desarrollo de software. Apps móviles, sistemas POS, ERP, CRM, automatizaciones e infraestructura cloud para empresas en Honduras. Sede en Copán con cobertura nacional."
+  breadcrumbs={[
+    { name: 'Inicio', url: '/' },
+    { name: 'Desarrollo de Software en Honduras', url: '/desarrollo-software-honduras' },
+  ]}
+  faq={faqs}
+>
+
+<div class="geo-page">
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="geo-hero">
+      <p class="label-tag">Honduras, Centroamérica</p>
+      <h1 class="geo-title">
+        Desarrollo de Software<br/>
+        <span class="geo-em">en Honduras</span>
+      </h1>
+      <p class="geo-lead">
+        Olympo Code es una empresa hondureña de desarrollo de software.
+        Construimos sistemas a medida, aplicaciones móviles, automatizaciones y soluciones cloud
+        para empresas en todo el país — desde PYMEs locales hasta empresas con operaciones nacionales.
+      </p>
+      <div class="geo-actions">
+        <a href="/contacto" class="btn btn-primary">Solicitar consulta gratis</a>
+        <a href="/servicios" class="btn btn-secondary">Ver servicios →</a>
+      </div>
+    </div>
+
+    <!-- Cobertura nacional -->
+    <section class="geo-regions">
+      <h2 class="geo-section-title">Cobertura en todo Honduras</h2>
+      <div class="geo-regions-grid">
+        {regions.map(r => (
+          <div class="geo-region-card">
+            <h3>{r.name}</h3>
+            <p>{r.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Servicios -->
+    <section class="geo-services-list">
+      <h2 class="geo-section-title">Soluciones de software para empresas hondureñas</h2>
+      <div class="geo-svc-grid">
+        <div class="geo-svc-item">
+          <h3>Software a medida</h3>
+          <p>Sistemas POS, ERP, CRM y plataformas diseñadas específicamente para tu negocio. No vendemos software genérico — construimos lo que necesitas.</p>
+          <a href="/servicios#software-medida">Más información →</a>
+        </div>
+        <div class="geo-svc-item">
+          <h3>Aplicaciones móviles</h3>
+          <p>Apps nativas para iOS y Android con React Native y Flutter. Desde apps de delivery hasta plataformas de gestión empresarial móvil.</p>
+          <a href="/servicios#apps-moviles">Más información →</a>
+        </div>
+        <div class="geo-svc-item">
+          <h3>Automatizaciones</h3>
+          <p>Eliminamos procesos manuales con flujos automáticos usando N8N y Make. Ahorra tiempo y reduce errores en tu operación diaria.</p>
+          <a href="/servicios#automatizaciones">Más información →</a>
+        </div>
+        <div class="geo-svc-item">
+          <h3>Infraestructura cloud</h3>
+          <p>Servidores, Docker, CI/CD, SSL y monitoreo 24/7. Tu sistema siempre disponible, seguro y escalable cuando tu negocio crezca.</p>
+          <a href="/servicios#infraestructura">Más información →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diferenciadores -->
+    <section class="geo-diff">
+      <h2 class="geo-section-title">¿Por qué Olympo Code?</h2>
+      <div class="geo-diff-grid">
+        <div class="geo-diff-item">
+          <span class="geo-diff-num">01</span>
+          <h3>Empresa 100% hondureña</h3>
+          <p>Entendemos el mercado local, las regulaciones fiscales y la realidad de hacer negocios en Honduras.</p>
+        </div>
+        <div class="geo-diff-item">
+          <span class="geo-diff-num">02</span>
+          <h3>Calidad internacional</h3>
+          <p>Usamos las mismas tecnologías y metodologías que empresas en Silicon Valley, adaptadas al contexto centroamericano.</p>
+        </div>
+        <div class="geo-diff-item">
+          <span class="geo-diff-num">03</span>
+          <h3>Precios competitivos</h3>
+          <p>Desarrollo profesional a precios accesibles. Sin intermediarios ni sobrecostos innecesarios.</p>
+        </div>
+        <div class="geo-diff-item">
+          <span class="geo-diff-num">04</span>
+          <h3>Soporte continuo</h3>
+          <p>No desaparecemos después de entregar. Ofrecemos mantenimiento, monitoreo y evolución continua de tu sistema.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="geo-faq">
+      <h2 class="geo-section-title">Preguntas frecuentes</h2>
+      <div class="geo-faq-list">
+        {faqs.map(f => (
+          <details class="geo-faq-item">
+            <summary class="geo-faq-q">{f.question}</summary>
+            <p class="geo-faq-a">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="geo-cta">
+      <h2 class="geo-cta-title">Tu próximo proyecto empieza con una conversación</h2>
+      <p class="geo-cta-desc">Consulta inicial gratuita. Cuéntanos qué necesitas y te respondemos con un plan técnico claro y sin compromiso.</p>
+      <div class="geo-actions">
+        <a href="/contacto" class="btn btn-primary">Iniciar proyecto</a>
+        <a href="https://wa.me/50433012826" class="btn btn-whatsapp" target="_blank" rel="noopener nofollow">WhatsApp →</a>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+</Layout>
+
+<style>
+  .geo-page { padding: 5rem 0 7rem; }
+
+  .geo-hero {
+    text-align: center; max-width: 680px; margin: 0 auto 5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  }
+  .geo-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.08; color: var(--text-1); }
+  .geo-em { background: linear-gradient(115deg, #f0d080, #c8a040 40%, #e8b860 70%, #9a6a28); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .geo-lead { font-size: 0.95rem; color: var(--text-2); line-height: 1.75; font-weight: 300; max-width: 560px; }
+  .geo-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
+  .geo-section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.03em; color: var(--text-1); text-align: center; margin-bottom: 2.5rem; }
+
+  /* Regions */
+  .geo-regions { margin-bottom: 5rem; }
+  .geo-regions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .geo-region-card { padding: 1.25rem; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-1); text-align: center; transition: border-color 0.2s ease; }
+  .geo-region-card:hover { border-color: var(--border-gold); }
+  .geo-region-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.25rem; }
+  .geo-region-card p { font-size: 0.75rem; color: var(--text-3); }
+
+  /* Services */
+  .geo-services-list { margin-bottom: 5rem; }
+  .geo-svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .geo-svc-item { padding: 1.75rem; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-1); transition: border-color 0.2s ease; }
+  .geo-svc-item:hover { border-color: var(--border-gold); }
+  .geo-svc-item h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.5rem; }
+  .geo-svc-item p { font-size: 0.82rem; color: var(--text-2); line-height: 1.7; font-weight: 300; margin-bottom: 1rem; }
+  .geo-svc-item a { font-size: 0.78rem; color: var(--gold); font-weight: 500; }
+
+  /* Differentiators */
+  .geo-diff { margin-bottom: 5rem; }
+  .geo-diff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+  .geo-diff-item { padding: 1.5rem; }
+  .geo-diff-num { font-size: 0.7rem; font-family: var(--font-mono); color: var(--gold); letter-spacing: 0.05em; }
+  .geo-diff-item h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin: 0.35rem 0 0.5rem; }
+  .geo-diff-item p { font-size: 0.82rem; color: var(--text-2); line-height: 1.7; font-weight: 300; }
+
+  /* FAQ */
+  .geo-faq { margin-bottom: 5rem; max-width: 720px; margin-left: auto; margin-right: auto; }
+  .geo-faq-list { display: flex; flex-direction: column; }
+  .geo-faq-item { border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
+  .geo-faq-q { font-size: 0.9rem; font-weight: 500; color: var(--text-1); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  .geo-faq-q::-webkit-details-marker { display: none; }
+  .geo-faq-q::after { content: '+'; font-size: 1.2rem; color: var(--text-3); flex-shrink: 0; margin-left: 1rem; }
+  details[open] .geo-faq-q::after { content: '−'; }
+  .geo-faq-a { font-size: 0.82rem; color: var(--text-2); line-height: 1.75; font-weight: 300; margin-top: 0.75rem; padding-right: 2rem; }
+
+  /* CTA */
+  .geo-cta { text-align: center; padding: 3rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-1); }
+  .geo-cta-title { font-size: 1.5rem; font-weight: 700; color: var(--text-1); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .geo-cta-desc { font-size: 0.85rem; color: var(--text-2); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+</style>

@@ -1,0 +1,72 @@
+---
+// src/components/Ticker.astro
+
+const items = [
+  'Software a Medida',
+  'Apps Móviles',
+  'APIs e Integraciones',
+  'Automatizaciones N8N',
+  'Consultoría IT',
+  'Infraestructura',
+  'Bases de Datos',
+  'SEO Técnico',
+];
+
+// Triplicamos para que el loop sea continuo sin saltos
+const tickerItems = [...items, ...items, ...items];
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    {tickerItems.map(s => (
+      <span class="ticker-item">
+        <span class="ticker-gem">✦</span>
+        {s}
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+.ticker {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  padding: 0.7rem 0;
+  background: var(--bg-1);
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 44s linear infinite;
+}
+
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0 2rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--text-3);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  transition: color var(--transition);
+}
+
+.ticker-item:hover {
+  color: var(--text-2);
+}
+
+.ticker-gem {
+  color: var(--gold);
+  font-size: 0.5rem;
+  opacity: 0.45;
+}
+</style>

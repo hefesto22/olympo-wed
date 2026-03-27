@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Bloquear rutas innecesarias
+Disallow: /api/
+Disallow: /_astro/
+
+# Páginas en construcción
+Disallow: /nosotros
+Disallow: /portafolio
+Disallow: /blog
+
+# Sitemap
+Sitemap: https://olympohn.com/sitemap-index.xml

@@ -1,0 +1,847 @@
+---
+// src/components/Services.astro
+---
+
+<section class="section svc-section" id="servicios">
+    <div class="container">
+      <div class="svc-header">
+        <div>
+          <p class="label-tag">Servicios</p>
+          <h2 class="section-h2">Todo lo que necesitas<br/>en un solo equipo.</h2>
+        </div>
+        <div class="svc-nav">
+          <button class="svc-nav-btn" id="svc-prev" aria-label="Anterior">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="svc-nav-btn" id="svc-next" aria-label="Siguiente">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Carrusel — full width con overflow -->
+    <div class="svc-carousel-wrapper">
+      <div class="svc-carousel" id="svc-carousel">
+  
+        <!-- 01 Software a Medida -->
+        <div class="svc-card">
+          <div class="svc-card-top">
+            <div class="svc-card-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="1.5" y="1.5" width="17" height="17" rx="3.5" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M6 7l-3 3 3 3M14 7l3 3-3 3M12 5l-4 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="svc-card-title">Software a Medida</h3>
+            <button class="svc-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="svc-card-desc">Tu operación en código. POS, ERP y CRM construidos desde cero — sin plantillas. Código que crece contigo y te pertenece desde el día uno.</p>
+          <div class="svc-card-preview svc-preview-code">
+            <div class="code-window">
+              <div class="code-bar">
+                <span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+                <span class="code-filename">pos.controller.ts</span>
+              </div>
+              <div class="code-body">
+                <div class="code-line"><span class="c-purple">import</span> <span class="c-white">&#123; Controller &#125;</span> <span class="c-purple">from</span> <span class="c-gold">'@nestjs/common'</span></div>
+                <div class="code-line"><span class="c-purple">import</span> <span class="c-white">&#123; SaleService &#125;</span> <span class="c-purple">from</span> <span class="c-gold">'./sale.service'</span></div>
+                <div class="code-line">&nbsp;</div>
+                <div class="code-line"><span class="c-blue">@Controller</span><span class="c-white">(</span><span class="c-gold">'sales'</span><span class="c-white">)</span></div>
+                <div class="code-line"><span class="c-purple">export class</span> <span class="c-blue">PosController</span> <span class="c-white">&#123;</span></div>
+                <div class="code-line">&nbsp;&nbsp;<span class="c-blue">@Get</span><span class="c-white">(</span><span class="c-gold">'today'</span><span class="c-white">)</span></div>
+                <div class="code-line">&nbsp;&nbsp;<span class="c-green">getTodaySales</span><span class="c-white">() &#123;</span></div>
+                <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-purple">return</span> <span class="c-white">this.saleService.</span><span class="c-green">findToday</span><span class="c-white">()</span></div>
+                <div class="code-line">&nbsp;&nbsp;<span class="c-white">&#125;</span></div>
+                <div class="code-line"><span class="c-white">&#125;</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="svc-card-chips">
+            <span>Laravel</span><span>React</span><span>Node.js</span><span>PostgreSQL</span><span>Docker</span>
+          </div>
+        </div>
+  
+        <!-- 02 Apps Móviles -->
+        <div class="svc-card">
+          <div class="svc-card-top">
+            <div class="svc-card-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="5.5" y="1.5" width="9" height="17" rx="2.5" stroke="currentColor" stroke-width="1.4"/>
+                <circle cx="10" cy="15.5" r="0.8" fill="currentColor"/>
+                <path d="M8.5 4h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="svc-card-title">Apps Móviles</h3>
+            <button class="svc-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="svc-card-desc">De la idea a la App Store. Apps nativas y multiplataforma que tus clientes van a querer usar. Diseño, desarrollo y publicación en un solo equipo.</p>
+          <div class="svc-card-preview svc-preview-mobile">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-bar">
+                  <span class="phone-time">9:41</span>
+                  <div class="phone-icons">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 7l2-4 2 3 1.5-2 2.5 3" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                </div>
+                <div class="phone-content">
+                  <div class="phone-card">
+                    <div class="phone-label">Ventas hoy</div>
+                    <div class="phone-amount">L 12,480</div>
+                    <div class="phone-up">↑ 8%</div>
+                  </div>
+                  <div class="phone-list">
+                    <div class="phone-item"><span class="phone-dot gold"></span><span>Pedido #142</span><span>L 840</span></div>
+                    <div class="phone-item"><span class="phone-dot green"></span><span>Pedido #141</span><span>L 320</span></div>
+                    <div class="phone-item"><span class="phone-dot gold"></span><span>Pedido #140</span><span>L 1,200</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-frame phone-back">
+              <div class="phone-screen phone-screen-back"></div>
+            </div>
+          </div>
+          <div class="svc-card-chips">
+            <span>React Native</span><span>Flutter</span><span>iOS</span><span>Android</span>
+          </div>
+        </div>
+  
+        <!-- 03 APIs e Integraciones -->
+        <div class="svc-card">
+          <div class="svc-card-top">
+            <div class="svc-card-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="4" cy="10" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+                <circle cx="16" cy="4" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+                <circle cx="16" cy="16" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M6.5 10h4m0 0V6m0 4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="svc-card-title">APIs e Integraciones</h3>
+            <button class="svc-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="svc-card-desc">Tus sistemas hablando entre sí. Conectamos pasarelas de pago, ERPs y servicios externos en flujos confiables. Sin datos perdidos, sin procesos manuales.</p>
+          <div class="svc-card-preview svc-preview-api">
+            <div class="api-flow">
+              <div class="api-node api-node-main">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/></svg>
+                Tu Sistema
+              </div>
+              <div class="api-connector">
+                <div class="api-line"></div>
+                <div class="api-pulse"></div>
+                <span class="api-badge">REST</span>
+              </div>
+              <div class="api-nodes-col">
+                <div class="api-node api-node-sm">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.1"/><path d="M6 3.5V6l1.5 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+                  Stripe
+                </div>
+                <div class="api-node api-node-sm">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.1"/><path d="M3.5 6h5M6 3.5v5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+                  SAP ERP
+                </div>
+                <div class="api-node api-node-sm">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 8.5L4 3l2.5 4 1.5-2L10 8.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Analytics
+                </div>
+              </div>
+            </div>
+            <div class="api-log">
+              <div class="log-line"><span class="log-ok">200</span> POST /api/payment</div>
+              <div class="log-line"><span class="log-ok">200</span> GET /api/inventory</div>
+              <div class="log-line"><span class="log-ok">201</span> POST /api/order</div>
+              <div class="log-line log-dim"><span class="log-pending">···</span> Syncing ERP</div>
+            </div>
+          </div>
+          <div class="svc-card-chips">
+            <span>REST</span><span>GraphQL</span><span>Webhooks</span><span>OAuth</span>
+          </div>
+        </div>
+  
+        <!-- 04 Automatizaciones -->
+        <div class="svc-card">
+          <div class="svc-card-top">
+            <div class="svc-card-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10a6 6 0 0 1 6-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M16 10a6 6 0 0 1-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M10 4l2 2-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 16l-2-2 2-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="svc-card-title">Automatizaciones N8N</h3>
+            <button class="svc-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="svc-card-desc">Tu equipo libre del trabajo repetitivo. Flujos automáticos que conectan herramientas, eliminan errores humanos y ejecutan tareas mientras duermes.</p>
+          <div class="svc-card-preview svc-preview-automation">
+            <div class="flow-nodes">
+              <div class="flow-node flow-trigger">
+                <span class="flow-icon">⚡</span>
+                <span>Trigger</span>
+              </div>
+              <div class="flow-arrow-down"></div>
+              <div class="flow-row">
+                <div class="flow-node flow-action">
+                  <span class="flow-icon">📧</span>
+                  <span>Email</span>
+                </div>
+                <div class="flow-node flow-action">
+                  <span class="flow-icon">📊</span>
+                  <span>Sheet</span>
+                </div>
+                <div class="flow-node flow-action">
+                  <span class="flow-icon">💬</span>
+                  <span>Slack</span>
+                </div>
+              </div>
+              <div class="flow-arrow-down"></div>
+              <div class="flow-node flow-done">
+                <span class="flow-icon">✓</span>
+                <span>Completado</span>
+              </div>
+            </div>
+            <div class="flow-stats">
+              <div class="flow-stat">
+                <span class="flow-stat-val">2,840</span>
+                <span class="flow-stat-label">ejecuciones/mes</span>
+              </div>
+              <div class="flow-stat">
+                <span class="flow-stat-val">98%</span>
+                <span class="flow-stat-label">sin errores</span>
+              </div>
+            </div>
+          </div>
+          <div class="svc-card-chips">
+            <span>N8N</span><span>Make</span><span>Zapier</span><span>Scripts</span>
+          </div>
+        </div>
+  
+        <!-- 05 Infraestructura -->
+        <div class="svc-card">
+          <div class="svc-card-top">
+            <div class="svc-card-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="1.5" y="3.5" width="17" height="4.5" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+                <rect x="1.5" y="12" width="17" height="4.5" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+                <circle cx="15.5" cy="5.75" r="0.9" fill="currentColor"/>
+                <circle cx="15.5" cy="14.25" r="0.9" fill="currentColor"/>
+                <circle cx="13" cy="5.75" r="0.9" fill="currentColor"/>
+                <circle cx="13" cy="14.25" r="0.9" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="svc-card-title">Infraestructura</h3>
+            <button class="svc-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="svc-card-desc">Tu negocio no puede darse el lujo de caerse. Configuramos servidores locales y cloud con monitoreo, backups automáticos y uptime como prioridad.</p>
+          <div class="svc-card-preview svc-preview-infra">
+            <div class="infra-monitor">
+              <div class="infra-row">
+                <span class="infra-label">CPU</span>
+                <div class="infra-bar-track"><div class="infra-bar" style="width:34%"></div></div>
+                <span class="infra-val">34%</span>
+              </div>
+              <div class="infra-row">
+                <span class="infra-label">RAM</span>
+                <div class="infra-bar-track"><div class="infra-bar" style="width:61%"></div></div>
+                <span class="infra-val">61%</span>
+              </div>
+              <div class="infra-row">
+                <span class="infra-label">DISK</span>
+                <div class="infra-bar-track"><div class="infra-bar" style="width:48%"></div></div>
+                <span class="infra-val">48%</span>
+              </div>
+              <div class="infra-row">
+                <span class="infra-label">NET</span>
+                <div class="infra-bar-track"><div class="infra-bar infra-bar-green" style="width:22%"></div></div>
+                <span class="infra-val">22%</span>
+              </div>
+            </div>
+            <div class="infra-status">
+              <div class="infra-status-row">
+                <span class="status-dot green"></span>
+                <span>nginx — activo</span>
+              </div>
+              <div class="infra-status-row">
+                <span class="status-dot green"></span>
+                <span>postgres — activo</span>
+              </div>
+              <div class="infra-status-row">
+                <span class="status-dot green"></span>
+                <span>backup — 02:00 AM</span>
+              </div>
+              <div class="infra-uptime">
+                <span class="uptime-label">UPTIME</span>
+                <span class="uptime-val">99.97%</span>
+              </div>
+            </div>
+          </div>
+          <div class="svc-card-chips">
+            <span>Linux</span><span>Docker</span><span>Nginx</span><span>VPS</span>
+          </div>
+        </div>
+  
+        <!-- 06 Consultoría IT -->
+        <div class="svc-card">
+          <div class="svc-card-top">
+            <div class="svc-card-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M10 6.5v4.5l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="svc-card-title">Consultoría IT</h3>
+            <button class="svc-card-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="svc-card-desc">Claridad técnica para decisiones de negocio. Auditamos tus sistemas, identificamos cuellos de botella y diseñamos un roadmap técnico con sentido real.</p>
+          <div class="svc-card-preview svc-preview-consult">
+            <div class="roadmap">
+              <div class="roadmap-item roadmap-done">
+                <div class="roadmap-dot done"></div>
+                <div class="roadmap-content">
+                  <span class="roadmap-phase">Fase 1</span>
+                  <span class="roadmap-name">Auditoría de sistemas</span>
+                </div>
+                <span class="roadmap-tag done-tag">✓ Listo</span>
+              </div>
+              <div class="roadmap-line"></div>
+              <div class="roadmap-item roadmap-active">
+                <div class="roadmap-dot active"></div>
+                <div class="roadmap-content">
+                  <span class="roadmap-phase">Fase 2</span>
+                  <span class="roadmap-name">Diseño de arquitectura</span>
+                </div>
+                <span class="roadmap-tag active-tag">En curso</span>
+              </div>
+              <div class="roadmap-line"></div>
+              <div class="roadmap-item">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-content">
+                  <span class="roadmap-phase">Fase 3</span>
+                  <span class="roadmap-name">Implementación</span>
+                </div>
+                <span class="roadmap-tag">Q3 2025</span>
+              </div>
+            </div>
+          </div>
+          <div class="svc-card-chips">
+            <span>Auditoría</span><span>Roadmap</span><span>Arquitectura</span><span>DB</span>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  
+    <!-- Indicadores -->
+    <div class="container">
+      <div class="svc-dots" id="svc-dots"></div>
+    </div>
+  </section>
+  
+  <style>
+  .svc-section { overflow: hidden; }
+  
+  .svc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+  }
+  
+  /* Nav buttons */
+  .svc-nav { display: flex; gap: 0.5rem; }
+  @media (max-width: 640px) { .svc-nav { display: none; } }
+  .svc-nav-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: transparent; color: var(--text-2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .svc-nav-btn:hover {
+    border-color: var(--border-hover); color: var(--text-1);
+    background: var(--bg-2);
+  }
+  .svc-nav-btn:disabled {
+    opacity: 0.3; cursor: not-allowed;
+  }
+  
+  /* Carousel — contenido dentro del section, sin trucos de 100vw */
+  .svc-carousel-wrapper {
+    /* Extiende hasta el borde derecho de la pantalla,
+       pero respeta el margen izquierdo del container */
+    overflow: hidden;
+  }
+  
+  .svc-carousel {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1.5rem;
+    /* Fade-out sutil al final para indicar que hay más */
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    cursor: grab;
+    user-select: none;
+  }
+  .svc-carousel:active { cursor: grabbing; }
+  .svc-carousel::-webkit-scrollbar { display: none; }
+  
+  /* Cards */
+  .svc-card {
+    /* Desktop: 3 cards + peek del 4to */
+    flex: 0 0 calc((100% - 2 * 1.25rem) / 3.15);
+    scroll-snap-align: start;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg-1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color var(--transition-md), transform var(--transition-md);
+  }
+  /* Tablet: 2 cards + peek */
+  @media (max-width: 1024px) {
+    .svc-card { flex: 0 0 calc((100% - 1.25rem) / 2.1); }
+  }
+  /* Móvil: 1 card centrada + peek del siguiente */
+  @media (max-width: 640px) {
+    .svc-card {
+      flex: 0 0 88%;
+      scroll-snap-align: center;
+    }
+    .svc-carousel {
+      padding-left: 6%;
+      padding-right: 6%;
+      gap: 0.85rem;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+  
+  .svc-card::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0; transition: opacity var(--transition-md);
+  }
+  .svc-card:hover {
+    border-color: var(--border-gold);
+    transform: translateY(-3px);
+  }
+  .svc-card:hover::before { opacity: 1; }
+  
+  /* Card top row */
+  .svc-card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .svc-card-icon {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); flex-shrink: 0;
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .svc-card:hover .svc-card-icon {
+    background: rgba(200,169,110,0.1);
+    border-color: var(--border-gold);
+  }
+  .svc-card-title {
+    font-size: 0.9rem; font-weight: 600;
+    color: var(--text-1); letter-spacing: -0.01em;
+    flex: 1;
+  }
+  .svc-card-arrow {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: transparent; color: var(--text-3);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+    transition: all var(--transition);
+    opacity: 0; transform: scale(0.9);
+  }
+  .svc-card:hover .svc-card-arrow {
+    opacity: 1; transform: scale(1);
+    color: var(--gold); border-color: var(--border-gold);
+  }
+  
+  .svc-card-desc {
+    font-size: 0.78rem; color: var(--text-2);
+    line-height: 1.65; font-weight: 300;
+  }
+  
+  /* ── PREVIEW AREAS ── */
+  .svc-card-preview {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg-2);
+    min-height: 175px;
+    position: relative;
+  }
+  
+  /* Chips */
+  .svc-card-chips {
+    display: flex; gap: 0.3rem; flex-wrap: wrap;
+  }
+  .svc-card-chips span {
+    font-size: 0.58rem; font-family: var(--font-mono);
+    color: var(--text-3); border: 1px solid var(--border);
+    border-radius: 3px; padding: 0.15rem 0.45rem;
+    letter-spacing: 0.03em;
+    transition: border-color var(--transition), color var(--transition);
+  }
+  .svc-card:hover .svc-card-chips span {
+    border-color: var(--border-gold); color: var(--gold-dim);
+  }
+  
+  /* ── CODE PREVIEW ── */
+  .svc-preview-code { padding: 0; }
+  .code-window { height: 100%; display: flex; flex-direction: column; }
+  .code-bar {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-3);
+    border-bottom: 1px solid var(--border);
+  }
+  .code-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bg-4); }
+  .code-dot:nth-child(1) { background: #ff5f57; }
+  .code-dot:nth-child(2) { background: #febc2e; }
+  .code-dot:nth-child(3) { background: #28c840; }
+  .code-filename { font-size: 0.6rem; color: var(--text-3); font-family: var(--font-mono); margin-left: 0.25rem; }
+  .code-body { padding: 0.75rem; display: flex; flex-direction: column; gap: 0.15rem; }
+  .code-line { font-size: 0.65rem; font-family: var(--font-mono); white-space: nowrap; line-height: 1.6; }
+  .c-purple { color: #c792ea; }
+  .c-blue   { color: #82aaff; }
+  .c-green  { color: #c3e88d; }
+  .c-gold   { color: var(--gold); }
+  .c-white  { color: #d4d4d4; }
+  
+  /* ── MOBILE PREVIEW ── */
+  .svc-preview-mobile {
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem; gap: -0.5rem;
+    background: linear-gradient(135deg, var(--bg-2), var(--bg-3));
+  }
+  .phone-frame {
+    width: 110px;
+    border: 1.5px solid var(--border-hover);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg-0);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    position: relative; z-index: 2;
+  }
+  .phone-back {
+    position: absolute; right: 1.5rem;
+    transform: rotate(6deg) scale(0.9);
+    z-index: 1; opacity: 0.5;
+  }
+  .phone-screen { padding: 0.5rem; }
+  .phone-screen-back { height: 180px; background: var(--bg-3); }
+  .phone-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .phone-time { font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-2); }
+  .phone-icons { color: var(--text-3); }
+  .phone-card {
+    background: rgba(200,169,110,0.08); border: 1px solid var(--border-gold);
+    border-radius: 8px; padding: 0.5rem; margin-bottom: 0.4rem;
+  }
+  .phone-label { font-size: 0.5rem; color: var(--text-3); font-family: var(--font-mono); text-transform: uppercase; }
+  .phone-amount { font-size: 0.85rem; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; }
+  .phone-up { font-size: 0.5rem; color: #22c55e; font-family: var(--font-mono); }
+  .phone-list { display: flex; flex-direction: column; gap: 0.3rem; }
+  .phone-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.52rem; color: var(--text-2); justify-content: space-between; }
+  .phone-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .phone-dot.gold { background: var(--gold); }
+  .phone-dot.green { background: #22c55e; }
+  
+  /* ── API PREVIEW ── */
+  .svc-preview-api { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .api-flow { display: flex; align-items: center; gap: 0.5rem; }
+  .api-node {
+    display: flex; align-items: center; gap: 0.35rem;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.62rem; color: var(--text-2); background: var(--bg-3);
+    white-space: nowrap;
+  }
+  .api-node-main { border-color: var(--border-gold); color: var(--gold); background: rgba(200,169,110,0.06); }
+  .api-node-sm { padding: 0.25rem 0.5rem; font-size: 0.58rem; }
+  .api-connector { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; flex: 1; position: relative; }
+  .api-line { width: 100%; height: 1px; background: linear-gradient(90deg, var(--border-gold), var(--border)); }
+  .api-pulse {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold);
+    animation: api-move 2s linear infinite;
+  }
+  @keyframes api-move { from { left: 0; opacity: 1; } to { left: 100%; opacity: 0; } }
+  .api-badge { font-size: 0.52rem; color: var(--gold); font-family: var(--font-mono); }
+  .api-nodes-col { display: flex; flex-direction: column; gap: 0.3rem; }
+  .api-log { display: flex; flex-direction: column; gap: 0.2rem; }
+  .log-line { font-size: 0.6rem; font-family: var(--font-mono); color: var(--text-3); display: flex; gap: 0.5rem; }
+  .log-ok { color: #22c55e; }
+  .log-pending { color: var(--gold); }
+  .log-dim { opacity: 0.5; }
+  
+  /* ── AUTOMATION PREVIEW ── */
+  .svc-preview-automation { padding: 1rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .flow-nodes { display: flex; flex-direction: column; align-items: center; gap: 0; flex: 1; }
+  .flow-node {
+    display: flex; align-items: center; gap: 0.3rem;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.3rem 0.6rem; font-size: 0.6rem; color: var(--text-2);
+    background: var(--bg-3); white-space: nowrap;
+  }
+  .flow-trigger { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.06); }
+  .flow-done { border-color: rgba(34,197,94,0.3); color: #22c55e; background: rgba(34,197,94,0.05); }
+  .flow-action { font-size: 0.56rem; padding: 0.25rem 0.45rem; }
+  .flow-icon { font-size: 0.65rem; }
+  .flow-row { display: flex; gap: 0.3rem; }
+  .flow-arrow-down { width: 1px; height: 14px; background: var(--border); }
+  .flow-stats { display: flex; flex-direction: column; gap: 0.6rem; justify-content: center; }
+  .flow-stat { display: flex; flex-direction: column; gap: 0.1rem; }
+  .flow-stat-val { font-size: 0.95rem; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; font-family: var(--font-mono); }
+  .flow-stat-label { font-size: 0.56rem; color: var(--text-3); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
+  
+  /* ── INFRA PREVIEW ── */
+  .svc-preview-infra { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .infra-monitor { display: flex; flex-direction: column; gap: 0.45rem; }
+  .infra-row { display: flex; align-items: center; gap: 0.5rem; }
+  .infra-label { font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-3); width: 28px; flex-shrink: 0; }
+  .infra-bar-track { flex: 1; height: 4px; background: var(--bg-4); border-radius: 2px; overflow: hidden; }
+  .infra-bar { height: 100%; background: rgba(200,169,110,0.5); border-radius: 2px; }
+  .infra-bar-green { background: rgba(34,197,94,0.5); }
+  .infra-val { font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-3); width: 28px; text-align: right; }
+  .infra-status { display: flex; flex-direction: column; gap: 0.3rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+  .infra-status-row { display: flex; align-items: center; gap: 0.4rem; font-size: 0.6rem; color: var(--text-2); font-family: var(--font-mono); }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.green { background: #22c55e; box-shadow: 0 0 4px rgba(34,197,94,0.4); }
+  .infra-uptime { display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem; }
+  .uptime-label { font-size: 0.55rem; color: var(--text-3); font-family: var(--font-mono); letter-spacing: 0.06em; }
+  .uptime-val { font-size: 0.75rem; font-weight: 700; color: #22c55e; font-family: var(--font-mono); }
+  
+  /* ── ROADMAP PREVIEW ── */
+  .svc-preview-consult { padding: 1rem; }
+  .roadmap { display: flex; flex-direction: column; }
+  .roadmap-item { display: flex; align-items: center; gap: 0.6rem; }
+  .roadmap-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: var(--bg-3);
+    flex-shrink: 0;
+  }
+  .roadmap-dot.done { background: #22c55e; border-color: #22c55e; }
+  .roadmap-dot.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(200,169,110,0.4); }
+  .roadmap-content { display: flex; flex-direction: column; flex: 1; }
+  .roadmap-phase { font-size: 0.55rem; color: var(--text-3); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
+  .roadmap-name { font-size: 0.7rem; color: var(--text-2); font-weight: 500; }
+  .roadmap-tag { font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-3); white-space: nowrap; }
+  .done-tag { color: #22c55e; }
+  .active-tag { color: var(--gold); }
+  .roadmap-line { width: 1px; height: 18px; background: var(--border); margin-left: 4.5px; }
+  
+  /* Dots */
+  .svc-dots {
+    display: flex; gap: 0.4rem; justify-content: center;
+    margin-top: 1.5rem;
+  }
+  .svc-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--bg-4); border: 1px solid var(--border);
+    cursor: pointer; transition: all var(--transition);
+  }
+  .svc-dot.active {
+    background: var(--gold); border-color: var(--gold);
+    width: 18px; border-radius: 3px;
+  }
+  </style>
+  <script>
+  const carousel = document.getElementById('svc-carousel') as HTMLElement;
+  const prevBtn  = document.getElementById('svc-prev') as HTMLButtonElement;
+  const nextBtn  = document.getElementById('svc-next') as HTMLButtonElement;
+  const dotsEl   = document.getElementById('svc-dots') as HTMLElement;
+  
+  // ── Cards originales ──
+  const origCards = Array.from(carousel.querySelectorAll<HTMLElement>('.svc-card'));
+  const total     = origCards.length;
+  let current     = 0;
+  let isDragging  = false;
+  let isJumping   = false;
+  
+  // ── Clonar cards para loop infinito ──
+  // Clonamos todas al inicio y al final
+  const clonesBefore = origCards.map(c => { const cl = c.cloneNode(true) as HTMLElement; cl.setAttribute('aria-hidden','true'); return cl; });
+  const clonesAfter  = origCards.map(c => { const cl = c.cloneNode(true) as HTMLElement; cl.setAttribute('aria-hidden','true'); return cl; });
+  
+  clonesBefore.reverse().forEach(cl => carousel.prepend(cl));
+  clonesAfter.forEach(cl => carousel.append(cl));
+  
+  // Todas las cards (clones + reales + clones)
+  const allCards = () => Array.from(carousel.querySelectorAll<HTMLElement>('.svc-card'));
+  
+  // ── Dots solo para las originales ──
+  origCards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'svc-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Ir al servicio ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+  
+  function getCardWidth(): number {
+    const c = allCards()[0];
+    return c ? c.offsetWidth + parseInt(getComputedStyle(carousel).gap || '20') : 0;
+  }
+  
+  // Ir a index real (0-based sobre originales)
+  function goTo(index: number, instant = false) {
+    current = ((index % total) + total) % total;
+    const realIndex = current + total; // offset por los clones del inicio
+    const cards = allCards();
+    const target = cards[realIndex];
+    if (!target) return;
+    const offset = target.offsetLeft - carousel.offsetLeft;
+    if (instant) {
+      carousel.style.scrollBehavior = 'auto';
+      carousel.scrollLeft = offset;
+      requestAnimationFrame(() => { carousel.style.scrollBehavior = 'smooth'; });
+    } else {
+      carousel.style.scrollBehavior = 'smooth';
+      carousel.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+    updateUI();
+  }
+  
+  function updateUI() {
+    dotsEl.querySelectorAll('.svc-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current)
+    );
+    // Infinito: nunca deshabilitar botones
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+  
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  
+  // ── Inicializar en la primera card real ──
+  requestAnimationFrame(() => goTo(0, true));
+  
+  // ── Loop infinito: jump silencioso al detectar clones ──
+  let scrollTimer: ReturnType<typeof setTimeout>;
+  carousel.addEventListener('scroll', () => {
+    if (isJumping) return;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const cardW = getCardWidth();
+      if (!cardW) return;
+      const rawIndex = Math.round(carousel.scrollLeft / cardW);
+      const cards    = allCards();
+  
+      // Si estamos en los clones del final → saltar al inicio real
+      if (rawIndex >= total * 2) {
+        isJumping = true;
+        current = rawIndex - total * 2;
+        goTo(current, true);
+        setTimeout(() => { isJumping = false; }, 50);
+      }
+      // Si estamos en los clones del inicio → saltar al final real
+      else if (rawIndex < total) {
+        isJumping = true;
+        current = rawIndex + total;
+        goTo(current % total, true);
+        setTimeout(() => { isJumping = false; }, 50);
+      }
+      // Normal
+      else {
+        current = (rawIndex - total + total) % total;
+        updateUI();
+      }
+    }, 60);
+  }, { passive: true });
+  
+  // ── Drag con mouse ──
+  let startX = 0, startScroll = 0;
+  
+  carousel.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.pageX;
+    startScroll = carousel.scrollLeft;
+    carousel.style.scrollBehavior = 'auto';
+    carousel.style.cursor = 'grabbing';
+  });
+  
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    carousel.style.cursor = 'grab';
+    // Snap a la card más cercana
+    const cardW = getCardWidth();
+    const rawIndex = Math.round(carousel.scrollLeft / cardW);
+    const cards = allCards();
+    if (rawIndex >= 0 && rawIndex < cards.length) {
+      const offset = cards[rawIndex].offsetLeft - carousel.offsetLeft;
+      carousel.style.scrollBehavior = 'smooth';
+      carousel.scrollTo({ left: offset, behavior: 'smooth' });
+      // Actualizar current
+      if (rawIndex >= total && rawIndex < total * 2) {
+        current = rawIndex - total;
+      } else if (rawIndex >= total * 2) {
+        current = rawIndex - total * 2;
+      } else {
+        current = rawIndex % total;
+      }
+      updateUI();
+    }
+  });
+  
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    e.preventDefault();
+    carousel.scrollLeft = startScroll - (e.pageX - startX);
+  });
+  
+  updateUI();
+  </script>

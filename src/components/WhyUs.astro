@@ -1,0 +1,260 @@
+---
+// src/components/WhyUs.astro
+
+const reasons = [
+  {
+    num:       '01',
+    title:     'El código es tuyo. Siempre.',
+    desc:      'Muchas agencias te entregan un sistema que depende de ellas para sobrevivir. Nosotros no. Recibes el repositorio completo, documentado, listo para que cualquier desarrollador lo tome y continúe. Sin sorpresas, sin rehenes.',
+    highlight: 'Cero lock-in',
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 17l-5-5 5-5M16 7l5 5-5 5M14 4l-4 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  },
+  {
+    num:       '02',
+    title:     'Hablas con quien construye.',
+    desc:      'No hay un intermediario que traduzca lo que necesitas. El mismo desarrollador que escribe el código es quien responde tu mensaje. Eso significa menos malentendidos, decisiones más rápidas y cambios que se hacen ese mismo día.',
+    highlight: 'Sin intermediarios',
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  },
+  {
+    num:       '03',
+    title:     'Ves el avance. Cada dos semanas.',
+    desc:      'Nada de meses de silencio y una entrega al final que no era lo que esperabas. Cada sprint termina con una demo real que puedes usar y criticar. Tú decides si seguimos, cambiamos o ajustamos — antes de que sea tarde.',
+    highlight: 'Sin sorpresas finales',
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  },
+  {
+    num:       '04',
+    title:     'Calidad que no pide disculpas.',
+    desc:      'Somos hondureños y trabajamos para Honduras y el mundo. Cada proyecto lleva CI/CD, code reviews, pruebas y documentación — no porque lo pidas, sino porque es la única forma correcta de construir software que dure.',
+    highlight: 'Estándares internacionales',
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  },
+];
+---
+
+<section class="section why-section">
+  <div class="container">
+
+    <div class="why-header reveal">
+      <div class="why-header-left">
+        <p class="label-tag">Por qué elegirnos</p>
+        <h2 class="section-h2">Trabajamos como si<br/>fuera nuestro negocio.</h2>
+      </div>
+      <div class="why-header-right">
+        <p class="why-lead">
+          La mayoría de empresas de software construye lo que les pides.
+          Nosotros construimos lo que tu negocio realmente necesita —
+          y hay una diferencia enorme entre las dos cosas.
+        </p>
+
+      </div>
+    </div>
+
+    <div class="why-divider" aria-hidden="true"></div>
+    <div class="why-grid">
+      {reasons.map((r, i) => (
+        <div class="why-card reveal" style={`transition-delay:${i * 75}ms`}>
+
+          <!-- Número gigante decorativo -->
+          <div class="why-num-bg" aria-hidden="true">{r.num}</div>
+
+          <!-- Header de la card -->
+          <div class="why-card-header">
+            <div class="why-icon" set:html={r.icon} />
+            <span class="why-num-label">{r.num}</span>
+          </div>
+
+          <!-- Cuerpo -->
+          <h4 class="why-title">{r.title}</h4>
+          <p class="why-desc">{r.desc}</p>
+
+          <!-- Pill dorada -->
+          <div class="why-pill">
+            <span class="why-pill-dot"></span>
+            {r.highlight}
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .why-section {
+    overflow: hidden;
+  }
+
+  /* Header layout */
+  .why-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 1.75rem;
+  }
+  @media (max-width: 768px) {
+    .why-header {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .why-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin-bottom: 1.75rem;
+  }
+
+  .why-lead {
+    font-size: 0.875rem;
+    color: var(--text-2);
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Grid 2x2 */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  @media (max-width: 600px) {
+    .why-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Card */
+  .why-card {
+    position: relative;
+    background: var(--bg-1);
+    padding: 2.25rem;
+    overflow: hidden;
+    transition: background 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 220px;
+  }
+  @media (max-width: 600px) {
+    .why-card { padding: 1.75rem 1.5rem; min-height: unset; }
+  }
+  .why-card:hover { background: var(--bg-2); }
+
+  /* Línea superior dorada en hover */
+  .why-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .why-card:hover::before { opacity: 1; }
+
+  /* Número gigante de fondo */
+  .why-num-bg {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -0.5rem;
+    font-size: 10rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: var(--text-1);
+    opacity: 0.04;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.35s ease;
+    font-variant-numeric: tabular-nums;
+  }
+  .why-card:hover .why-num-bg { opacity: 0.08; }
+
+  /* Card header */
+  .why-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Ícono */
+  .why-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-3);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  .why-card:hover .why-icon {
+    background: rgba(200,169,110,0.1);
+    border-color: var(--border-gold);
+    color: var(--gold);
+  }
+
+  .why-num-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    transition: color 0.3s ease;
+  }
+  .why-card:hover .why-num-label { color: var(--gold); }
+
+  /* Text */
+  .why-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .why-desc {
+    font-size: 0.79rem;
+    color: var(--text-2);
+    line-height: 1.7;
+    font-weight: 300;
+    flex: 1;
+  }
+
+  /* Pill */
+  .why-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 100px;
+    padding: 0.25rem 0.7rem;
+    width: fit-content;
+    letter-spacing: 0.03em;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .why-card:hover .why-pill {
+    background: rgba(200,169,110,0.13);
+    border-color: rgba(200,169,110,0.35);
+  }
+
+  .why-pill-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+</style>

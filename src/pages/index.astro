@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Ticker from '../components/Ticker.astro';
+import Services from '../components/Services.astro';
+import Process from '../components/Process.astro';
+import WhyUs from '../components/WhyUs.astro';
+import Testimonial from '../components/Testimonial.astro';
+import CTA from '../components/CTA.astro';
+---
+
+<Layout
+  title="Desarrollo de Software en Honduras | Apps, ERP, POS — Olympo Code"
+  description="Empresa de desarrollo de software en Santa Rosa de Copán, Honduras. Software a medida, apps móviles, sistemas POS, ERP, CRM, automatizaciones e infraestructura cloud para tu negocio."
+  faq={[
+    {
+      question: '¿Cuánto cuesta desarrollar software a medida en Honduras?',
+      answer: 'El costo depende del alcance del proyecto. En Olympo Code ofrecemos una primera consulta gratuita donde analizamos tu caso y te damos una cotización clara sin compromiso. Proyectos como sistemas POS, ERP o CRM pueden comenzar desde $1,000 USD dependiendo de la complejidad.'
+    },
+    {
+      question: '¿Olympo Code trabaja solo en Santa Rosa de Copán o en todo Honduras?',
+      answer: 'Nuestra oficina está en Santa Rosa de Copán, Copán, pero trabajamos con clientes en todo Honduras y Centroamérica. Ofrecemos reuniones virtuales y presenciales según la ubicación del cliente.'
+    },
+    {
+      question: '¿Qué tipos de software desarrollan?',
+      answer: 'Desarrollamos software a medida incluyendo sistemas POS, ERP, CRM, aplicaciones móviles para iOS y Android, APIs e integraciones, automatizaciones con N8N y Make, infraestructura cloud y consultoría IT.'
+    },
+    {
+      question: '¿Cuánto tiempo tarda en desarrollarse una aplicación o sistema?',
+      answer: 'El tiempo varía según la complejidad. Un sistema POS básico puede estar listo en 4-8 semanas, mientras que un ERP completo puede tomar 3-6 meses. En la consulta inicial definimos un cronograma realista para tu proyecto.'
+    },
+    {
+      question: '¿Ofrecen soporte después de entregar el proyecto?',
+      answer: 'Sí, todos nuestros proyectos incluyen soporte post-lanzamiento. Ofrecemos planes de mantenimiento continuo, monitoreo 24/7, actualizaciones y evolución del sistema según las necesidades de tu negocio.'
+    },
+  ]}
+>
+  <Hero />
+  <Ticker />
+  <Services />
+  <Process />
+  <WhyUs />
+  <!-- <Testimonial /> -->
+  <CTA />
+</Layout>

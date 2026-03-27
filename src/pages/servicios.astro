@@ -1,0 +1,485 @@
+---
+// src/pages/servicios.astro
+import Layout from '../layouts/Layout.astro';
+
+const services = [
+  {
+    id:       'software-medida',
+    num:      '01',
+    title:    'Software a Medida',
+    tagline:  'Construido para cómo operas hoy. Diseñado para lo que serás mañana.',
+    desc1:    'No creemos en el software que obliga a tu empresa a adaptarse a él. Creemos en el software que se construye entendiendo primero cómo funciona tu negocio — sus procesos reales, sus cuellos de botella y sus metas a futuro.',
+    desc2:    'Cada sistema que entregamos está pensado para resolver el problema de hoy sin cerrarte las puertas del mañana. Arquitectura limpia, código escalable y documentación completa para que puedas crecer sin reconstruir desde cero.',
+    includes: ['Diagnóstico profundo de tus procesos','Sistemas POS, ERP y CRM a tu medida','Paneles con datos en tiempo real','Módulos que crecen con tu negocio','Facturación, reportes e inventario','Integración con tus herramientas actuales'],
+    tech:     ['Laravel', 'React', 'Node.js', 'PostgreSQL', 'Docker', 'Redis'],
+    color:    '#c8a96e',
+    icon:     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M8 16l-3-3 3-3M16 8l3 3-3 3M14 6l-4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  },
+  {
+    id:       'apps-moviles',
+    num:      '02',
+    title:    'Apps Móviles',
+    tagline:  'La app que tu cliente necesita. No la que es más fácil de hacer.',
+    desc1:    'Una app mediocre puede dañar más tu marca que no tener una. Por eso antes de escribir código, entendemos a quién va dirigida, cómo la va a usar y qué problema real va a resolver en su día a día.',
+    desc2:    'Construimos aplicaciones que se sienten rápidas, intuitivas y confiables — desde la primera pantalla hasta la última actualización. Y cuando tu negocio crezca, la app crece con él.',
+    includes: ['Análisis de usuario y diseño UX','Apps nativas iOS y Android','React Native y Flutter multiplataforma','Integración con APIs y pagos','Publicación en App Store y Google Play','Soporte y evolución continua'],
+    tech:     ['React Native', 'Flutter', 'Swift', 'Kotlin', 'Firebase', 'Expo'],
+    color:    '#ff3d71',
+    icon:     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="18" r="1" fill="currentColor"/><path d="M10 5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  },
+  {
+    id:       'apis-integraciones',
+    num:      '03',
+    title:    'APIs e Integraciones',
+    tagline:  'Tus sistemas conectados. Tu operación sin fricciones.',
+    desc1:    'Cada sistema aislado es tiempo perdido y errores esperando ocurrir. Diseñamos integraciones que conectan tus herramientas en flujos de datos confiables y auditables — sin importar qué tan viejos sean los sistemas.',
+    desc2:    'Lo que construimos hoy se conecta con lo que necesites mañana. Arquitectura de APIs que crece con tu operación y no se convierte en un problema cuando escales.',
+    includes: ['APIs RESTful y GraphQL','Pasarelas de pago locales e internacionales','Integración con ERPs y CRMs','Webhooks y eventos en tiempo real','Autenticación segura OAuth 2.0','Documentación técnica completa'],
+    tech:     ['REST', 'GraphQL', 'Webhooks', 'OAuth 2.0', 'Node.js', 'Laravel'],
+    color:    '#00d2ff',
+    icon:     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="4" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="20" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="20" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 12h6m0 0V7.5M13 12v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  },
+  {
+    id:       'automatizaciones',
+    num:      '04',
+    title:    'Automatizaciones N8N',
+    tagline:  'Menos tareas manuales. Más tiempo para lo que importa.',
+    desc1:    'Si tu equipo dedica horas a copiar datos entre sistemas o generar reportes a mano — eso no es trabajo, es desperdicio. Lo automatizamos para que tu gente se enfoque en lo que realmente genera valor.',
+    desc2:    'No automatizamos por automatizar — identificamos qué tareas tienen el mayor impacto y empezamos por ahí. Flujos que se adaptan a tu realidad hoy y se amplían cuando tu operación lo exija.',
+    includes: ['Mapeo de procesos a automatizar','Flujos de notificaciones y alertas','Sincronización entre plataformas','Reportes ejecutivos automáticos','Conexión con Slack, Gmail, Sheets y más','Monitoreo y mantenimiento continuo'],
+    tech:     ['N8N', 'Make', 'Zapier', 'Python', 'Node.js', 'Cron Jobs'],
+    color:    '#ff9500',
+    icon:     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4l2.5 2.5L12 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20l-2.5-2.5L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  },
+  {
+    id:       'infraestructura',
+    num:      '05',
+    title:    'Infraestructura',
+    tagline:  'La base que tu sistema necesita para no fallar nunca.',
+    desc1:    'El mejor software del mundo es inútil si el servidor cae en el momento equivocado. Configuramos y mantenemos infraestructura robusta con seguridad, monitoreo y respaldo como prioridades.',
+    desc2:    'No solo dejamos todo funcionando el día del lanzamiento. Nos quedamos monitoreando, actualizando y ajustando para que tu operación esté disponible cuando tus clientes la necesiten.',
+    includes: ['Servidores VPS, cloud y dedicados','Docker y containerización','SSL, firewalls y hardening','CI/CD para deploys sin riesgo','Monitoreo 24/7 y backups automáticos','Escalabilidad planificada'],
+    tech:     ['Linux', 'Docker', 'Nginx', 'GitHub Actions', 'Cloudflare', 'VPS'],
+    color:    '#00e676',
+    icon:     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="14" width="20" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="7" r="1" fill="currentColor"/><circle cx="15.5" cy="7" r="1" fill="currentColor"/><circle cx="18.5" cy="17" r="1" fill="currentColor"/><circle cx="15.5" cy="17" r="1" fill="currentColor"/></svg>',
+  },
+  {
+    id:       'consultoria',
+    num:      '06',
+    title:    'Consultoría IT',
+    tagline:  'Las decisiones técnicas correctas en el momento correcto.',
+    desc1:    'Tomar la decisión tecnológica equivocada hoy puede costarte meses y miles de dólares mañana. Antes de construir cualquier cosa, necesitas entender qué construir, en qué orden y con qué tecnología.',
+    desc2:    'No venimos con una solución predefinida. Analizamos tu situación real, identificamos riesgos y oportunidades, y diseñamos un camino técnico que tenga sentido para tu negocio ahora y en los próximos años.',
+    includes: ['Auditoría de sistemas y arquitectura','Identificación de deudas técnicas','Roadmap priorizado por impacto','Evaluación de tecnologías y proveedores','Revisión de código','Acompañamiento en decisiones críticas'],
+    tech:     ['Arquitectura', 'Code Review', 'Roadmap', 'UML', 'SQL', 'DevOps'],
+    color:    '#d946ef',
+    icon:     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5.5l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  },
+];
+---
+
+<Layout
+  title="Servicios de Desarrollo de Software en Honduras | POS, ERP, Apps Móviles"
+  description="Desarrollo de software a medida, apps móviles, APIs, automatizaciones N8N, infraestructura cloud y consultoría IT en Santa Rosa de Copán, Copán. Soluciones tecnológicas para empresas hondureñas."
+  breadcrumbs={[
+    { name: 'Inicio', url: '/' },
+    { name: 'Servicios', url: '/servicios' },
+  ]}
+>
+
+<div class="svc-page">
+
+  <!-- ── HERO centrado ── -->
+  <div class="svc-hero">
+    <div class="container">
+      <div class="svc-hero-inner">
+        <p class="label-tag">Servicios</p>
+        <h1 class="svc-hero-title">Todo lo que necesitas<br/><span class="svc-hero-em">en un solo equipo.</span></h1>
+        <p class="svc-hero-sub">Desde la idea hasta el servidor — construimos, integramos, automatizamos y mantenemos sin depender de terceros.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TABS centrados, sin números ── -->
+  <div class="svc-tabs-wrap">
+    <div class="container">
+      <div class="svc-tabs" role="tablist">
+        {services.map((s, i) => (
+          <button
+            class={`svc-tab ${i === 0 ? 'active' : ''}`}
+            role="tab"
+            data-index={i}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            style={`--svc-color: ${s.color}`}
+          >
+            <span class="svc-tab-icon" set:html={s.icon} />
+            <span class="svc-tab-name">{s.title}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANELS ── -->
+  <div class="container">
+    <div class="svc-panels">
+      {services.map((s, i) => (
+        <div
+          class={`svc-panel ${i === 0 ? 'active' : ''}`}
+          role="tabpanel"
+          data-index={i}
+          style={`--svc-color: ${s.color}`}
+        >
+          <div class="panel-header">
+            <div class="panel-icon" set:html={s.icon} />
+            <div class="panel-title-group">
+              <h2 class="panel-title">{s.title}</h2>
+              <p class="panel-tagline">{s.tagline}</p>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="panel-desc">
+              <p class="panel-desc-p">{s.desc1}</p>
+              <p class="panel-desc-p">{s.desc2}</p>
+              <div class="panel-tech">
+                {s.tech.map(t => <span class="panel-chip">{t}</span>)}
+              </div>
+            </div>
+            <div class="panel-includes">
+              <p class="panel-includes-title">Qué incluye este servicio</p>
+              <ul class="panel-includes-list">
+                {s.includes.map((item, idx) => (
+                  <li class="panel-include-item" style={`animation-delay: ${idx * 60}ms`}>
+                    <div class="include-check">
+                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path d="M2 5l2.5 2.5L8 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</div>
+
+</Layout>
+
+<style>
+  .svc-page {
+    padding-bottom: 7rem;
+    min-height: 100vh;
+  }
+
+  /* ── Hero centrado ── */
+  .svc-hero {
+    padding: 5rem 0 3rem;
+  }
+
+  .svc-hero-inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .svc-hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    color: var(--text-1);
+    margin: 0.65rem 0 1rem;
+  }
+
+  .svc-hero-em {
+    background: linear-gradient(115deg, #f0d080 0%, #c8a040 40%, #e8b860 70%, #9a6a28 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .svc-hero-sub {
+    font-size: 0.95rem;
+    color: var(--text-2);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 520px;
+  }
+
+  /* ── Tabs centrados ── */
+  .svc-tabs-wrap {
+    position: sticky;
+    top: 56px;
+    z-index: 50;
+    background: rgba(8,8,8,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .svc-tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: center;
+  }
+  .svc-tabs::-webkit-scrollbar { display: none; }
+
+  .svc-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.85rem 1.35rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.2s ease;
+    color: var(--text-3);
+    min-width: 90px;
+  }
+
+  .svc-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--svc-color);
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+    border-radius: 2px 2px 0 0;
+  }
+  .svc-tab.active::after  { transform: scaleX(1); }
+  .svc-tab.active         { color: var(--text-1); }
+  .svc-tab:hover:not(.active) { color: var(--text-2); background: rgba(255,255,255,0.02); }
+
+  .svc-tab-icon {
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .svc-tab-icon svg { width: 18px; height: 18px; }
+
+  .svc-tab-name {
+    font-size: 0.62rem;
+    font-weight: 500;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 600px) {
+    .svc-tab-name  { display: none; }
+    .svc-tab       { min-width: 52px; padding: 0.75rem; }
+  }
+
+  /* ── Panels ── */
+  .svc-panels { position: relative; }
+
+  .svc-panel {
+    display: none;
+    animation: panel-in 0.35s ease forwards;
+  }
+  .svc-panel.active { display: block; }
+
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    background: var(--bg-1);
+    position: relative;
+    overflow: hidden;
+  }
+  .panel-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--svc-color);
+  }
+  .panel-header::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, var(--svc-color), transparent 70%);
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .panel-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--svc-color);
+  }
+  .panel-icon svg { width: 24px; height: 24px; }
+
+  .panel-title {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+
+  .panel-tagline {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .panel-body {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+  }
+  @media (max-width: 768px) {
+    .panel-body { grid-template-columns: 1fr; }
+  }
+
+  .panel-desc {
+    padding: 2rem;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--bg-0);
+  }
+  @media (max-width: 768px) {
+    .panel-desc { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  .panel-desc-p {
+    font-size: 0.875rem;
+    color: var(--text-2);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .panel-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+  }
+
+  .panel-chip {
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: var(--text-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    transition: all 0.15s ease;
+  }
+  .panel-chip:hover {
+    border-color: var(--svc-color);
+    color: var(--text-1);
+  }
+
+  .panel-includes {
+    padding: 2rem;
+    background: var(--bg-1);
+  }
+
+  .panel-includes-title {
+    font-size: 0.62rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-3);
+    margin-bottom: 1.25rem;
+  }
+
+  .panel-includes-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .panel-include-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    color: var(--text-2);
+    font-weight: 300;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.15s ease;
+    animation: item-in 0.3s ease backwards;
+  }
+  .panel-include-item:last-child { border-bottom: none; }
+  .panel-include-item:hover {
+    color: var(--text-1);
+    padding-left: 0.35rem;
+  }
+
+  @keyframes item-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .include-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--svc-color) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--svc-color) 30%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--svc-color);
+  }
+</style>
+
+<script>
+const tabs   = document.querySelectorAll<HTMLButtonElement>('.svc-tab');
+const panels = document.querySelectorAll<HTMLElement>('.svc-panel');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const idx = tab.dataset.index;
+
+    tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+
+    panels.forEach(p => p.classList.remove('active'));
+    document.querySelector<HTMLElement>(`.svc-panel[data-index="${idx}"]`)?.classList.add('active');
+
+    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  const activeTab = document.querySelector<HTMLButtonElement>('.svc-tab.active');
+  if (!activeTab) return;
+  const idx = parseInt(activeTab.dataset.index || '0');
+  if (e.key === 'ArrowRight') document.querySelector<HTMLButtonElement>(`.svc-tab[data-index="${idx + 1}"]`)?.click();
+  if (e.key === 'ArrowLeft')  document.querySelector<HTMLButtonElement>(`.svc-tab[data-index="${idx - 1}"]`)?.click();
+});
+</script>

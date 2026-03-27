@@ -1,0 +1,765 @@
+---
+// src/components/Hero.astro
+---
+
+<section class="hero">
+
+    <!-- Ambient background layers -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="bg-glow bg-glow-1"></div>
+      <div class="bg-glow bg-glow-2"></div>
+      <div class="bg-glow bg-glow-3"></div>
+      <div class="bg-grid"></div>
+      <div class="bg-noise"></div>
+    </div>
+  
+    <!-- Golden drop — anchored to full section -->
+    <div class="drop-scene" aria-hidden="true">
+      <div class="drop-wrapper">
+        <div class="drop"></div>
+      </div>
+    </div>
+  
+    <!-- Gold pulse overlay — fires when drop lands -->
+    <div class="gold-pulse-overlay" aria-hidden="true"></div>
+  
+    <div class="hero-container">
+  
+      <!-- LEFT: copy -->
+      <div class="hero-copy">
+  
+        <div class="copy-eyebrow">
+          <span class="eyebrow-line"></span>
+          <span class="eyebrow-text">Desarrollo de Software · Santa Rosa de Copán, Honduras</span>
+        </div>
+  
+        <h1 class="hero-heading">
+          <span class="h-line h-line-1">Detrás de cada negocio</span>
+          <span class="h-line h-line-2">que escala, hay</span>
+          <span class="h-line h-line-3"><span class="h-em">tecnología que funciona.</span></span>
+        </h1>
+  
+        <p class="hero-sub">
+          Empresa de desarrollo de software en Honduras. Construimos sistemas a medida,
+          apps móviles, POS, ERP, CRM y automatizaciones para negocios que necesitan crecer.
+        </p>
+  
+        <div class="hero-actions">
+          <a href="/contacto" class="btn-primary">
+            Iniciar proyecto
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="/portafolio" class="btn-ghost">Ver portafolio</a>
+        </div>
+  
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-val" data-count="50">0</span><span class="stat-suf">+</span>
+            <span class="stat-label">proyectos</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <span class="stat-val" data-count="5">0</span><span class="stat-suf">+</span>
+            <span class="stat-label">años</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <span class="stat-val" data-count="100">0</span><span class="stat-suf">%</span>
+            <span class="stat-label">satisfechos</span>
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- RIGHT: preview card -->
+      <div class="hero-visual">
+        <div class="visual-aura"></div>
+  
+        <div class="preview-card">
+          <div class="preview-glow-top"></div>
+  
+          <!-- Window chrome -->
+          <div class="preview-bar">
+            <div class="preview-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="preview-title-bar">olympo — sistema POS</div>
+            <div class="preview-live">
+              <span class="live-dot"></span>
+              en producción
+            </div>
+          </div>
+  
+          <!-- App body -->
+          <div class="preview-body">
+  
+            <nav class="preview-sidebar">
+              <button class="ps-btn ps-active" data-tab="dashboard">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 6.5h6M3.5 4h3M3.5 9h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                Dashboard
+              </button>
+              <button class="ps-btn" data-tab="inventario">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L11.5 4.2v4.6L6.5 11.5 1.5 8.8V4.2L6.5 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                Inventario
+              </button>
+              <button class="ps-btn" data-tab="ventas">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 9.5L4 5l3 4 2-2.5 2.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Ventas
+              </button>
+              <button class="ps-btn" data-tab="reportes">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="4" width="9" height="7" rx="1.2" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 4V3a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                Reportes
+              </button>
+            </nav>
+  
+            <main class="preview-main">
+  
+              <!-- Dashboard panel -->
+              <div class="tab-panel tab-active" data-panel="dashboard">
+                <div class="pm-head">
+                  <div>
+                    <p class="pm-label">Ventas de hoy</p>
+                    <p class="pm-val">L 84,320</p>
+                  </div>
+                  <span class="badge-up">↑ 12% vs ayer</span>
+                </div>
+                <div class="pm-chart">
+                  <div class="chart-bars">
+                    {[40,65,45,80,55,90,70,95,60,85,75,100].map((h, i) => (
+                      <div class="c-bar" style={`height:${h}%;animation-delay:${i*55}ms`}></div>
+                    ))}
+                  </div>
+                </div>
+                <div class="pm-kpis">
+                  <div class="kpi"><span class="kpi-l">Órdenes</span><span class="kpi-v">142</span></div>
+                  <div class="kpi"><span class="kpi-l">Ticket prom.</span><span class="kpi-v">L 594</span></div>
+                  <div class="kpi"><span class="kpi-l">Productos</span><span class="kpi-v">38</span></div>
+                </div>
+              </div>
+  
+              <!-- Inventario panel -->
+              <div class="tab-panel" data-panel="inventario">
+                <div class="pm-head">
+                  <div>
+                    <p class="pm-label">Stock actual</p>
+                    <p class="pm-val">1,284 items</p>
+                  </div>
+                  <span class="badge-warn">⚠ 6 bajo mínimo</span>
+                </div>
+                <div class="inv-list">
+                  {[
+                    { name: 'Laptop Dell XPS',  stock: 12, pct: 60 },
+                    { name: 'Monitor LG 27"',   stock: 5,  pct: 25 },
+                    { name: 'Teclado Mecánico', stock: 28, pct: 90 },
+                    { name: 'Mouse Logitech',   stock: 3,  pct: 15 },
+                  ].map(item => (
+                    <div class="inv-row">
+                      <div class="inv-top">
+                        <span class="inv-name">{item.name}</span>
+                        <span class="inv-qty">{item.stock} u.</span>
+                      </div>
+                      <div class="inv-track">
+                        <div class="inv-fill" style={`width:${item.pct}%;${item.pct < 20 ? 'background:rgba(239,68,68,0.45)' : ''}`}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+  
+              <!-- Ventas panel -->
+              <div class="tab-panel" data-panel="ventas">
+                <div class="pm-head">
+                  <div>
+                    <p class="pm-label">Ventas del mes</p>
+                    <p class="pm-val">L 1,240,800</p>
+                  </div>
+                  <span class="badge-up">↑ 8% vs anterior</span>
+                </div>
+                <div class="pm-chart">
+                  <div class="chart-bars">
+                    {[30,50,70,45,85,60,90,55,75,95,65,100].map((h, i) => (
+                      <div class="c-bar" style={`height:${h}%;animation-delay:${i*55}ms`}></div>
+                    ))}
+                  </div>
+                </div>
+                <div class="pm-kpis">
+                  <div class="kpi"><span class="kpi-l">Transacciones</span><span class="kpi-v">3,412</span></div>
+                  <div class="kpi"><span class="kpi-l">Clientes nuevos</span><span class="kpi-v">84</span></div>
+                  <div class="kpi"><span class="kpi-l">Devoluciones</span><span class="kpi-v">12</span></div>
+                </div>
+              </div>
+  
+              <!-- Reportes panel -->
+              <div class="tab-panel" data-panel="reportes">
+                <div class="pm-head">
+                  <div>
+                    <p class="pm-label">Resumen trimestral</p>
+                    <p class="pm-val">Q1 — 2025</p>
+                  </div>
+                  <span class="badge-up">↑ 23% YoY</span>
+                </div>
+                <div class="rep-rows">
+                  {[
+                    { label: 'Ingresos totales', val: 'L 3,842,400', up: true  },
+                    { label: 'Costo de ventas',  val: 'L 1,921,200', up: false },
+                    { label: 'Margen bruto',     val: '50%',         up: true  },
+                    { label: 'Clientes activos', val: '318',         up: true  },
+                  ].map(r => (
+                    <div class="rep-row">
+                      <span class="rep-label">{r.label}</span>
+                      <span class={`rep-val ${r.up ? 'rep-up' : 'rep-dn'}`}>{r.val}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+  
+            </main>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </section>
+  
+  <style>
+  /* ─── Base ─────────────────────────────────────── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56px;
+    background: var(--bg);
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* ─── Background ───────────────────────────────── */
+  .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+  
+  .bg-glow { position: absolute; border-radius: 50%; filter: blur(120px); }
+  .bg-glow-1 {
+    width: 700px; height: 700px; top: -200px; left: -150px;
+    background: radial-gradient(circle, rgba(200,169,110,0.07) 0%, transparent 65%);
+    animation: glow-drift-1 14s ease-in-out infinite;
+  }
+  .bg-glow-2 {
+    width: 500px; height: 500px; bottom: -100px; right: -80px;
+    background: radial-gradient(circle, rgba(200,169,110,0.05) 0%, transparent 65%);
+    animation: glow-drift-2 18s ease-in-out infinite;
+  }
+  .bg-glow-3 {
+    width: 350px; height: 350px; top: 40%; right: 30%;
+    background: radial-gradient(circle, rgba(200,169,110,0.03) 0%, transparent 70%);
+    animation: glow-drift-1 22s ease-in-out infinite reverse;
+  }
+  @keyframes glow-drift-1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%     { transform: translate(40px,-30px) scale(1.05); }
+    66%     { transform: translate(-20px,20px) scale(0.95); }
+  }
+  @keyframes glow-drift-2 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%     { transform: translate(-30px,-40px) scale(1.08); }
+  }
+  
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 20%, transparent 100%);
+  }
+  .bg-noise {
+    position: absolute; inset: 0; opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+  
+  /* ─────────────────────────────────────────────────
+     CICLO DE LA GOTA — 7.5s total
+     Mapa de fases (% → segundos):
+       0–5%   = 0–0.375s   → gota aparece / se forma
+       5–50%  = 0.375–3.75s → gota crece, se tensa
+       50–66% = 3.75–4.95s  → gota en tensión máxima (PICO DE BRILLO)
+       66–97% = 4.95–7.275s → gota cae (brillo acompaña la caída)
+       97–100%= 7.275–7.5s  → gota desaparece, reset a oscuro
+     ───────────────────────────────────────────────── */
+
+  /* ─── Gold pulse overlay ───────────────────────── */
+  .gold-pulse-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(ellipse 55% 65% at 75% 50%,
+      rgba(248,215,109,0.18) 0%,
+      rgba(200,169,110,0.06) 50%,
+      transparent 75%
+    );
+    opacity: 0;
+    animation: gold-overlay-pulse 7.5s ease-in-out infinite;
+  }
+  @keyframes gold-overlay-pulse {
+    /*  0–5%:  gota formándose → overlay apagado          */
+    0%   { opacity: 0; }
+    5%   { opacity: 0; }
+    /*  5–50%: gota creciendo → brillo sube gradualmente  */
+    30%  { opacity: 0.2; }
+    50%  { opacity: 0.5; }
+    /*  50–66%: tensión máxima → pico de brillo           */
+    60%  { opacity: 0.75; }
+    66%  { opacity: 0.9; }
+    /*  66–97%: gota cae → brillo acompaña toda la caída  */
+    80%  { opacity: 0.55; }
+    97%  { opacity: 0.15; }
+    /*  97–100%: gota desaparece → overlay se apaga        */
+    100% { opacity: 0; }
+  }
+  
+  /* ─── Layout ───────────────────────────────────── */
+  .hero-container {
+    position: relative; z-index: 3;
+    width: 100%; max-width: 1280px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .hero-container { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; text-align: center; }
+  }
+  
+  /* ─── LEFT copy ────────────────────────────────── */
+  .hero-copy { display: flex; flex-direction: column; align-items: flex-start; }
+  @media (max-width: 900px) { .hero-copy { align-items: center; } }
+  
+  .copy-eyebrow {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.75rem;
+    opacity: 0; animation: fadeUp 0.5s 0.1s forwards;
+  }
+  .eyebrow-line {
+    display: block; width: 24px; height: 1px;
+    background: var(--gold); flex-shrink: 0;
+  }
+  .eyebrow-text {
+    font-size: 0.65rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--gold);
+    font-family: var(--font-mono);
+  }
+  
+  .hero-heading {
+    display: flex; flex-direction: column;
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    font-weight: 800; line-height: 1.0;
+    letter-spacing: -0.05em; margin-bottom: 1.75rem;
+  }
+  .h-line { display: block; color: var(--text-1); opacity: 0; }
+  .h-line-1 { animation: fadeUp 0.7s 0.2s forwards; }
+  .h-line-2 { animation: fadeUp 0.7s 0.32s forwards; }
+
+  /* Gold italic text — background-clip:text MUST stay isolated */
+  .h-em {
+    background: linear-gradient(118deg, #f5de8a 0%, #c8a040 28%, #e8b860 55%, #8a5c1e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+  }
+
+  /*
+    .h-line-3 tiene DOS animaciones:
+    1. fadeUp  → entrada inicial (una sola vez, fill: forwards)
+    2. gold-text-pulse → sincronizada con la gota (loop infinito)
+
+    El delay negativo en gold-text-pulse (-0.44s) hace que el loop
+    arranque exactamente en el mismo punto que el ciclo de la gota,
+    compensando el delay de fadeUp.
+  */
+  .h-line-3 {
+    animation:
+      fadeUp        0.7s 0.44s ease forwards,
+      gold-text-pulse 7.5s -0.44s ease-in-out infinite;
+  }
+
+  @keyframes gold-text-pulse {
+    /*  0–5%:  gota formándose → sin brillo en el texto     */
+    0%   { text-shadow: none; }
+    5%   { text-shadow: none; }
+    /*  5–50%: gota creciendo → brillo sube suavemente      */
+    30%  { text-shadow: 0 0 6px  rgba(248,215,109,0.15); }
+    50%  { text-shadow: 0 0 16px rgba(248,215,109,0.45); }
+    /*  50–66%: tensión máxima → pico de brillo en el texto */
+    60%  { text-shadow: 0 0 24px rgba(248,215,109,0.65); }
+    66%  { text-shadow: 0 0 30px rgba(248,215,109,0.85); }
+    /*  66–97%: gota cae → brillo acompaña toda la caída    */
+    80%  { text-shadow: 0 0 18px rgba(248,215,109,0.5); }
+    97%  { text-shadow: 0 0 6px  rgba(248,215,109,0.1); }
+    /*  97–100%: gota desaparece → texto vuelve a neutro     */
+    100% { text-shadow: none; }
+  }
+  
+  .hero-sub {
+    font-size: clamp(0.9rem, 1.6vw, 1.02rem); color: var(--text-2);
+    line-height: 1.85; max-width: 420px; font-weight: 300;
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.56s forwards;
+  }
+  
+  .hero-actions {
+    display: flex; gap: 0.75rem; flex-wrap: wrap;
+    margin-bottom: 3rem;
+    opacity: 0; animation: fadeUp 0.7s 0.68s forwards;
+  }
+  
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    background: var(--gold); color: #0a0a0a;
+    font-size: 0.82rem; font-weight: 700; border-radius: 8px;
+    letter-spacing: -0.01em; text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    opacity: 0.92; transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(200,169,110,0.28);
+  }
+  
+  .btn-ghost {
+    display: inline-flex; align-items: center;
+    padding: 0.75rem 1.4rem;
+    border: 1px solid var(--border); color: var(--text-2);
+    font-size: 0.82rem; font-weight: 500; border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: rgba(200,169,110,0.3);
+    color: var(--gold); background: rgba(200,169,110,0.04);
+  }
+  
+  .hero-stats {
+    display: flex; align-items: center; gap: 1.75rem;
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+  .stat { display: flex; align-items: baseline; gap: 0.1rem; flex-wrap: wrap; }
+  .stat-val { font-size: 1.5rem; font-weight: 800; color: var(--text-1); letter-spacing: -0.04em; line-height: 1; }
+  .stat-suf { font-size: 0.9rem; color: var(--gold); font-weight: 700; margin-right: 0.35rem; }
+  .stat-label { font-size: 0.58rem; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; font-family: var(--font-mono); width: 100%; }
+  .stat-sep { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+  
+  /* ─── RIGHT visual ─────────────────────────────── */
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; animation: fadeIn 1s 0.4s forwards;
+    overflow: visible;
+  }
+  
+  .visual-aura {
+    position: absolute; width: 80%; height: 60%;
+    background: radial-gradient(ellipse, rgba(200,169,110,0.14) 0%, transparent 70%);
+    filter: blur(40px);
+    animation: aura-base 6s ease-in-out infinite, aura-impact 7.5s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes aura-base {
+    0%,100% { opacity: 0.7; transform: scale(1); }
+    50%     { opacity: 1;   transform: scale(1.06); }
+  }
+  @keyframes aura-impact {
+    /*  Sincronizado con el ciclo de la gota               */
+    0%   { opacity: 0.7; }
+    5%   { opacity: 0.7; }
+    30%  { opacity: 0.85; }
+    50%  { opacity: 1.0; }
+    60%  { opacity: 1.2; }
+    66%  { opacity: 1.4; }
+    80%  { opacity: 1.1; }
+    97%  { opacity: 0.75; }
+    100% { opacity: 0.7; }
+  }
+  
+  /* ─── Drop scene ───────────────────────────────── */
+  .drop-scene {
+    position: absolute; inset: 0;
+    overflow: visible; pointer-events: none; z-index: 0;
+  }
+  
+  .drop-wrapper {
+    position: absolute;
+    top: 0; right: 28%;
+    width: 0; height: 0;
+  }
+  
+  .drop {
+    width: 12px; height: 18px;
+    background: radial-gradient(ellipse at 35% 25%, #fff5b0, #e8b840 40%, #7a4e18);
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    position: absolute;
+    left: 0; top: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0);
+    box-shadow: 0 0 14px rgba(200,169,110,0.9), 0 0 30px rgba(200,169,110,0.4);
+    animation: drip-form-fall 7.5s ease-in-out infinite;
+    opacity: 0;
+    transform-origin: top center;
+  }
+  
+  @keyframes drip-form-fall {
+    /*  0–5%:  gota aparece y se forma                      */
+    0%   { transform: translateX(-50%) translateY(-20px) scale(0)    scaleY(0.3); opacity: 0; }
+    5%   { transform: translateX(-50%) translateY(-20px) scale(0.3)  scaleY(0.6); opacity: 0.6; }
+    /*  5–50%: gota crece y se tensa                        */
+    30%  { transform: translateX(-50%) translateY(-20px) scale(0.7)  scaleY(1);   opacity: 0.9; }
+    50%  { transform: translateX(-50%) translateY(-20px) scale(1)    scaleY(1.3); opacity: 1; }
+    /*  50–66%: tensión máxima, último tirón antes de caer  */
+    60%  { transform: translateX(-50%) translateY(-14px) scale(0.85) scaleY(1.6); opacity: 1; }
+    66%  { transform: translateX(-50%) translateY(-20px) scale(1)    scaleY(1);   opacity: 1; }
+    /*  66–97%: gota cae hacia abajo                        */
+    97%  { transform: translateX(-50%) translateY(480px) scale(1)    scaleY(1);   opacity: 0.9; }
+    /*  97–100%: gota desaparece y se resetea               */
+    99%  { transform: translateX(-50%) translateY(480px) scale(1)    scaleY(1);   opacity: 0; }
+    100% { transform: translateX(-50%) translateY(-20px) scale(0)    scaleY(0.3); opacity: 0; }
+  }
+  
+  /* ─── Preview card ─────────────────────────────── */
+  .preview-card {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 580px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: var(--bg-1);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04),
+      0 32px 80px rgba(0,0,0,0.55),
+      0 0 60px rgba(200,169,110,0.12);
+    transform: perspective(1000px) rotateY(-3deg) rotateX(2deg);
+    transition: transform 0.6s ease;
+    background-clip: padding-box;
+  }
+  
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  
+  .preview-card::before {
+    content: '';
+    position: absolute; inset: -1.5px;
+    border-radius: 15px; z-index: -1;
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      transparent 20%,
+      rgba(200,169,110,0.15) 35%,
+      rgba(248,215,109,0.9) 45%,
+      rgba(200,169,110,0.8) 50%,
+      rgba(248,215,109,0.9) 55%,
+      rgba(200,169,110,0.15) 65%,
+      transparent 80%
+    );
+    animation: liquid-border 4s linear infinite;
+  }
+  .preview-card::after {
+    content: '';
+    position: absolute; inset: 1px;
+    border-radius: 13px; z-index: -1;
+    background: var(--bg-1);
+  }
+  @keyframes liquid-border { to { --angle: 360deg; } }
+  
+  .preview-card:hover {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+  }
+  
+  .preview-glow-top {
+    position: absolute; top: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 55%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    pointer-events: none;
+  }
+  
+  /* Window bar */
+  .preview-bar {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-2); border-bottom: 1px solid var(--border);
+  }
+  .preview-dots { display: flex; gap: 5px; flex-shrink: 0; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-red    { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green  { background: #28c840; }
+  .preview-title-bar { flex: 1; text-align: center; font-size: 0.68rem; color: var(--text-3); font-family: var(--font-mono); }
+  .preview-live {
+    display: flex; align-items: center; gap: 0.35rem;
+    font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+    color: #22c55e; background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.18); border-radius: 100px;
+    padding: 0.18rem 0.6rem; font-family: var(--font-mono); flex-shrink: 0;
+  }
+  .live-dot {
+    width: 5px; height: 5px; background: #22c55e;
+    border-radius: 50%; flex-shrink: 0;
+    animation: pulse-dot 2s ease infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%     { opacity: 0.5; transform: scale(0.8); }
+  }
+  
+  .preview-body { display: flex; height: 280px; }
+  
+  .preview-sidebar {
+    width: 124px; flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 0.65rem 0;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  @media (max-width: 500px) { .preview-sidebar { display: none; } }
+  
+  .ps-btn {
+    display: flex; align-items: center; gap: 0.45rem;
+    font-size: 0.68rem; color: var(--text-3);
+    padding: 0.4rem 0.8rem; border-radius: 6px;
+    margin: 0 0.4rem; width: calc(100% - 0.8rem);
+    cursor: pointer; background: none; border: none;
+    font-family: var(--font-sans); text-align: left;
+    transition: background 0.15s, color 0.15s;
+  }
+  .ps-btn:hover { background: var(--bg-3); color: var(--text-2); }
+  .ps-active    { background: rgba(200,169,110,0.1) !important; color: var(--gold) !important; }
+  
+  .preview-main { flex: 1; padding: 1.1rem 1.25rem; overflow: hidden; }
+  
+  .tab-panel { display: none; flex-direction: column; }
+  .tab-active { display: flex; animation: fadeIn 0.2s ease forwards; }
+  
+  .pm-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; }
+  .pm-label { font-size: 0.6rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--font-mono); margin-bottom: 0.15rem; }
+  .pm-val { font-size: 1.4rem; font-weight: 700; color: var(--text-1); letter-spacing: -0.04em; }
+  
+  .badge-up { font-size: 0.6rem; color: #22c55e; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.18); border-radius: 100px; padding: 0.18rem 0.55rem; font-family: var(--font-mono); white-space: nowrap; align-self: flex-start; }
+  .badge-warn { font-size: 0.6rem; color: #f59e0b; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 100px; padding: 0.18rem 0.55rem; font-family: var(--font-mono); white-space: nowrap; align-self: flex-start; }
+  
+  .pm-chart { height: 88px; margin-bottom: 0.85rem; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 3px; height: 100%; border-bottom: 1px solid var(--border); }
+  .c-bar {
+    flex: 1; border-radius: 2px 2px 0 0;
+    background: linear-gradient(to top, rgba(200,169,110,0.6), rgba(200,169,110,0.1));
+    transform-origin: bottom;
+    animation: bar-grow 0.5s cubic-bezier(0.34,1.4,0.64,1) backwards;
+  }
+  .c-bar:hover { background: linear-gradient(to top, rgba(200,169,110,0.95), rgba(200,169,110,0.3)); }
+  
+  .pm-kpis { display: flex; gap: 1.5rem; }
+  .kpi { display: flex; flex-direction: column; gap: 0.08rem; }
+  .kpi-l { font-size: 0.55rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-mono); }
+  .kpi-v { font-size: 0.82rem; font-weight: 600; color: var(--text-1); letter-spacing: -0.02em; }
+  
+  .inv-list { display: flex; flex-direction: column; gap: 0.55rem; }
+  .inv-row  { display: flex; flex-direction: column; gap: 0.2rem; }
+  .inv-top  { display: flex; justify-content: space-between; }
+  .inv-name { font-size: 0.7rem; color: var(--text-2); }
+  .inv-qty  { font-size: 0.62rem; color: var(--text-3); font-family: var(--font-mono); }
+  .inv-track { height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
+  .inv-fill  {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, rgba(200,169,110,0.4) 0%, rgba(248,215,109,0.9) 40%, rgba(200,169,110,0.6) 60%, rgba(248,215,109,0.85) 100%);
+    background-size: 200% 100%;
+    animation: liquid-flow 2.5s ease-in-out infinite;
+  }
+  @keyframes liquid-flow {
+    0%   { background-position: 100% 0; }
+    50%  { background-position: 0% 0; }
+    100% { background-position: 100% 0; }
+  }
+  
+  .rep-rows { display: flex; flex-direction: column; }
+  .rep-row  { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
+  .rep-row:last-child { border-bottom: none; }
+  .rep-label { font-size: 0.7rem; color: var(--text-2); }
+  .rep-val   { font-size: 0.7rem; font-weight: 600; font-family: var(--font-mono); }
+  .rep-up    { color: #22c55e; }
+  .rep-dn    { color: var(--text-2); }
+  
+  /* ─── Keyframes ────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes bar-grow {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+  </style>
+  
+  <script>
+  // ── Tab switching ──────────────────────────────
+  const tabs   = document.querySelectorAll<HTMLButtonElement>('.ps-btn');
+  const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('ps-active'));
+      tab.classList.add('ps-active');
+      panels.forEach(p => p.classList.remove('tab-active'));
+      document.querySelector<HTMLElement>(`[data-panel="${target}"]`)?.classList.add('tab-active');
+    });
+  });
+  
+  // ── Animated counters ──────────────────────────
+  const counter = (el: HTMLElement, target: number) => {
+    let start = 0;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / 1600, 1);
+      el.textContent = Math.floor((1 - Math.pow(1 - p, 4)) * target).toString();
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target.toString();
+    };
+    requestAnimationFrame(step);
+  };
+  
+  let triggered = false;
+  const statsEl = document.querySelector('.hero-stats');
+  if (statsEl) {
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !triggered) {
+        triggered = true;
+        document.querySelectorAll<HTMLElement>('.stat-val').forEach(el =>
+          counter(el, parseInt(el.dataset.count || '0'))
+        );
+      }
+    }, { threshold: 0.4 }).observe(statsEl);
+  }
+  
+  // ── Subtle card tilt on mouse move ────────────
+  const card   = document.querySelector<HTMLElement>('.preview-card');
+  const visual = document.querySelector<HTMLElement>('.hero-visual');
+  if (card && visual) {
+    visual.addEventListener('mousemove', (e) => {
+      const rect = visual.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width  - 0.5;
+      const y = (e.clientY - rect.top)  / rect.height - 0.5;
+      card.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 5}deg)`;
+    });
+    visual.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateY(-3deg) rotateX(2deg)';
+    });
+  }
+  </script>
