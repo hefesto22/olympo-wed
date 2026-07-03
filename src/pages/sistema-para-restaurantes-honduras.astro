@@ -3,12 +3,12 @@
 import Layout from '../layouts/Layout.astro';
 
 const tipos = [
-  { icon: '🍽️', title: 'Restaurantes', desc: 'Control de mesas, comandas directas a cocina, cuentas separadas y propinas. Todo fluye desde que el cliente se sienta hasta que paga.' },
-  { icon: '☕', title: 'Cafeterías', desc: 'Ventas rápidas en barra, personalización de bebidas, combos y control de insumos como café, leche y azúcar por receta.' },
-  { icon: '🍔', title: 'Comida rápida', desc: 'Pedidos para llevar, en mesa o delivery en la misma pantalla. Cocina ve cada orden al instante, sin papelitos que se pierden.' },
-  { icon: '🥡', title: 'Comedores y buffets', desc: 'Menú del día, precios por porción, control de raciones y reportes de qué platillos dejan más margen.' },
-  { icon: '🛵', title: 'Delivery propio', desc: 'Pedidos por WhatsApp o app propia, asignación de repartidores y seguimiento de cada entrega sin pagar comisión a terceros.' },
-  { icon: '🍹', title: 'Bares y food trucks', desc: 'Cuentas abiertas por cliente, cortes de caja por turno y operación ágil aunque el local esté lleno.' },
+  { icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3v4.5M4.5 3v4.5a2 2 0 004 0V3M6.5 9.5V17"/><path d="M13.5 3v14M13.5 3c1.8 0 2.8 1.8 2.8 4.5 0 2.4-1 3.8-2.8 3.8"/></svg>', title: 'Restaurantes', desc: 'Control de mesas, comandas directas a cocina, cuentas separadas y propinas. Todo fluye desde que el cliente se sienta hasta que paga.' },
+  { icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h9.5v4.5a4 4 0 01-4 4H8a4 4 0 01-4-4V8z"/><path d="M13.5 9h1.5a2 2 0 010 4h-1.5"/><path d="M7 5.5c0-.8.7-1 .7-1.8M10 5.5c0-.8.7-1 .7-1.8"/></svg>', title: 'Cafeterías', desc: 'Ventas rápidas en barra, personalización de bebidas, combos y control de insumos como café, leche y azúcar por receta.' },
+  { icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5a6 4.5 0 0112 0H4z"/><path d="M3.5 11.5h13"/><path d="M4 14.5h12v.5a2 2 0 01-2 2H6a2 2 0 01-2-2v-.5z"/></svg>', title: 'Comida rápida', desc: 'Pedidos para llevar, en mesa o delivery en la misma pantalla. Cocina ve cada orden al instante, sin papelitos que se pierden.' },
+  { icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h14a7 7 0 01-14 0z"/><path d="M8 6.5c0-1.4 4-1.4 4 0"/><path d="M6 17h8"/></svg>', title: 'Comedores y buffets', desc: 'Menú del día, precios por porción, control de raciones y reportes de qué platillos dejan más margen.' },
+  { icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="14" r="2.3"/><circle cx="14.5" cy="14" r="2.3"/><path d="M5.5 14l2.5-6h3l2 6"/><path d="M9.5 8H13l1.5 3"/><path d="M8 5.5h3"/></svg>', title: 'Delivery propio', desc: 'Pedidos por WhatsApp o app propia, asignación de repartidores y seguimiento de cada entrega sin pagar comisión a terceros.' },
+  { icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h12L10 11v5.5"/><path d="M7 16.5h6M6 6h8"/></svg>', title: 'Bares y food trucks', desc: 'Cuentas abiertas por cliente, cortes de caja por turno y operación ágil aunque el local esté lleno.' },
 ];
 
 const features = [
@@ -83,7 +83,7 @@ const faqs = [
       <div class="geo-grid">
         {tipos.map(t => (
           <div class="geo-card">
-            <span class="geo-card-icon">{t.icon}</span>
+            <span class="geo-card-icon" set:html={t.icon} />
             <h3 class="geo-card-title">{t.title}</h3>
             <p class="geo-card-desc">{t.desc}</p>
           </div>
@@ -220,18 +220,43 @@ const faqs = [
   }
 
   .geo-card {
+    position: relative;
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 1.75rem;
+    padding: 1.5rem;
     background: var(--bg-1);
+    overflow: hidden;
     transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .geo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
   }
   .geo-card:hover {
     border-color: var(--border-gold);
     transform: translateY(-2px);
   }
+  .geo-card:hover::before { opacity: 1; }
 
-  .geo-card-icon { font-size: 1.5rem; display: block; margin-bottom: 0.75rem; }
+  .geo-card-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    margin-bottom: 0.9rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .geo-card:hover .geo-card-icon {
+    background: rgba(200,169,110,0.1);
+    border-color: var(--border-gold);
+  }
   .geo-card-title { font-size: 1rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.5rem; }
   .geo-card-desc { font-size: 0.82rem; color: var(--text-2); line-height: 1.7; font-weight: 300; }
 
