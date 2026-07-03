@@ -494,3 +494,17 @@ hr { border: none; border-top: 1px solid var(--border); }
 .fab-wa .fab-option-icon      { background: #25d366; color: #fff; }
 .fab-email .fab-option-icon   { background: rgba(200,169,110,0.15); color: var(--gold); border: 1px solid var(--border-gold); }
 .fab-contact .fab-option-icon { background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border); }
+/* ─── Accesibilidad: reducir movimiento ─────────────
+   Desactiva animaciones y transiciones decorativas para
+   usuarios con prefers-reduced-motion (vestibular/mareo).
+   Los elementos con entrada fadeUp/fadeIn quedan visibles. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

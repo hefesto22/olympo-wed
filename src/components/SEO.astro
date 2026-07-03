@@ -131,7 +131,6 @@ const graphItems: Record<string, any>[] = [
     isPartOf:      { '@id': `${SITE_URL}/#website` },
     about:         { '@id': `${SITE_URL}/#organization` },
     inLanguage:    'es-HN',
-    dateModified:  new Date().toISOString().split('T')[0],
   },
 ];
 
@@ -177,7 +176,6 @@ const schema = {
 <meta name="description" content={description} />
 <meta name="robots"      content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
 <meta name="author"      content={SITE_NAME} />
-<meta name="keywords"    content="desarrollo de software Honduras, desarrollo de software Copán, desarrollo de software Santa Rosa de Copán, empresa de software Honduras, software a medida Honduras, software a medida Copán, sistema POS Honduras, sistema POS Santa Rosa de Copán, sistema ERP Honduras, sistema CRM Honduras, apps móviles Honduras, aplicaciones móviles Copán, desarrollo web Honduras, automatizaciones N8N Honduras, consultoría IT Honduras, empresa tecnología Copán, programadores Honduras, Olympo Code, olympohn" />
 <link rel="canonical"    href={canonical} />
 
 <!-- Open Graph / Facebook -->

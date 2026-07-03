@@ -15,6 +15,12 @@ export default defineConfig({
         if (item.url === 'https://olympohn.com/')
           return { ...item, priority: 1.0, changefreq: 'weekly' };
 
+        // Landing pages de intención — prioridad alta
+        if (item.url.includes('/sistema-pos-honduras'))
+          return { ...item, priority: 0.9, changefreq: 'monthly' };
+        if (item.url.includes('/sistema-para-restaurantes'))
+          return { ...item, priority: 0.9, changefreq: 'monthly' };
+
         // Landing pages geo-targeted — prioridad alta
         if (item.url.includes('/desarrollo-software-santa-rosa'))
           return { ...item, priority: 0.9, changefreq: 'monthly' };

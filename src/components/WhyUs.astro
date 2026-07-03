@@ -7,6 +7,7 @@ const reasons = [
     title:     'El código es tuyo. Siempre.',
     desc:      'Muchas agencias te entregan un sistema que depende de ellas para sobrevivir. Nosotros no. Recibes el repositorio completo, documentado, listo para que cualquier desarrollador lo tome y continúe. Sin sorpresas, sin rehenes.',
     highlight: 'Cero lock-in',
+    proof:     '$ git clone — tuyo desde el día 1',
     icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 17l-5-5 5-5M16 7l5 5-5 5M14 4l-4 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   },
   {
@@ -14,6 +15,7 @@ const reasons = [
     title:     'Hablas con quien construye.',
     desc:      'No hay un intermediario que traduzca lo que necesitas. El mismo desarrollador que escribe el código es quien responde tu mensaje. Eso significa menos malentendidos, decisiones más rápidas y cambios que se hacen ese mismo día.',
     highlight: 'Sin intermediarios',
+    proof:     'respuesta < 2 h en horario laboral',
     icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   },
   {
@@ -21,6 +23,7 @@ const reasons = [
     title:     'Ves el avance. Cada dos semanas.',
     desc:      'Nada de meses de silencio y una entrega al final que no era lo que esperabas. Cada sprint termina con una demo real que puedes usar y criticar. Tú decides si seguimos, cambiamos o ajustamos — antes de que sea tarde.',
     highlight: 'Sin sorpresas finales',
+    proof:     'demo funcional cada 14 días',
     icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   },
   {
@@ -28,6 +31,7 @@ const reasons = [
     title:     'Calidad que no pide disculpas.',
     desc:      'Somos hondureños y trabajamos para Honduras y el mundo. Cada proyecto lleva CI/CD, code reviews, pruebas y documentación — no porque lo pidas, sino porque es la única forma correcta de construir software que dure.',
     highlight: 'Estándares internacionales',
+    proof:     'CI/CD · tests · review en cada PR',
     icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
   },
 ];
@@ -69,10 +73,13 @@ const reasons = [
           <h4 class="why-title">{r.title}</h4>
           <p class="why-desc">{r.desc}</p>
 
-          <!-- Pill dorada -->
-          <div class="why-pill">
-            <span class="why-pill-dot"></span>
-            {r.highlight}
+          <!-- Pill dorada + prueba concreta -->
+          <div class="why-foot">
+            <div class="why-pill">
+              <span class="why-pill-dot"></span>
+              {r.highlight}
+            </div>
+            <span class="why-proof">{r.proof}</span>
           </div>
 
         </div>
@@ -81,6 +88,17 @@ const reasons = [
 
   </div>
 </section>
+
+<script>
+  // Spotlight que sigue el mouse en cada card
+  document.querySelectorAll<HTMLElement>('.why-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+</script>
 
 <style>
   .why-section {
@@ -175,7 +193,22 @@ const reasons = [
     transition: opacity 0.35s ease;
     font-variant-numeric: tabular-nums;
   }
-  .why-card:hover .why-num-bg { opacity: 0.08; }
+  .why-card:hover .why-num-bg { opacity: 0.09; color: var(--gold); }
+
+  /* Spotlight dorado que sigue el cursor */
+  .why-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      240px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(200,169,110,0.07),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .why-card:hover::after { opacity: 1; }
 
   /* Card header */
   .why-card-header {
@@ -227,6 +260,26 @@ const reasons = [
     font-weight: 300;
     flex: 1;
   }
+
+  /* Pie de card: pill + prueba */
+  .why-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .why-proof {
+    font-size: 0.58rem;
+    font-family: var(--font-mono);
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    opacity: 0.75;
+    transition: color 0.3s ease, opacity 0.3s ease;
+  }
+  .why-card:hover .why-proof { color: var(--gold-dim, var(--gold)); opacity: 1; }
 
   /* Pill */
   .why-pill {

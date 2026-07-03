@@ -52,16 +52,24 @@
                 <span class="code-filename">pos.controller.ts</span>
               </div>
               <div class="code-body">
-                <div class="code-line"><span class="c-purple">import</span> <span class="c-white">&#123; Controller &#125;</span> <span class="c-purple">from</span> <span class="c-gold">'@nestjs/common'</span></div>
-                <div class="code-line"><span class="c-purple">import</span> <span class="c-white">&#123; SaleService &#125;</span> <span class="c-purple">from</span> <span class="c-gold">'./sale.service'</span></div>
-                <div class="code-line">&nbsp;</div>
-                <div class="code-line"><span class="c-blue">@Controller</span><span class="c-white">(</span><span class="c-gold">'sales'</span><span class="c-white">)</span></div>
-                <div class="code-line"><span class="c-purple">export class</span> <span class="c-blue">PosController</span> <span class="c-white">&#123;</span></div>
-                <div class="code-line">&nbsp;&nbsp;<span class="c-blue">@Get</span><span class="c-white">(</span><span class="c-gold">'today'</span><span class="c-white">)</span></div>
-                <div class="code-line">&nbsp;&nbsp;<span class="c-green">getTodaySales</span><span class="c-white">() &#123;</span></div>
-                <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-purple">return</span> <span class="c-white">this.saleService.</span><span class="c-green">findToday</span><span class="c-white">()</span></div>
-                <div class="code-line">&nbsp;&nbsp;<span class="c-white">&#125;</span></div>
-                <div class="code-line"><span class="c-white">&#125;</span></div>
+                <div class="code-line"><span class="code-ln">1</span><span class="c-purple">import</span> <span class="c-white">&#123; Controller, Get &#125;</span> <span class="c-purple">from</span> <span class="c-gold">'@nestjs/common'</span></div>
+                <div class="code-line"><span class="code-ln">2</span><span class="c-purple">import</span> <span class="c-white">&#123; VentasService &#125;</span> <span class="c-purple">from</span> <span class="c-gold">'./ventas.service'</span></div>
+                <div class="code-line"><span class="code-ln">3</span>&nbsp;</div>
+                <div class="code-line"><span class="code-ln">4</span><span class="c-blue">@Controller</span><span class="c-white">(</span><span class="c-gold">'ventas'</span><span class="c-white">)</span></div>
+                <div class="code-line"><span class="code-ln">5</span><span class="c-purple">export class</span> <span class="c-blue">VentasController</span> <span class="c-white">&#123;</span></div>
+                <div class="code-line"><span class="code-ln">6</span>&nbsp;&nbsp;<span class="c-purple">constructor</span><span class="c-white">(</span><span class="c-purple">private</span> <span class="c-white">ventas:</span> <span class="c-blue">VentasService</span><span class="c-white">) &#123;&#125;</span></div>
+                <div class="code-line"><span class="code-ln">7</span>&nbsp;</div>
+                <div class="code-line"><span class="code-ln">8</span>&nbsp;&nbsp;<span class="c-blue">@Get</span><span class="c-white">(</span><span class="c-gold">'resumen-hoy'</span><span class="c-white">)</span></div>
+                <div class="code-line"><span class="code-ln">9</span>&nbsp;&nbsp;<span class="c-purple">async</span> <span class="c-green">resumenHoy</span><span class="c-white">() &#123;</span></div>
+                <div class="code-line"><span class="code-ln">10</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-purple">return</span> <span class="c-white">this.ventas.</span><span class="c-green">resumenDiario</span><span class="c-white">(&#123; isv: </span><span class="c-gold">0.15</span> <span class="c-white">&#125;)</span></div>
+                <div class="code-line"><span class="code-ln">11</span>&nbsp;&nbsp;<span class="c-white">&#125;</span></div>
+                <div class="code-line"><span class="code-ln">12</span><span class="c-white">&#125;</span></div>
+              </div>
+              <div class="code-status">
+                <span class="cs-branch">⎇ main</span>
+                <span>TypeScript</span>
+                <span class="cs-ok">✓ Prettier</span>
+                <span class="cs-right">Ln 10, Col 42</span>
               </div>
             </div>
           </div>
@@ -101,18 +109,34 @@
                   <div class="phone-card">
                     <div class="phone-label">Ventas hoy</div>
                     <div class="phone-amount">L 12,480</div>
-                    <div class="phone-up">↑ 8%</div>
+                    <div class="phone-up">↑ 8% vs ayer</div>
+                  </div>
+                  <div class="phone-chart">
+                    {[35,55,40,70,50,85,65].map(h => (
+                      <span class="ph-bar" style={`height:${h}%`}></span>
+                    ))}
                   </div>
                   <div class="phone-list">
-                    <div class="phone-item"><span class="phone-dot gold"></span><span>Pedido #142</span><span>L 840</span></div>
-                    <div class="phone-item"><span class="phone-dot green"></span><span>Pedido #141</span><span>L 320</span></div>
-                    <div class="phone-item"><span class="phone-dot gold"></span><span>Pedido #140</span><span>L 1,200</span></div>
+                    <div class="phone-item"><span class="phone-dot gold"></span><span class="pi-name">Pedido #142</span><span class="pi-time">10:42</span><span class="pi-amt">L 840</span></div>
+                    <div class="phone-item"><span class="phone-dot green"></span><span class="pi-name">Pedido #141</span><span class="pi-time">10:37</span><span class="pi-amt">L 320</span></div>
+                    <div class="phone-item"><span class="phone-dot gold"></span><span class="pi-name">Pedido #140</span><span class="pi-time">10:31</span><span class="pi-amt">L 1,200</span></div>
+                  </div>
+                  <div class="phone-tabbar">
+                    <svg class="pt-ico pt-on" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 5L5.5 1.5 9.5 5v4.5h-3v-3h-2v3h-3V5z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/></svg>
+                    <svg class="pt-ico" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 9.5V6M5.5 9.5V3M9.5 9.5V1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                    <svg class="pt-ico" width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="3.5" r="2" stroke="currentColor" stroke-width="1"/><path d="M1.5 9.5c0-2 1.8-3 4-3s4 1 4 3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
                   </div>
                 </div>
               </div>
             </div>
             <div class="phone-frame phone-back">
-              <div class="phone-screen phone-screen-back"></div>
+              <div class="phone-screen phone-screen-back">
+                <div class="sk-line sk-w60"></div>
+                <div class="sk-block"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line sk-w80"></div>
+                <div class="sk-line sk-w40"></div>
+              </div>
             </div>
           </div>
           <div class="svc-card-chips">
@@ -165,11 +189,18 @@
                 </div>
               </div>
             </div>
+            <div class="api-metrics">
+              <span>Requests hoy <b>18,342</b></span>
+              <span>p95 <b>89ms</b></span>
+              <span>Errores <b class="am-ok">0.2%</b></span>
+            </div>
             <div class="api-log">
-              <div class="log-line"><span class="log-ok">200</span> POST /api/payment</div>
-              <div class="log-line"><span class="log-ok">200</span> GET /api/inventory</div>
-              <div class="log-line"><span class="log-ok">201</span> POST /api/order</div>
-              <div class="log-line log-dim"><span class="log-pending">···</span> Syncing ERP</div>
+              <div class="log-line"><span class="log-t">10:42:01</span><span class="log-ok">200</span> POST /api/payments<span class="log-ms">142ms</span></div>
+              <div class="log-line"><span class="log-t">10:42:07</span><span class="log-ok">200</span> GET /api/inventory<span class="log-ms">38ms</span></div>
+              <div class="log-line"><span class="log-t">10:42:11</span><span class="log-ok">201</span> POST /api/orders<span class="log-ms">96ms</span></div>
+              <div class="log-line"><span class="log-t">10:42:15</span><span class="log-warn">429</span> POST /api/sms<span class="log-ms">retry ↻</span></div>
+              <div class="log-line"><span class="log-t">10:42:16</span><span class="log-ok">200</span> POST /api/sms<span class="log-ms">81ms</span></div>
+              <div class="log-line log-dim"><span class="log-t">10:42:20</span><span class="log-pending">···</span> Webhook ERP<span class="log-ms">en cola</span></div>
             </div>
           </div>
           <div class="svc-card-chips">
@@ -197,6 +228,7 @@
           </div>
           <p class="svc-card-desc">Tu equipo libre del trabajo repetitivo. Flujos automáticos que conectan herramientas, eliminan errores humanos y ejecutan tareas mientras duermes.</p>
           <div class="svc-card-preview svc-preview-automation">
+            <div class="auto-top">
             <div class="flow-nodes">
               <div class="flow-node flow-trigger">
                 <span class="flow-icon">⚡</span>
@@ -232,6 +264,16 @@
                 <span class="flow-stat-val">98%</span>
                 <span class="flow-stat-label">sin errores</span>
               </div>
+              <div class="flow-stat">
+                <span class="flow-stat-val">64h</span>
+                <span class="flow-stat-label">ahorradas/mes</span>
+              </div>
+            </div>
+            </div>
+            <div class="auto-log">
+              <div class="al-row"><span class="al-ok">✓</span><span class="al-t">10:41</span><span class="al-name">Factura #4821 → email + PDF</span><span class="al-ms">1.2s</span></div>
+              <div class="al-row"><span class="al-ok">✓</span><span class="al-t">10:38</span><span class="al-name">Lead nuevo → CRM + Slack</span><span class="al-ms">0.8s</span></div>
+              <div class="al-row"><span class="al-ok">✓</span><span class="al-t">10:31</span><span class="al-name">Stock bajo → orden de compra</span><span class="al-ms">2.1s</span></div>
             </div>
           </div>
           <div class="svc-card-chips">
@@ -261,6 +303,10 @@
           </div>
           <p class="svc-card-desc">Tu negocio no puede darse el lujo de caerse. Configuramos servidores locales y cloud con monitoreo, backups automáticos y uptime como prioridad.</p>
           <div class="svc-card-preview svc-preview-infra">
+            <div class="infra-host">
+              <span class="ih-name">srv-olympo-01</span>
+              <span class="ih-os">Ubuntu 22.04 LTS · monitoreo 24/7</span>
+            </div>
             <div class="infra-monitor">
               <div class="infra-row">
                 <span class="infra-label">CPU</span>
@@ -294,12 +340,22 @@
               </div>
               <div class="infra-status-row">
                 <span class="status-dot green"></span>
-                <span>backup — 02:00 AM</span>
+                <span>backup diario — 02:00 AM</span>
+              </div>
+              <div class="infra-status-row">
+                <span class="status-dot green"></span>
+                <span>ssl — renueva en 68 días</span>
               </div>
               <div class="infra-uptime">
-                <span class="uptime-label">UPTIME</span>
+                <span class="uptime-label">UPTIME — 30 DÍAS</span>
                 <span class="uptime-val">99.97%</span>
               </div>
+              <div class="uptime-ticks">
+                {Array.from({ length: 30 }).map((_, i) => (
+                  <span class={`ut ${i === 21 ? 'ut-warn' : ''}`}></span>
+                ))}
+              </div>
+              <div class="ut-caption"><span>hace 30 días</span><span>hoy</span></div>
             </div>
           </div>
           <div class="svc-card-chips">
@@ -331,6 +387,7 @@
                 <div class="roadmap-content">
                   <span class="roadmap-phase">Fase 1</span>
                   <span class="roadmap-name">Auditoría de sistemas</span>
+                  <span class="roadmap-sub">14 sistemas · 3 hallazgos críticos</span>
                 </div>
                 <span class="roadmap-tag done-tag">✓ Listo</span>
               </div>
@@ -340,6 +397,8 @@
                 <div class="roadmap-content">
                   <span class="roadmap-phase">Fase 2</span>
                   <span class="roadmap-name">Diseño de arquitectura</span>
+                  <span class="roadmap-sub">ERD + diagramas C4 — 60%</span>
+                  <div class="roadmap-progress"><div class="rp-fill" style="width:60%"></div></div>
                 </div>
                 <span class="roadmap-tag active-tag">En curso</span>
               </div>
@@ -349,9 +408,15 @@
                 <div class="roadmap-content">
                   <span class="roadmap-phase">Fase 3</span>
                   <span class="roadmap-name">Implementación</span>
+                  <span class="roadmap-sub">6 sprints · 2 devs asignados</span>
                 </div>
                 <span class="roadmap-tag">Q3 2025</span>
               </div>
+            </div>
+            <div class="consult-score">
+              <span class="cs-label">Salud técnica</span>
+              <div class="cs-track"><div class="cs-fill" style="width:68%"></div></div>
+              <span class="cs-vals">68 → <b>92</b></span>
             </div>
           </div>
           <div class="svc-card-chips">
@@ -552,8 +617,23 @@
   .code-dot:nth-child(2) { background: #febc2e; }
   .code-dot:nth-child(3) { background: #28c840; }
   .code-filename { font-size: 0.6rem; color: var(--text-3); font-family: var(--font-mono); margin-left: 0.25rem; }
-  .code-body { padding: 0.75rem; display: flex; flex-direction: column; gap: 0.15rem; }
-  .code-line { font-size: 0.65rem; font-family: var(--font-mono); white-space: nowrap; line-height: 1.6; }
+  .code-body { padding: 0.6rem 0.75rem; display: flex; flex-direction: column; gap: 0.12rem; flex: 1; }
+  .code-line { font-size: 0.62rem; font-family: var(--font-mono); white-space: nowrap; line-height: 1.55; }
+  .code-ln {
+    display: inline-block; width: 16px; margin-right: 0.6rem;
+    text-align: right; color: var(--text-3); opacity: 0.45;
+    font-size: 0.55rem; user-select: none;
+  }
+  .code-status {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.28rem 0.75rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg-3);
+    font-size: 0.5rem; font-family: var(--font-mono); color: var(--text-3);
+  }
+  .cs-branch { color: var(--gold); }
+  .cs-ok { color: #22c55e; }
+  .cs-right { margin-left: auto; }
   .c-purple { color: #c792ea; }
   .c-blue   { color: #82aaff; }
   .c-green  { color: #c3e88d; }
@@ -592,11 +672,32 @@
   .phone-label { font-size: 0.5rem; color: var(--text-3); font-family: var(--font-mono); text-transform: uppercase; }
   .phone-amount { font-size: 0.85rem; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; }
   .phone-up { font-size: 0.5rem; color: #22c55e; font-family: var(--font-mono); }
+  .phone-chart { display: flex; gap: 2px; align-items: flex-end; height: 24px; margin-bottom: 0.4rem; }
+  .ph-bar {
+    flex: 1; border-radius: 1px 1px 0 0;
+    background: linear-gradient(to top, rgba(200,169,110,0.55), rgba(200,169,110,0.1));
+  }
   .phone-list { display: flex; flex-direction: column; gap: 0.3rem; }
-  .phone-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.52rem; color: var(--text-2); justify-content: space-between; }
+  .phone-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.52rem; color: var(--text-2); }
+  .pi-name { flex: 1; white-space: nowrap; overflow: hidden; }
+  .pi-time { font-size: 0.46rem; color: var(--text-3); font-family: var(--font-mono); }
+  .pi-amt { font-family: var(--font-mono); color: var(--text-1); }
   .phone-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
   .phone-dot.gold { background: var(--gold); }
   .phone-dot.green { background: #22c55e; }
+  .phone-tabbar {
+    display: flex; justify-content: space-around; align-items: center;
+    border-top: 1px solid var(--border);
+    margin-top: 0.45rem; padding-top: 0.35rem;
+  }
+  .pt-ico { color: var(--text-3); }
+  .pt-on { color: var(--gold); }
+  .phone-screen-back { height: 180px; padding: 0.6rem 0.5rem; }
+  .sk-line { height: 6px; border-radius: 3px; background: var(--bg-4); margin-bottom: 7px; opacity: 0.7; }
+  .sk-block { height: 42px; border-radius: 6px; background: var(--bg-4); margin-bottom: 8px; opacity: 0.7; }
+  .sk-w60 { width: 60%; }
+  .sk-w80 { width: 80%; }
+  .sk-w40 { width: 40%; }
   
   /* ── API PREVIEW ── */
   .svc-preview-api { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -620,14 +721,34 @@
   @keyframes api-move { from { left: 0; opacity: 1; } to { left: 100%; opacity: 0; } }
   .api-badge { font-size: 0.52rem; color: var(--gold); font-family: var(--font-mono); }
   .api-nodes-col { display: flex; flex-direction: column; gap: 0.3rem; }
-  .api-log { display: flex; flex-direction: column; gap: 0.2rem; }
-  .log-line { font-size: 0.6rem; font-family: var(--font-mono); color: var(--text-3); display: flex; gap: 0.5rem; }
+  .api-metrics {
+    display: flex; gap: 0.9rem;
+    font-size: 0.52rem; font-family: var(--font-mono); color: var(--text-3);
+    padding-bottom: 0.45rem; border-bottom: 1px solid var(--border);
+  }
+  .api-metrics b { color: var(--text-1); font-weight: 600; }
+  .api-metrics b.am-ok { color: #22c55e; }
+  .api-log { display: flex; flex-direction: column; gap: 0.22rem; }
+  .log-line { font-size: 0.56rem; font-family: var(--font-mono); color: var(--text-2); display: flex; gap: 0.45rem; align-items: baseline; }
+  .log-t { color: var(--text-3); opacity: 0.6; }
   .log-ok { color: #22c55e; }
+  .log-warn { color: #f59e0b; }
   .log-pending { color: var(--gold); }
-  .log-dim { opacity: 0.5; }
+  .log-ms { margin-left: auto; color: var(--text-3); font-size: 0.5rem; }
+  .log-dim { opacity: 0.55; }
   
   /* ── AUTOMATION PREVIEW ── */
-  .svc-preview-automation { padding: 1rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .svc-preview-automation { padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .auto-top { display: flex; gap: 1rem; align-items: flex-start; width: 100%; }
+  .auto-log {
+    display: flex; flex-direction: column; gap: 0.25rem;
+    border-top: 1px solid var(--border); padding-top: 0.5rem; width: 100%;
+  }
+  .al-row { display: flex; gap: 0.45rem; align-items: baseline; font-size: 0.54rem; font-family: var(--font-mono); color: var(--text-2); }
+  .al-ok { color: #22c55e; }
+  .al-t { color: var(--text-3); opacity: 0.7; }
+  .al-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .al-ms { color: var(--text-3); font-size: 0.5rem; }
   .flow-nodes { display: flex; flex-direction: column; align-items: center; gap: 0; flex: 1; }
   .flow-node {
     display: flex; align-items: center; gap: 0.3rem;
@@ -647,7 +768,21 @@
   .flow-stat-label { font-size: 0.56rem; color: var(--text-3); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
   
   /* ── INFRA PREVIEW ── */
-  .svc-preview-infra { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .svc-preview-infra { padding: 1rem; display: flex; flex-direction: column; gap: 0.65rem; }
+  .infra-host {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 0.45rem; border-bottom: 1px solid var(--border);
+  }
+  .ih-name { font-size: 0.62rem; font-family: var(--font-mono); color: var(--gold); }
+  .ih-os { font-size: 0.48rem; font-family: var(--font-mono); color: var(--text-3); }
+  .uptime-ticks { display: flex; gap: 2px; margin-top: 0.3rem; }
+  .ut { flex: 1; height: 10px; border-radius: 1px; background: rgba(34,197,94,0.5); }
+  .ut-warn { background: rgba(245,158,11,0.65); }
+  .ut-caption {
+    display: flex; justify-content: space-between;
+    font-size: 0.44rem; color: var(--text-3); font-family: var(--font-mono);
+    margin-top: 0.2rem; opacity: 0.7;
+  }
   .infra-monitor { display: flex; flex-direction: column; gap: 0.45rem; }
   .infra-row { display: flex; align-items: center; gap: 0.5rem; }
   .infra-label { font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-3); width: 28px; flex-shrink: 0; }
@@ -680,7 +815,23 @@
   .roadmap-tag { font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-3); white-space: nowrap; }
   .done-tag { color: #22c55e; }
   .active-tag { color: var(--gold); }
-  .roadmap-line { width: 1px; height: 18px; background: var(--border); margin-left: 4.5px; }
+  .roadmap-line { width: 1px; height: 14px; background: var(--border); margin-left: 4.5px; }
+  .roadmap-sub { font-size: 0.5rem; color: var(--text-3); font-family: var(--font-mono); margin-top: 1px; }
+  .roadmap-progress { height: 3px; background: var(--bg-4); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+  .rp-fill { height: 100%; background: var(--gold); border-radius: 2px; }
+  .consult-score {
+    display: flex; align-items: center; gap: 0.55rem;
+    margin-top: 0.75rem; padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .cs-label {
+    font-size: 0.5rem; font-family: var(--font-mono); color: var(--text-3);
+    text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .cs-track { flex: 1; height: 4px; background: var(--bg-4); border-radius: 2px; overflow: hidden; }
+  .cs-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, rgba(200,169,110,0.5), var(--gold)); }
+  .cs-vals { font-size: 0.56rem; font-family: var(--font-mono); color: var(--text-3); white-space: nowrap; }
+  .cs-vals b { color: #22c55e; font-weight: 600; }
   
   /* Dots */
   .svc-dots {

@@ -13,16 +13,6 @@
       <div class="bg-noise"></div>
     </div>
   
-    <!-- Golden drop — anchored to full section -->
-    <div class="drop-scene" aria-hidden="true">
-      <div class="drop-wrapper">
-        <div class="drop"></div>
-      </div>
-    </div>
-  
-    <!-- Gold pulse overlay — fires when drop lands -->
-    <div class="gold-pulse-overlay" aria-hidden="true"></div>
-  
     <div class="hero-container">
   
       <!-- LEFT: copy -->
@@ -98,7 +88,11 @@
           <div class="preview-body">
   
             <nav class="preview-sidebar">
-              <button class="ps-btn ps-active" data-tab="dashboard">
+              <button class="ps-btn ps-active" data-tab="venta">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 1.5h1.6l1.2 7h6.4l1.3-5H4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5" cy="11" r="1" fill="currentColor"/><circle cx="9.5" cy="11" r="1" fill="currentColor"/></svg>
+                Venta
+              </button>
+              <button class="ps-btn" data-tab="dashboard">
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 6.5h6M3.5 4h3M3.5 9h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
                 Dashboard
               </button>
@@ -117,15 +111,85 @@
             </nav>
   
             <main class="preview-main">
-  
-              <!-- Dashboard panel -->
-              <div class="tab-panel tab-active" data-panel="dashboard">
-                <div class="pm-head">
-                  <div>
-                    <p class="pm-label">Ventas de hoy</p>
-                    <p class="pm-val">L 84,320</p>
+
+              <!-- Venta (POS) panel — grid de productos + carrito -->
+              <div class="tab-panel tab-active" data-panel="venta">
+                <div class="pos-layout">
+                  <div class="pos-products">
+                    <div class="pos-cats">
+                      <span class="cat-chip cat-on">Todos</span>
+                      <span class="cat-chip">Equipos</span>
+                      <span class="cat-chip">Accesorios</span>
+                    </div>
+                    <div class="prod-grid">
+                      {[
+                        { name: 'Laptop Dell XPS 13', price: 'L 28,500', stock: 12, qty: 1 },
+                        { name: 'Monitor LG 27"',     price: 'L 6,900',  stock: 5,  qty: 0 },
+                        { name: 'Teclado Mec. K2',    price: 'L 2,400',  stock: 28, qty: 0 },
+                        { name: 'Mouse Logitech MX',  price: 'L 1,850',  stock: 3,  qty: 2 },
+                        { name: 'Hub USB-C 7 en 1',   price: 'L 1,150',  stock: 17, qty: 1 },
+                        { name: 'Audífonos JBL',      price: 'L 990',    stock: 9,  qty: 0 },
+                      ].map(p => (
+                        <div class={`prod-tile ${p.qty > 0 ? 'pt-sel' : ''}`}>
+                          {p.qty > 0 && <span class="pt-badge">×{p.qty}</span>}
+                          <span class="pt-name">{p.name}</span>
+                          <div class="pt-row">
+                            <span class="pt-price">{p.price}</span>
+                            <span class="pt-stock">{p.stock} disp.</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <span class="badge-up">↑ 12% vs ayer</span>
+                  <aside class="pos-ticket">
+                    <div class="ticket-head">
+                      <span class="th-id">#000482</span>
+                      <span>Caja 1 · 10:42</span>
+                    </div>
+                    <div class="ticket-client">Cliente — Consumidor final</div>
+                    <div class="ticket-lines">
+                      {[
+                        { qty: 1, name: 'Laptop Dell XPS', price: '28,500.00' },
+                        { qty: 2, name: 'Mouse MX',        price: '3,700.00'  },
+                        { qty: 1, name: 'Hub USB-C',       price: '1,150.00'  },
+                      ].map(l => (
+                        <div class="t-line">
+                          <span class="tl-qty">{l.qty}×</span>
+                          <span class="tl-name">{l.name}</span>
+                          <span class="tl-price">{l.price}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="ticket-totals">
+                      <div class="tt-row"><span>Subtotal</span><span>33,350.00</span></div>
+                      <div class="tt-row"><span>ISV 15%</span><span>5,002.50</span></div>
+                      <div class="tt-row tt-total"><span>Total</span><span>L 38,352.50</span></div>
+                    </div>
+                    <div class="ticket-methods">
+                      <span class="tm-chip tm-on">Efectivo</span>
+                      <span class="tm-chip">Tarjeta</span>
+                      <span class="tm-chip">Transf.</span>
+                    </div>
+                    <span class="ticket-pay">Cobrar →</span>
+                  </aside>
+                </div>
+              </div>
+
+              <!-- Dashboard panel -->
+              <div class="tab-panel" data-panel="dashboard">
+                <div class="dash-kpis">
+                  {[
+                    { l: 'Ventas hoy',   v: 'L 84,320', d: '↑ 12%', up: true },
+                    { l: 'Órdenes',      v: '142',      d: '↑ 9%',  up: true },
+                    { l: 'Ticket prom.', v: 'L 594',    d: '↑ 4%',  up: true },
+                    { l: 'Margen',       v: '42%',      d: '↓ 1%',  up: false },
+                  ].map(k => (
+                    <div class="dk-card">
+                      <span class="dk-l">{k.l}</span>
+                      <span class="dk-v">{k.v}</span>
+                      <span class={`dk-d ${k.up ? 'dk-up' : 'dk-dn'}`}>{k.d}</span>
+                    </div>
+                  ))}
                 </div>
                 <div class="pm-chart">
                   <div class="chart-bars">
@@ -133,11 +197,16 @@
                       <div class="c-bar" style={`height:${h}%;animation-delay:${i*55}ms`}></div>
                     ))}
                   </div>
+                  <div class="chart-x">
+                    <span>8am</span><span>10am</span><span>12pm</span><span>2pm</span><span>4pm</span><span>6pm</span>
+                  </div>
                 </div>
-                <div class="pm-kpis">
-                  <div class="kpi"><span class="kpi-l">Órdenes</span><span class="kpi-v">142</span></div>
-                  <div class="kpi"><span class="kpi-l">Ticket prom.</span><span class="kpi-v">L 594</span></div>
-                  <div class="kpi"><span class="kpi-l">Productos</span><span class="kpi-v">38</span></div>
+                <div class="dash-goal">
+                  <div class="goal-top">
+                    <span>Meta del día</span>
+                    <span>84% — L 84,320 / L 100,000</span>
+                  </div>
+                  <div class="goal-track"><div class="goal-fill" style="width:84%"></div></div>
                 </div>
               </div>
   
@@ -150,24 +219,24 @@
                   </div>
                   <span class="badge-warn">⚠ 6 bajo mínimo</span>
                 </div>
-                <div class="inv-list">
+                <div class="tbl tbl-inv">
+                  <div class="tbl-h"><span>Producto</span><span>SKU</span><span>Stock</span><span>Estado</span></div>
                   {[
-                    { name: 'Laptop Dell XPS',  stock: 12, pct: 60 },
-                    { name: 'Monitor LG 27"',   stock: 5,  pct: 25 },
-                    { name: 'Teclado Mecánico', stock: 28, pct: 90 },
-                    { name: 'Mouse Logitech',   stock: 3,  pct: 15 },
-                  ].map(item => (
-                    <div class="inv-row">
-                      <div class="inv-top">
-                        <span class="inv-name">{item.name}</span>
-                        <span class="inv-qty">{item.stock} u.</span>
-                      </div>
-                      <div class="inv-track">
-                        <div class="inv-fill" style={`width:${item.pct}%;${item.pct < 20 ? 'background:rgba(239,68,68,0.45)' : ''}`}></div>
-                      </div>
+                    { name: 'Laptop Dell XPS 13',  sku: 'LP-0034', stock: 12, st: 'OK',      cls: 'pill-ok'   },
+                    { name: 'Monitor LG 27"',      sku: 'MN-0108', stock: 5,  st: 'Bajo',    cls: 'pill-low'  },
+                    { name: 'Teclado Mecánico K2', sku: 'TC-0219', stock: 28, st: 'OK',      cls: 'pill-ok'   },
+                    { name: 'Mouse Logitech MX',   sku: 'MS-0075', stock: 3,  st: 'Crítico', cls: 'pill-crit' },
+                    { name: 'Hub USB-C 7 en 1',    sku: 'AC-0311', stock: 17, st: 'OK',      cls: 'pill-ok'   },
+                  ].map(r => (
+                    <div class="tbl-r">
+                      <span class="td-name">{r.name}</span>
+                      <span class="td-mono">{r.sku}</span>
+                      <span class="td-num">{r.stock}</span>
+                      <span class={`pill ${r.cls}`}>{r.st}</span>
                     </div>
                   ))}
                 </div>
+                <p class="tbl-note">Valor de inventario — L 1,842,300</p>
               </div>
   
               <!-- Ventas panel -->
@@ -179,18 +248,24 @@
                   </div>
                   <span class="badge-up">↑ 8% vs anterior</span>
                 </div>
-                <div class="pm-chart">
-                  <div class="chart-bars">
-                    {[30,50,70,45,85,60,90,55,75,95,65,100].map((h, i) => (
-                      <div class="c-bar" style={`height:${h}%;animation-delay:${i*55}ms`}></div>
-                    ))}
-                  </div>
+                <div class="tbl tbl-sales">
+                  <div class="tbl-h"><span>Factura</span><span>Hora</span><span>Método</span><span>Total</span></div>
+                  {[
+                    { f: '#000481', h: '10:42', m: 'Tarjeta',   cls: 'pill-gold', t: 'L 1,240.00' },
+                    { f: '#000480', h: '10:37', m: 'Efectivo',  cls: 'pill-ok',   t: 'L 386.00'   },
+                    { f: '#000479', h: '10:21', m: 'Transfer.', cls: 'pill-blue', t: 'L 7,900.00' },
+                    { f: '#000478', h: '09:58', m: 'Tarjeta',   cls: 'pill-gold', t: 'L 2,150.00' },
+                    { f: '#000477', h: '09:45', m: 'Efectivo',  cls: 'pill-ok',   t: 'L 594.00'   },
+                  ].map(r => (
+                    <div class="tbl-r">
+                      <span class="td-mono">{r.f}</span>
+                      <span class="td-mono">{r.h}</span>
+                      <span class={`pill ${r.cls}`}>{r.m}</span>
+                      <span class="td-num">{r.t}</span>
+                    </div>
+                  ))}
                 </div>
-                <div class="pm-kpis">
-                  <div class="kpi"><span class="kpi-l">Transacciones</span><span class="kpi-v">3,412</span></div>
-                  <div class="kpi"><span class="kpi-l">Clientes nuevos</span><span class="kpi-v">84</span></div>
-                  <div class="kpi"><span class="kpi-l">Devoluciones</span><span class="kpi-v">12</span></div>
-                </div>
+                <p class="tbl-note">Mostrando 5 de 3,412 transacciones</p>
               </div>
   
               <!-- Reportes panel -->
@@ -202,18 +277,26 @@
                   </div>
                   <span class="badge-up">↑ 23% YoY</span>
                 </div>
-                <div class="rep-rows">
+                <div class="tbl tbl-rep">
+                  <div class="tbl-h"><span>Concepto</span><span>Q4 24</span><span>Q1 25</span><span>Δ</span></div>
                   {[
-                    { label: 'Ingresos totales', val: 'L 3,842,400', up: true  },
-                    { label: 'Costo de ventas',  val: 'L 1,921,200', up: false },
-                    { label: 'Margen bruto',     val: '50%',         up: true  },
-                    { label: 'Clientes activos', val: '318',         up: true  },
+                    { c: 'Ingresos totales', a: 'L 3,124,900', b: 'L 3,842,400', d: '+23%'  },
+                    { c: 'Costo de ventas',  a: 'L 1,684,300', b: 'L 1,921,200', d: '+14%'  },
+                    { c: 'Margen bruto',     a: '46%',         b: '50%',         d: '+4 pt' },
+                    { c: 'Ticket promedio',  a: 'L 512',       b: 'L 594',       d: '+16%'  },
+                    { c: 'Clientes activos', a: '282',         b: '318',         d: '+13%'  },
                   ].map(r => (
-                    <div class="rep-row">
-                      <span class="rep-label">{r.label}</span>
-                      <span class={`rep-val ${r.up ? 'rep-up' : 'rep-dn'}`}>{r.val}</span>
+                    <div class="tbl-r">
+                      <span class="td-name">{r.c}</span>
+                      <span class="td-num td-dim">{r.a}</span>
+                      <span class="td-num">{r.b}</span>
+                      <span class="delta-up">{r.d}</span>
                     </div>
                   ))}
+                </div>
+                <div class="rep-actions">
+                  <span class="rep-btn">Exportar PDF</span>
+                  <span class="rep-btn">Excel</span>
                 </div>
               </div>
   
@@ -280,47 +363,6 @@
     background-size: 200px 200px;
   }
   
-  /* ─────────────────────────────────────────────────
-     CICLO DE LA GOTA — 7.5s total
-     Mapa de fases (% → segundos):
-       0–5%   = 0–0.375s   → gota aparece / se forma
-       5–50%  = 0.375–3.75s → gota crece, se tensa
-       50–66% = 3.75–4.95s  → gota en tensión máxima (PICO DE BRILLO)
-       66–97% = 4.95–7.275s → gota cae (brillo acompaña la caída)
-       97–100%= 7.275–7.5s  → gota desaparece, reset a oscuro
-     ───────────────────────────────────────────────── */
-
-  /* ─── Gold pulse overlay ───────────────────────── */
-  .gold-pulse-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-    background: radial-gradient(ellipse 55% 65% at 75% 50%,
-      rgba(248,215,109,0.18) 0%,
-      rgba(200,169,110,0.06) 50%,
-      transparent 75%
-    );
-    opacity: 0;
-    animation: gold-overlay-pulse 7.5s ease-in-out infinite;
-  }
-  @keyframes gold-overlay-pulse {
-    /*  0–5%:  gota formándose → overlay apagado          */
-    0%   { opacity: 0; }
-    5%   { opacity: 0; }
-    /*  5–50%: gota creciendo → brillo sube gradualmente  */
-    30%  { opacity: 0.2; }
-    50%  { opacity: 0.5; }
-    /*  50–66%: tensión máxima → pico de brillo           */
-    60%  { opacity: 0.75; }
-    66%  { opacity: 0.9; }
-    /*  66–97%: gota cae → brillo acompaña toda la caída  */
-    80%  { opacity: 0.55; }
-    97%  { opacity: 0.15; }
-    /*  97–100%: gota desaparece → overlay se apaga        */
-    100% { opacity: 0; }
-  }
-  
   /* ─── Layout ───────────────────────────────────── */
   .hero-container {
     position: relative; z-index: 3;
@@ -374,37 +416,7 @@
     font-style: italic;
   }
 
-  /*
-    .h-line-3 tiene DOS animaciones:
-    1. fadeUp  → entrada inicial (una sola vez, fill: forwards)
-    2. gold-text-pulse → sincronizada con la gota (loop infinito)
-
-    El delay negativo en gold-text-pulse (-0.44s) hace que el loop
-    arranque exactamente en el mismo punto que el ciclo de la gota,
-    compensando el delay de fadeUp.
-  */
-  .h-line-3 {
-    animation:
-      fadeUp        0.7s 0.44s ease forwards,
-      gold-text-pulse 7.5s -0.44s ease-in-out infinite;
-  }
-
-  @keyframes gold-text-pulse {
-    /*  0–5%:  gota formándose → sin brillo en el texto     */
-    0%   { text-shadow: none; }
-    5%   { text-shadow: none; }
-    /*  5–50%: gota creciendo → brillo sube suavemente      */
-    30%  { text-shadow: 0 0 6px  rgba(248,215,109,0.15); }
-    50%  { text-shadow: 0 0 16px rgba(248,215,109,0.45); }
-    /*  50–66%: tensión máxima → pico de brillo en el texto */
-    60%  { text-shadow: 0 0 24px rgba(248,215,109,0.65); }
-    66%  { text-shadow: 0 0 30px rgba(248,215,109,0.85); }
-    /*  66–97%: gota cae → brillo acompaña toda la caída    */
-    80%  { text-shadow: 0 0 18px rgba(248,215,109,0.5); }
-    97%  { text-shadow: 0 0 6px  rgba(248,215,109,0.1); }
-    /*  97–100%: gota desaparece → texto vuelve a neutro     */
-    100% { text-shadow: none; }
-  }
+  .h-line-3 { animation: fadeUp 0.7s 0.44s ease forwards; }
   
   .hero-sub {
     font-size: clamp(0.9rem, 1.6vw, 1.02rem); color: var(--text-2);
@@ -467,68 +479,14 @@
     position: absolute; width: 80%; height: 60%;
     background: radial-gradient(ellipse, rgba(200,169,110,0.14) 0%, transparent 70%);
     filter: blur(40px);
-    animation: aura-base 6s ease-in-out infinite, aura-impact 7.5s ease-out infinite;
+    animation: aura-base 6s ease-in-out infinite;
     pointer-events: none;
   }
   @keyframes aura-base {
     0%,100% { opacity: 0.7; transform: scale(1); }
     50%     { opacity: 1;   transform: scale(1.06); }
   }
-  @keyframes aura-impact {
-    /*  Sincronizado con el ciclo de la gota               */
-    0%   { opacity: 0.7; }
-    5%   { opacity: 0.7; }
-    30%  { opacity: 0.85; }
-    50%  { opacity: 1.0; }
-    60%  { opacity: 1.2; }
-    66%  { opacity: 1.4; }
-    80%  { opacity: 1.1; }
-    97%  { opacity: 0.75; }
-    100% { opacity: 0.7; }
-  }
-  
-  /* ─── Drop scene ───────────────────────────────── */
-  .drop-scene {
-    position: absolute; inset: 0;
-    overflow: visible; pointer-events: none; z-index: 0;
-  }
-  
-  .drop-wrapper {
-    position: absolute;
-    top: 0; right: 28%;
-    width: 0; height: 0;
-  }
-  
-  .drop {
-    width: 12px; height: 18px;
-    background: radial-gradient(ellipse at 35% 25%, #fff5b0, #e8b840 40%, #7a4e18);
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-    position: absolute;
-    left: 0; top: 0;
-    transform: translateX(-50%) translateY(-20px) scale(0);
-    box-shadow: 0 0 14px rgba(200,169,110,0.9), 0 0 30px rgba(200,169,110,0.4);
-    animation: drip-form-fall 7.5s ease-in-out infinite;
-    opacity: 0;
-    transform-origin: top center;
-  }
-  
-  @keyframes drip-form-fall {
-    /*  0–5%:  gota aparece y se forma                      */
-    0%   { transform: translateX(-50%) translateY(-20px) scale(0)    scaleY(0.3); opacity: 0; }
-    5%   { transform: translateX(-50%) translateY(-20px) scale(0.3)  scaleY(0.6); opacity: 0.6; }
-    /*  5–50%: gota crece y se tensa                        */
-    30%  { transform: translateX(-50%) translateY(-20px) scale(0.7)  scaleY(1);   opacity: 0.9; }
-    50%  { transform: translateX(-50%) translateY(-20px) scale(1)    scaleY(1.3); opacity: 1; }
-    /*  50–66%: tensión máxima, último tirón antes de caer  */
-    60%  { transform: translateX(-50%) translateY(-14px) scale(0.85) scaleY(1.6); opacity: 1; }
-    66%  { transform: translateX(-50%) translateY(-20px) scale(1)    scaleY(1);   opacity: 1; }
-    /*  66–97%: gota cae hacia abajo                        */
-    97%  { transform: translateX(-50%) translateY(480px) scale(1)    scaleY(1);   opacity: 0.9; }
-    /*  97–100%: gota desaparece y se resetea               */
-    99%  { transform: translateX(-50%) translateY(480px) scale(1)    scaleY(1);   opacity: 0; }
-    100% { transform: translateX(-50%) translateY(-20px) scale(0)    scaleY(0.3); opacity: 0; }
-  }
-  
+
   /* ─── Preview card ─────────────────────────────── */
   .preview-card {
     position: relative; z-index: 1;
@@ -617,7 +575,7 @@
     50%     { opacity: 0.5; transform: scale(0.8); }
   }
   
-  .preview-body { display: flex; height: 280px; }
+  .preview-body { display: flex; height: 296px; }
   
   .preview-sidebar {
     width: 124px; flex-shrink: 0;
@@ -641,7 +599,7 @@
   
   .preview-main { flex: 1; padding: 1.1rem 1.25rem; overflow: hidden; }
   
-  .tab-panel { display: none; flex-direction: column; }
+  .tab-panel { display: none; flex-direction: column; height: 100%; }
   .tab-active { display: flex; animation: fadeIn 0.2s ease forwards; }
   
   .pm-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; }
@@ -651,8 +609,13 @@
   .badge-up { font-size: 0.6rem; color: #22c55e; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.18); border-radius: 100px; padding: 0.18rem 0.55rem; font-family: var(--font-mono); white-space: nowrap; align-self: flex-start; }
   .badge-warn { font-size: 0.6rem; color: #f59e0b; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 100px; padding: 0.18rem 0.55rem; font-family: var(--font-mono); white-space: nowrap; align-self: flex-start; }
   
-  .pm-chart { height: 88px; margin-bottom: 0.85rem; }
-  .chart-bars { display: flex; align-items: flex-end; gap: 3px; height: 100%; border-bottom: 1px solid var(--border); }
+  .pm-chart { flex: 1; min-height: 84px; display: flex; flex-direction: column; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 3px; flex: 1; border-bottom: 1px solid var(--border); }
+  .chart-x {
+    display: flex; justify-content: space-between;
+    font-size: 0.5rem; color: var(--text-3); font-family: var(--font-mono);
+    margin-top: 0.25rem;
+  }
   .c-bar {
     flex: 1; border-radius: 2px 2px 0 0;
     background: linear-gradient(to top, rgba(200,169,110,0.6), rgba(200,169,110,0.1));
@@ -661,36 +624,175 @@
   }
   .c-bar:hover { background: linear-gradient(to top, rgba(200,169,110,0.95), rgba(200,169,110,0.3)); }
   
-  .pm-kpis { display: flex; gap: 1.5rem; }
-  .kpi { display: flex; flex-direction: column; gap: 0.08rem; }
-  .kpi-l { font-size: 0.55rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-mono); }
-  .kpi-v { font-size: 0.82rem; font-weight: 600; color: var(--text-1); letter-spacing: -0.02em; }
-  
-  .inv-list { display: flex; flex-direction: column; gap: 0.55rem; }
-  .inv-row  { display: flex; flex-direction: column; gap: 0.2rem; }
-  .inv-top  { display: flex; justify-content: space-between; }
-  .inv-name { font-size: 0.7rem; color: var(--text-2); }
-  .inv-qty  { font-size: 0.62rem; color: var(--text-3); font-family: var(--font-mono); }
-  .inv-track { height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
-  .inv-fill  {
-    height: 100%; border-radius: 2px;
-    background: linear-gradient(90deg, rgba(200,169,110,0.4) 0%, rgba(248,215,109,0.9) 40%, rgba(200,169,110,0.6) 60%, rgba(248,215,109,0.85) 100%);
-    background-size: 200% 100%;
-    animation: liquid-flow 2.5s ease-in-out infinite;
+  /* ─── Dashboard: KPI cards + meta ──────────────── */
+  .dash-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; margin-bottom: 0.6rem; }
+  .dk-card {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 7px; padding: 0.4rem 0.5rem;
+    display: flex; flex-direction: column; gap: 0.1rem; min-width: 0;
   }
-  @keyframes liquid-flow {
-    0%   { background-position: 100% 0; }
-    50%  { background-position: 0% 0; }
-    100% { background-position: 100% 0; }
+  .dk-l { font-size: 0.5rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-v { font-size: 0.78rem; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; white-space: nowrap; }
+  .dk-d { font-size: 0.52rem; font-family: var(--font-mono); }
+  .dk-up { color: #22c55e; }
+  .dk-dn { color: #ef4444; }
+
+  .dash-goal { margin-top: 0.6rem; }
+  .goal-top {
+    display: flex; justify-content: space-between;
+    font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-3);
+    margin-bottom: 0.25rem;
   }
+  .goal-top span:last-child { color: var(--text-2); }
+  .goal-track { height: 5px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+  .goal-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, rgba(200,169,110,0.5), var(--gold)); }
+
+  /* ─── Tablas (inventario / ventas / reportes) ──── */
+  .tbl { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .tbl-h, .tbl-r { display: grid; align-items: center; padding: 0.32rem 0.65rem; gap: 0.5rem; }
+  .tbl-h {
+    font-size: 0.52rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-3); font-family: var(--font-mono);
+    background: var(--bg-2); border-bottom: 1px solid var(--border);
+  }
+  .tbl-h span:last-child { text-align: right; }
+  .tbl-r { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .tbl-r:last-child { border-bottom: none; }
+  .tbl-r:hover { background: rgba(255,255,255,0.02); }
+  .td-name { font-size: 0.64rem; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .td-mono { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-3); }
+  .td-num  { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-1); text-align: right; }
+  .td-dim  { color: var(--text-3); }
+
+  .tbl-inv   .tbl-h, .tbl-inv   .tbl-r { grid-template-columns: 1.5fr 58px 38px 62px; }
+  .tbl-sales .tbl-h, .tbl-sales .tbl-r { grid-template-columns: 60px 40px 1fr 80px; }
+  .tbl-rep   .tbl-h, .tbl-rep   .tbl-r { grid-template-columns: 1.3fr 82px 82px 46px; }
+  .tbl-inv .tbl-h span:last-child, .tbl-inv .pill { text-align: center; justify-self: end; }
+
+  .pill {
+    font-size: 0.5rem; font-family: var(--font-mono);
+    padding: 0.1rem 0.45rem; border-radius: 100px;
+    justify-self: start; white-space: nowrap;
+  }
+  .pill-ok   { color: #22c55e;    background: rgba(34,197,94,0.08);   border: 1px solid rgba(34,197,94,0.18); }
+  .pill-low  { color: #f59e0b;    background: rgba(245,158,11,0.08);  border: 1px solid rgba(245,158,11,0.2); }
+  .pill-crit { color: #ef4444;    background: rgba(239,68,68,0.08);   border: 1px solid rgba(239,68,68,0.2); }
+  .pill-gold { color: var(--gold); background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.2); }
+  .pill-blue { color: #60a5fa;    background: rgba(96,165,250,0.08);  border: 1px solid rgba(96,165,250,0.2); }
+
+  .delta-up { color: #22c55e; font-family: var(--font-mono); font-size: 0.58rem; text-align: right; }
+
+  .tbl-note {
+    font-size: 0.52rem; color: var(--text-3); font-family: var(--font-mono);
+    text-align: right; margin-top: 0.4rem;
+  }
+
+  .rep-actions { display: flex; gap: 0.4rem; margin-top: 0.55rem; justify-content: flex-end; }
+  .rep-btn {
+    font-size: 0.55rem; font-family: var(--font-mono);
+    padding: 0.24rem 0.6rem; border-radius: 6px;
+    border: 1px solid var(--border); color: var(--text-2);
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .rep-btn:hover { border-color: rgba(200,169,110,0.35); color: var(--gold); }
   
-  .rep-rows { display: flex; flex-direction: column; }
-  .rep-row  { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
-  .rep-row:last-child { border-bottom: none; }
-  .rep-label { font-size: 0.7rem; color: var(--text-2); }
-  .rep-val   { font-size: 0.7rem; font-weight: 600; font-family: var(--font-mono); }
-  .rep-up    { color: #22c55e; }
-  .rep-dn    { color: var(--text-2); }
+  /* ─── Panel Venta: productos + carrito ─────────── */
+  .pos-layout { display: flex; gap: 0.7rem; height: 100%; min-height: 0; }
+
+  .pos-products { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .pos-cats { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; }
+  .cat-chip {
+    font-size: 0.54rem; font-family: var(--font-mono);
+    padding: 0.16rem 0.55rem; border-radius: 100px;
+    border: 1px solid var(--border); color: var(--text-3);
+    white-space: nowrap;
+  }
+  .cat-on { border-color: rgba(200,169,110,0.35); color: var(--gold); background: rgba(200,169,110,0.07); }
+
+  .prod-grid {
+    flex: 1; display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr; gap: 0.4rem;
+    min-height: 0;
+  }
+  .prod-tile {
+    position: relative;
+    display: flex; flex-direction: column; justify-content: center; gap: 0.18rem;
+    padding: 0.3rem 0.55rem; min-width: 0;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 7px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .prod-tile:hover { border-color: rgba(200,169,110,0.35); }
+  .pt-sel {
+    border-color: rgba(200,169,110,0.45);
+    background: rgba(200,169,110,0.05);
+    box-shadow: 0 0 12px rgba(200,169,110,0.08) inset;
+  }
+  .pt-badge {
+    position: absolute; top: -5px; right: -5px;
+    background: var(--gold); color: #0a0a0a;
+    font-size: 0.48rem; font-weight: 700; font-family: var(--font-mono);
+    padding: 0.06rem 0.3rem; border-radius: 100px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+  .pt-name  { font-size: 0.58rem; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pt-sel .pt-name { color: var(--text-1); }
+  .pt-row   { display: flex; justify-content: space-between; align-items: baseline; gap: 0.3rem; }
+  .pt-price { font-size: 0.6rem; color: var(--gold); font-family: var(--font-mono); }
+  .pt-stock { font-size: 0.46rem; color: var(--text-3); font-family: var(--font-mono); white-space: nowrap; }
+
+  .pos-ticket {
+    width: 176px; flex-shrink: 0;
+    display: flex; flex-direction: column;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.55rem 0.6rem;
+  }
+  .ticket-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.54rem; font-family: var(--font-mono); color: var(--text-3);
+    padding-bottom: 0.35rem; border-bottom: 1px dashed var(--border);
+    margin-bottom: 0.25rem;
+  }
+  .th-id { color: var(--text-2); }
+  .ticket-client {
+    font-size: 0.5rem; font-family: var(--font-mono); color: var(--text-3);
+    padding-bottom: 0.25rem; margin-bottom: 0.15rem;
+  }
+  .ticket-lines { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .t-line { display: flex; gap: 0.3rem; align-items: baseline; padding: 0.15rem 0; }
+  .tl-qty   { font-size: 0.55rem; color: var(--gold); font-family: var(--font-mono); flex-shrink: 0; }
+  .tl-name  { font-size: 0.58rem; color: var(--text-2); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tl-price { font-size: 0.55rem; color: var(--text-1); font-family: var(--font-mono); }
+  .ticket-totals { border-top: 1px dashed var(--border); padding-top: 0.3rem; margin-bottom: 0.45rem; }
+  .tt-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.55rem; color: var(--text-3); font-family: var(--font-mono);
+    padding: 0.07rem 0;
+  }
+  .tt-total { font-size: 0.7rem; font-weight: 700; color: var(--text-1); padding-top: 0.2rem; }
+  .tt-total span:last-child { color: var(--gold); }
+  .ticket-methods { display: flex; gap: 0.25rem; margin-bottom: 0.4rem; }
+  .tm-chip {
+    flex: 1; text-align: center;
+    font-size: 0.48rem; font-family: var(--font-mono);
+    padding: 0.2rem 0.1rem; border-radius: 5px;
+    border: 1px solid var(--border); color: var(--text-3);
+    white-space: nowrap;
+  }
+  .tm-on {
+    border-color: rgba(200,169,110,0.4); color: var(--gold);
+    background: rgba(200,169,110,0.07);
+  }
+  .ticket-pay {
+    background: var(--gold); color: #0a0a0a;
+    font-size: 0.62rem; font-weight: 700; text-align: center;
+    padding: 0.38rem 0; border-radius: 6px;
+  }
+  @media (max-width: 500px) {
+    .pos-ticket { width: 148px; }
+    .prod-grid { grid-template-columns: 1fr; }
+  }
   
   /* ─── Keyframes ────────────────────────────────── */
   @keyframes fadeUp {

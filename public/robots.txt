@@ -3,7 +3,6 @@ Allow: /
 
 # Bloquear rutas innecesarias
 Disallow: /api/
-Disallow: /_astro/
 
 # Páginas en construcción
 Disallow: /nosotros
