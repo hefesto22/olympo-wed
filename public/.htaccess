@@ -1,0 +1,18 @@
+# ── Canonical: forzar HTTPS y dominio sin www (una sola redirección, sin loops) ──
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://olympohn.com%{REQUEST_URI} [L,R=301]
+
+# ── Página 404 personalizada ──
+ErrorDocument 404 /404.html
+
+# ── Cache de assets estáticos (Astro les pone hash, seguro cachear fuerte) ──
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
