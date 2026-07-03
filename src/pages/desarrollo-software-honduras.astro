@@ -2,12 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 
 const regions = [
-  { name: 'Copán', desc: 'Santa Rosa de Copán, Copán Ruinas, La Entrada' },
-  { name: 'San Pedro Sula', desc: 'Zona industrial y comercial del norte' },
-  { name: 'Tegucigalpa', desc: 'Capital y zona metropolitana' },
-  { name: 'La Ceiba', desc: 'Costa atlántica y turismo' },
-  { name: 'Comayagua', desc: 'Centro logístico del país' },
-  { name: 'Occidente', desc: 'Lempira, Ocotepeque, Santa Bárbara' },
+  { name: 'Copán', desc: 'Santa Rosa de Copán, Copán Ruinas, La Entrada', hq: true },
+  { name: 'San Pedro Sula', desc: 'Zona industrial y comercial del norte', hq: false },
+  { name: 'Tegucigalpa', desc: 'Capital y zona metropolitana', hq: false },
+  { name: 'La Ceiba', desc: 'Costa atlántica y turismo', hq: false },
+  { name: 'Comayagua', desc: 'Centro logístico del país', hq: false },
+  { name: 'Occidente', desc: 'Lempira, Ocotepeque, Santa Bárbara', hq: false },
 ];
 
 const faqs = [
@@ -70,7 +70,11 @@ const faqs = [
       <h2 class="geo-section-title">Cobertura en todo Honduras</h2>
       <div class="geo-regions-grid">
         {regions.map(r => (
-          <div class="geo-region-card">
+          <div class={`geo-region-card ${r.hq ? 'grc-sede' : ''}`}>
+            <div class="grc-top">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18s-6-5.2-6-9.8A6 6 0 0110 2a6 6 0 016 6.2C16 12.8 10 18 10 18z"/><circle cx="10" cy="8.2" r="2.2"/></svg>
+              {r.hq && <span class="grc-hq">Sede</span>}
+            </div>
             <h3>{r.name}</h3>
             <p>{r.desc}</p>
           </div>
@@ -83,21 +87,25 @@ const faqs = [
       <h2 class="geo-section-title">Soluciones de software para empresas hondureñas</h2>
       <div class="geo-svc-grid">
         <div class="geo-svc-item">
+          <span class="geo-svc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.7" y="1.7" width="16.6" height="16.6" rx="3.3"/><path d="M6.7 13.3L4.2 10.8l2.5-2.5M13.3 8.3l2.5 2.5-2.5 2.5M11.7 5l-3.4 10"/></svg></span>
           <h3>Software a medida</h3>
           <p>Sistemas POS, ERP, CRM y plataformas diseñadas específicamente para tu negocio. No vendemos software genérico — construimos lo que necesitas.</p>
           <a href="/servicios#software-medida">Más información →</a>
         </div>
         <div class="geo-svc-item">
+          <span class="geo-svc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="1.7" width="8.4" height="16.6" rx="2.1"/><circle cx="10" cy="15" r="0.8" fill="currentColor" stroke="none"/><path d="M8.3 4.2h3.4"/></svg></span>
           <h3>Aplicaciones móviles</h3>
           <p>Apps nativas para iOS y Android con React Native y Flutter. Desde apps de delivery hasta plataformas de gestión empresarial móvil.</p>
           <a href="/servicios#apps-moviles">Más información →</a>
         </div>
         <div class="geo-svc-item">
+          <span class="geo-svc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.3 10a6.7 6.7 0 016.7-6.7M16.7 10a6.7 6.7 0 01-6.7 6.7"/><path d="M10 3.3l2 2-2 2M10 16.7l-2-2 2-2"/></svg></span>
           <h3>Automatizaciones</h3>
           <p>Eliminamos procesos manuales con flujos automáticos usando N8N y Make. Ahorra tiempo y reduce errores en tu operación diaria.</p>
           <a href="/servicios#automatizaciones">Más información →</a>
         </div>
         <div class="geo-svc-item">
+          <span class="geo-svc-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.7" y="3.3" width="16.6" height="4.6" rx="1.3"/><rect x="1.7" y="12.1" width="16.6" height="4.6" rx="1.3"/><circle cx="14.6" cy="5.6" r="0.8" fill="currentColor" stroke="none"/><circle cx="14.6" cy="14.4" r="0.8" fill="currentColor" stroke="none"/></svg></span>
           <h3>Infraestructura cloud</h3>
           <p>Servidores, Docker, CI/CD, SSL y monitoreo 24/7. Tu sistema siempre disponible, seguro y escalable cuando tu negocio crezca.</p>
           <a href="/servicios#infraestructura">Más información →</a>
@@ -176,16 +184,59 @@ const faqs = [
   /* Regions */
   .geo-regions { margin-bottom: 5rem; }
   .geo-regions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-  .geo-region-card { padding: 1.25rem; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-1); text-align: center; transition: border-color 0.2s ease; }
-  .geo-region-card:hover { border-color: var(--border-gold); }
+  .geo-region-card {
+    position: relative;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-1);
+    overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .geo-region-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .geo-region-card:hover { border-color: var(--border-gold); transform: translateY(-2px); }
+  .geo-region-card:hover::before { opacity: 1; }
+  .grc-sede { border-color: rgba(200,169,110,0.3); background: rgba(200,169,110,0.03); }
+  .grc-top {
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--gold); margin-bottom: 0.6rem;
+  }
+  .grc-hq {
+    font-size: 0.52rem; font-family: var(--font-mono);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--gold);
+    border: 1px solid rgba(200,169,110,0.35);
+    background: rgba(200,169,110,0.08);
+    border-radius: 100px;
+    padding: 0.15rem 0.5rem;
+  }
   .geo-region-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.25rem; }
-  .geo-region-card p { font-size: 0.75rem; color: var(--text-3); }
+  .geo-region-card p { font-size: 0.75rem; color: var(--text-3); line-height: 1.55; }
 
   /* Services */
   .geo-services-list { margin-bottom: 5rem; }
   .geo-svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-  .geo-svc-item { padding: 1.75rem; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-1); transition: border-color 0.2s ease; }
-  .geo-svc-item:hover { border-color: var(--border-gold); }
+  .geo-svc-item { padding: 1.6rem; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-1); transition: border-color 0.2s ease, transform 0.2s ease; }
+  .geo-svc-item:hover { border-color: var(--border-gold); transform: translateY(-2px); }
+  .geo-svc-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    margin-bottom: 0.9rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .geo-svc-item:hover .geo-svc-icon { background: rgba(200,169,110,0.1); border-color: var(--border-gold); }
   .geo-svc-item h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.5rem; }
   .geo-svc-item p { font-size: 0.82rem; color: var(--text-2); line-height: 1.7; font-weight: 300; margin-bottom: 1rem; }
   .geo-svc-item a { font-size: 0.78rem; color: var(--gold); font-weight: 500; }
@@ -193,7 +244,7 @@ const faqs = [
   /* Differentiators */
   .geo-diff { margin-bottom: 5rem; }
   .geo-diff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
-  .geo-diff-item { padding: 1.5rem; }
+  .geo-diff-item { padding: 1.25rem 1.5rem; border-left: 2px solid var(--gold); }
   .geo-diff-num { font-size: 0.7rem; font-family: var(--font-mono); color: var(--gold); letter-spacing: 0.05em; }
   .geo-diff-item h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin: 0.35rem 0 0.5rem; }
   .geo-diff-item p { font-size: 0.82rem; color: var(--text-2); line-height: 1.7; font-weight: 300; }
