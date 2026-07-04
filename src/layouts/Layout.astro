@@ -4,8 +4,10 @@ import '@fontsource-variable/dm-sans';
 import '@fontsource-variable/dm-sans/standard-italic.css';
 import '@fontsource/dm-mono/400.css';
 import '@fontsource/dm-mono/500.css';
-// URL del woff2 principal para preload (corta la cadena crítica de fuentes)
+// URLs de los woff2 críticos para preload (cortan la cadena crítica de fuentes)
 import dmSansWoff2 from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url';
+import dmSansItalicWoff2 from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-italic.woff2?url';
+import dmMonoWoff2 from '@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2?url';
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
@@ -32,6 +34,8 @@ const { title, description, image, noindex, breadcrumbs, faq } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preload" as="font" type="font/woff2" href={dmSansWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={dmSansItalicWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={dmMonoWoff2} crossorigin />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#080808" />
