@@ -23,7 +23,7 @@
   /* Text */
   --text-1: #f5f5f0;
   --text-2: #a0a099;
-  --text-3: #55554f;
+  --text-3: #82827a; /* aclarado para contraste AA (antes #55554f) */
 
   /* Gold palette */
   --gold:         #c8a96e;

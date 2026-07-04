@@ -1,9 +1,13 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import partytown from '@astrojs/partytown';
 
 export default defineConfig({
   site: 'https://olympohn.com',
   integrations: [
+    partytown({
+      config: { forward: ['dataLayer.push'] },
+    }),
     sitemap({
       filter: (page) =>
         !page.includes('/api/') &&
