@@ -89,18 +89,17 @@ const { title, description, image, noindex, breadcrumbs, faq } = Astro.props;
 
     <!-- Script global: corre en todas las páginas -->
     <script>
-      const reveal = () => {
-        document.querySelectorAll('.reveal').forEach(el => {
-          if (el.getBoundingClientRect().top < window.innerHeight - 60) {
-            el.classList.add('visible');
+      // Reveal con IntersectionObserver: sin lecturas de layout en scroll (evita reflow forzado)
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
           }
         });
-      };
+      }, { rootMargin: '0px 0px -60px 0px' });
 
-      window.addEventListener('scroll', reveal, { passive: true });
-      window.addEventListener('load', reveal);
-      document.addEventListener('DOMContentLoaded', reveal);
-      reveal();
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
       // FAB toggle
       const fabMain    = document.getElementById('fab-main');

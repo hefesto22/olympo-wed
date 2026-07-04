@@ -4,6 +4,10 @@ import partytown from '@astrojs/partytown';
 
 export default defineConfig({
   site: 'https://olympohn.com',
+  build: {
+    // Inline de todo el CSS en el HTML: elimina la request bloqueante de render
+    inlineStylesheets: 'always',
+  },
   integrations: [
     partytown({
       config: { forward: ['dataLayer.push'] },
