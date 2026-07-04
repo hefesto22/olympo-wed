@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+/* Fuentes self-hosteadas vía @fontsource (importadas en Layout.astro) */
 
 @tailwind base;
 @tailwind components;
@@ -33,8 +33,8 @@
   --gold-glow:    rgba(200, 169, 110, 0.12);
 
   /* Typography */
-  --font-sans:    'DM Sans', system-ui, sans-serif;
-  --font-mono:    'DM Mono', monospace;
+  --font-sans:    'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', ui-monospace, monospace;
 
   /* Misc */
   --radius:       8px;
