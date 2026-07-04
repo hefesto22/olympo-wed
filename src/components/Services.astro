@@ -838,12 +838,20 @@
     display: flex; gap: 0.4rem; justify-content: center;
     margin-top: 1.5rem;
   }
+  /* Touch target de 24px (accesibilidad); el punto visual vive en ::after */
   .svc-dot {
+    width: 24px; height: 24px;
+    background: transparent; border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0;
+  }
+  .svc-dot::after {
+    content: '';
     width: 6px; height: 6px; border-radius: 50%;
     background: var(--bg-4); border: 1px solid var(--border);
-    cursor: pointer; transition: all var(--transition);
+    transition: all var(--transition);
   }
-  .svc-dot.active {
+  .svc-dot.active::after {
     background: var(--gold); border-color: var(--gold);
     width: 18px; border-radius: 3px;
   }
@@ -863,8 +871,15 @@
   
   // ── Clonar cards para loop infinito ──
   // Clonamos todas al inicio y al final
-  const clonesBefore = origCards.map(c => { const cl = c.cloneNode(true) as HTMLElement; cl.setAttribute('aria-hidden','true'); return cl; });
-  const clonesAfter  = origCards.map(c => { const cl = c.cloneNode(true) as HTMLElement; cl.setAttribute('aria-hidden','true'); return cl; });
+  const makeClone = (c: HTMLElement) => {
+    const cl = c.cloneNode(true) as HTMLElement;
+    cl.setAttribute('aria-hidden', 'true');
+    // Un elemento aria-hidden no debe contener elementos enfocables
+    cl.querySelectorAll<HTMLElement>('button, a, [tabindex]').forEach(el => { el.tabIndex = -1; });
+    return cl;
+  };
+  const clonesBefore = origCards.map(makeClone);
+  const clonesAfter  = origCards.map(makeClone);
   
   clonesBefore.reverse().forEach(cl => carousel.prepend(cl));
   clonesAfter.forEach(cl => carousel.append(cl));
