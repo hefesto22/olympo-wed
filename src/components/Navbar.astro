@@ -1,4 +1,8 @@
 ---
+// El menú "Sistemas" sale de la misma lista que la página /sistemas.
+import { sistemas, svgSistema } from '../data/sistemas';
+const mitad = Math.ceil(sistemas.length / 2);
+const columnasSistemas = [sistemas.slice(0, mitad), sistemas.slice(mitad)];
 ---
 
 <header id="nav">
@@ -95,6 +99,35 @@
         </div>
       </div>
 
+      <!-- Sistemas dropdown -->
+      <div class="nav-item has-dropdown" id="drop-sistemas">
+        <button class="nav-link nav-link-btn">
+          Sistemas
+          <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="dropdown dropdown-sistemas">
+          <div class="dropdown-inner">
+            {columnasSistemas.map((col, i) => (
+              <div class="dropdown-col">
+                <p class="dropdown-label">{i === 0 ? 'Sistemas por rubro' : '\u00a0'}</p>
+                {col.map(s => (
+                  <a href={s.href ?? `/sistemas#${s.id}`} class="dropdown-item">
+                    <span class="ditem-icon" set:html={svgSistema(s.icono, 15)} />
+                    <span>
+                      <strong>{s.corto}</strong>
+                      <small>{s.paraQuien}</small>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
+          <a href="/sistemas" class="dropdown-foot">Ver todos los sistemas y para qué sirven <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
       <!-- Empresa dropdown -->
       <div class="nav-item has-dropdown" id="drop-empresa">
         <button class="nav-link nav-link-btn">
@@ -132,7 +165,7 @@
         </div>
       </div>
 
-      <a href="/blog" class="nav-link">Blog</a>
+      <a href="/blog" class="nav-link nav-link-blog">Blog</a>
       <a href="/portafolio" class="nav-link">Portafolio</a>
 
     </nav>
@@ -158,10 +191,11 @@
       <a href="/servicios#apis"           class="mobile-link">APIs e Integraciones</a>
       <a href="/servicios#automatizaciones" class="mobile-link">Automatizaciones N8N</a>
       <a href="/servicios#servidores"     class="mobile-link">Servidores & Hosting</a>
-      <p class="mobile-section-label" style="margin-top:0.75rem">Soluciones</p>
-      <a href="/sistema-para-lotificadoras-honduras" class="mobile-link">Sistema para Lotificadoras</a>
-      <a href="/sistema-pos-honduras"                class="mobile-link">Sistema Punto de Venta</a>
-      <a href="/sistema-para-restaurantes-honduras"  class="mobile-link">Sistema para Restaurantes</a>
+      <p class="mobile-section-label" style="margin-top:0.75rem">Sistemas</p>
+      <div class="mobile-sistemas">
+        {sistemas.map(s => <a href={s.href ?? `/sistemas#${s.id}`} class="mobile-sistema">{s.corto}</a>)}
+      </div>
+      <a href="/sistemas" class="mobile-link">Ver todos los sistemas →</a>
       <p class="mobile-section-label" style="margin-top:0.75rem">Empresa</p>
       <a href="/nosotros"   class="mobile-link">Nosotros</a>
       <a href="/portafolio" class="mobile-link">Portafolio</a>
@@ -295,6 +329,20 @@
     overflow: hidden;
   }
   .dropdown-sm { min-width: 280px; }
+  .dropdown-sistemas { min-width: 600px; }
+  .dropdown-sistemas .dropdown-item small {
+    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .dropdown-foot {
+    display: block; text-align: center;
+    font-size: 0.76rem; font-weight: 500; color: var(--gold);
+    padding: 0.75rem 1rem; border-top: 1px solid var(--border);
+    background: rgba(200,169,110,0.05);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .dropdown-foot:hover { background: rgba(200,169,110,0.1); color: var(--gold-bright, #e2c07a); }
+  .ditem-icon { color: var(--text-2); }
+  @media (max-width: 1040px) { .nav-link-blog { display: none; } }
 
   .nav-item.open .dropdown {
     opacity: 1;
@@ -402,7 +450,11 @@
   .mobile-btn.open .mb-line:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
 
   /* ── Mobile menu ── */
-  .mobile-menu { display: none; background: var(--bg-1); border-bottom: 1px solid var(--border); }
+  .mobile-menu {
+    display: none; background: var(--bg-1); border-bottom: 1px solid var(--border);
+    /* el menú vive dentro del header fijo: sin esto, lo que no cabe en pantalla queda inalcanzable */
+    max-height: calc(100vh - 74px); max-height: calc(100dvh - 74px); overflow-y: auto; overscroll-behavior: contain;
+  }
   .mobile-menu.open { display: block; }
   @media (min-width: 860px) { .mobile-menu { display: none !important; } }
 
@@ -419,6 +471,14 @@
   }
   .mobile-link:last-of-type { border-bottom: none; }
   .mobile-link:hover { color: var(--text-1); }
+  .mobile-sistemas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem; padding: 0.25rem 0 0.5rem; }
+  .mobile-sistema {
+    font-size: 0.8rem; color: var(--text-2);
+    border: 1px solid var(--border); border-radius: 8px; background: var(--bg-2);
+    padding: 0.55rem 0.65rem; line-height: 1.25;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .mobile-sistema:hover { color: var(--text-1); border-color: var(--border-gold); }
   .mobile-link-cta {
     color: var(--gold) !important; margin-top: 0.5rem;
     border-bottom: none !important; font-weight: 500;

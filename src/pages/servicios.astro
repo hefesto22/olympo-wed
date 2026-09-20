@@ -108,6 +108,11 @@ const services = [
         <p class="label-tag">Servicios</p>
         <h1 class="svc-hero-title">Todo lo que necesitas<br/><span class="svc-hero-em">en un solo equipo.</span></h1>
         <p class="svc-hero-sub">Desde la idea hasta el servidor — construimos, integramos, automatizamos y mantenemos sin depender de terceros.</p>
+        <a href="/sistemas" class="svc-sistemas-link">
+          <span class="svc-sistemas-tag">Sistemas por rubro</span>
+          Punto de venta, restaurantes y bares, farmacias, lotificadoras y más
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </div>
@@ -238,6 +243,22 @@ const services = [
   .svc-hero {
     padding: 5rem 0 3rem;
   }
+
+  .svc-sistemas-link {
+    margin-top: 1.5rem;
+    display: inline-flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: center;
+    font-size: 0.82rem; color: var(--text-2);
+    border: 1px solid var(--border-gold); border-radius: 100px;
+    background: var(--gold-subtle); padding: 0.45rem 1rem 0.45rem 0.5rem;
+    transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  }
+  .svc-sistemas-link:hover { color: var(--text-1); background: rgba(200,169,110,0.14); border-color: var(--gold); }
+  .svc-sistemas-tag {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #120d04; background: linear-gradient(135deg, #e2c07a, #b8924e);
+    border-radius: 100px; padding: 0.2rem 0.6rem; font-weight: 600;
+  }
+  @media (max-width: 560px) { .svc-sistemas-link { border-radius: 14px; padding: 0.6rem 0.8rem; } }
 
   .svc-hero-inner {
     text-align: center;
