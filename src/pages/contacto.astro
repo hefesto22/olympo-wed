@@ -145,6 +145,7 @@ import Layout from '../layouts/Layout.astro';
                     <select class="form-input form-select" id="servicio" name="servicio" required>
                       <option value="" disabled selected>Selecciona un servicio</option>
                       <option value="software-medida">Software a Medida (POS, ERP, CRM)</option>
+                      <option value="lotificaciones">Sistema para Lotificadoras (presentación)</option>
                       <option value="app-movil">App Móvil</option>
                       <option value="api-integracion">API e Integraciones</option>
                       <option value="automatizacion">Automatizaciones N8N</option>
@@ -562,6 +563,19 @@ const submitBtn  = document.getElementById('submit-btn') as HTMLButtonElement;
 const btnText    = document.getElementById('btn-text') as HTMLElement;
 const btnArrow   = document.getElementById('btn-arrow') as HTMLElement;
 const btnSpinner = document.getElementById('btn-spinner') as HTMLElement;
+
+// Preselección desde una landing: /contacto?servicio=lotificaciones
+const servicioParam = new URLSearchParams(window.location.search).get('servicio');
+const servicioSel   = document.getElementById('servicio') as HTMLSelectElement | null;
+if (servicioParam && servicioSel && Array.from(servicioSel.options).some(o => o.value === servicioParam)) {
+  servicioSel.value = servicioParam;
+  if (servicioParam === 'lotificaciones') {
+    const desc = document.getElementById('descripcion') as HTMLTextAreaElement | null;
+    if (desc && !desc.value) {
+      desc.placeholder = 'Contanos de tu lotificadora: cuántos proyectos y lotes manejás, cómo llevás hoy las cuotas y cuándo te queda bien la presentación.';
+    }
+  }
+}
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();

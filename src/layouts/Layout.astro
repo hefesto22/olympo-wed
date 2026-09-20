@@ -23,9 +23,10 @@ interface Props {
   noindex?:     boolean;
   breadcrumbs?: BreadcrumbItem[];
   faq?:         FAQItem[];
+  schema?:      Record<string, any>[];
 }
 
-const { title, description, image, noindex, breadcrumbs, faq } = Astro.props;
+const { title, description, image, noindex, breadcrumbs, faq, schema } = Astro.props;
 ---
 
 <!doctype html>
@@ -41,7 +42,7 @@ const { title, description, image, noindex, breadcrumbs, faq } = Astro.props;
     <meta name="theme-color" content="#080808" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <SEO title={title} description={description} image={image} noindex={noindex} breadcrumbs={breadcrumbs} faq={faq} />
+    <SEO title={title} description={description} image={image} noindex={noindex} breadcrumbs={breadcrumbs} faq={faq} schema={schema} />
 
     <!-- Google Analytics 4 — vía Partytown: corre en Web Worker, no toca el hilo principal -->
     <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-C37PGYXW55"></script>

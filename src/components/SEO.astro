@@ -1,6 +1,6 @@
 ---
 // src/components/SEO.astro
-// Uso: <SEO title="..." description="..." breadcrumbs={[...]} faq={[...]} />
+// Uso: <SEO title="..." description="..." breadcrumbs={[...]} faq={[...]} schema={[...]} />
 
 interface BreadcrumbItem {
   name: string;
@@ -21,6 +21,8 @@ interface Props {
   noindex?:     boolean;
   breadcrumbs?: BreadcrumbItem[];
   faq?:         FAQItem[];
+  /** Nodos JSON-LD propios de la página (p. ej. un Service); se agregan al @graph. */
+  schema?:      Record<string, any>[];
 }
 
 const SITE_URL  = 'https://olympohn.com';
@@ -37,6 +39,7 @@ const {
   noindex     = false,
   breadcrumbs = [],
   faq         = [],
+  schema: extraSchema = [],
 } = Astro.props;
 
 const fullTitle = title.includes('Olympo') ? title : `${title} — ${SITE_NAME}`;
@@ -83,7 +86,8 @@ const graphItems: Record<string, any>[] = [
       longitude:   -88.7833,
     },
     sameAs: [
-      'https://github.com/olympo-code',
+      'https://www.instagram.com/olympocode',
+      'https://www.tiktok.com/@olympotk',
       'https://www.linkedin.com/company/olympo-code',
     ],
     knowsAbout: [
@@ -94,6 +98,7 @@ const graphItems: Record<string, any>[] = [
       'Sistemas POS',
       'Sistemas ERP',
       'Sistemas CRM',
+      'Software para lotificadoras',
       'APIs e Integraciones',
       'Automatizaciones N8N',
       'Infraestructura Cloud',
@@ -105,6 +110,7 @@ const graphItems: Record<string, any>[] = [
       name:    'Servicios de Desarrollo de Software en Honduras',
       itemListElement: [
         { '@type': 'Offer', name: 'Software a Medida — POS, ERP, CRM',   url: `${SITE_URL}/servicios#software-medida` },
+        { '@type': 'Offer', name: 'Olympo Lotificaciones — Sistema para lotificadoras', url: `${SITE_URL}/sistema-para-lotificadoras-honduras` },
         { '@type': 'Offer', name: 'Aplicaciones Móviles iOS y Android',   url: `${SITE_URL}/servicios#apps-moviles` },
         { '@type': 'Offer', name: 'APIs e Integraciones',                 url: `${SITE_URL}/servicios#apis-integraciones` },
         { '@type': 'Offer', name: 'Automatizaciones N8N y Make',          url: `${SITE_URL}/servicios#automatizaciones` },
@@ -163,6 +169,9 @@ if (faq.length > 0) {
     })),
   });
 }
+
+// ── Nodos propios de la página ──
+if (extraSchema.length > 0) graphItems.push(...extraSchema);
 
 const schema = {
   '@context': 'https://schema.org',

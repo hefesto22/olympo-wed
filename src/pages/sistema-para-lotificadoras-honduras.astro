@@ -1,0 +1,1536 @@
+---
+// Landing de producto: Olympo Lotificaciones
+// Intención: "sistema para lotificadoras", "software para lotificadoras Honduras",
+// "sistema de control de lotes", "software para venta de lotes a plazos".
+//
+// Todo lo que esta página promete existe en el producto (módulos verificados contra
+// el manual de usuario de Olympo Lotificaciones). Si se agrega una función acá,
+// confirmar primero que el sistema la tiene.
+import Layout from '../layouts/Layout.astro';
+
+const URL_PAGINA = 'https://olympohn.com/sistema-para-lotificadoras-honduras/';
+const WHATSAPP   = 'https://wa.me/50433012826?text=' + encodeURIComponent(
+  'Hola, quiero una presentación de Olympo Lotificaciones para mi lotificadora.'
+);
+const CONTACTO   = '/contacto?servicio=lotificaciones';
+const WHATSAPP_360 = 'https://wa.me/50433012826?text=' + encodeURIComponent(
+  'Hola, quiero información sobre los recorridos virtuales 360° para mi lotificación.'
+);
+
+// Servicio adicional (se contrata aparte del sistema)
+const beneficios360 = [
+  'Compradores en el extranjero conocen el lote sin viajar.',
+  'Quien visita el terreno ya lo recorrió: menos visitas que no terminan en venta.',
+  'Un recorrido por lote, enlazado desde el plano público.',
+];
+
+/* ─────────────────────────────────────────────
+   Datos del plano de demostración (ficticios)
+───────────────────────────────────────────── */
+type Estado = 'disponible' | 'apartado' | 'vendido';
+interface LoteDemo { codigo: string; num: string; estado: Estado; area: number; puntos: string; cx: number; cy: number; }
+
+const PRIMA_PCT = 0.30;
+// Lista de precios de ejemplo: el precio por vara² sube con el plazo.
+const planes = [
+  { meses: 0,  etiqueta: 'Contado',  precio: 1150 },
+  { meses: 12, etiqueta: '12 meses', precio: 1250 },
+  { meses: 24, etiqueta: '24 meses', precio: 1300 },
+  { meses: 48, etiqueta: '48 meses', precio: 1350 },
+  { meses: 72, etiqueta: '72 meses', precio: 1400 },
+];
+const PLAN_DEMO = planes[4];
+
+const L = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// La cuota se redondea hacia arriba a un número cerrado (acá, múltiplos de L 10).
+const cuotaDe = (valor: number, meses: number) =>
+  meses === 0 ? 0 : Math.ceil(((valor * (1 - PRIMA_PCT)) / meses) / 10) * 10;
+
+const r1 = (n: number) => Math.round(n * 10) / 10;
+const lotes: LoteDemo[] = [];
+
+// Manzana A — dos filas de 7 lotes rectangulares
+const estadosA: Estado[][] = [
+  ['vendido', 'vendido', 'apartado', 'disponible', 'vendido', 'disponible', 'vendido'],
+  ['vendido', 'disponible', 'vendido', 'vendido', 'apartado', 'vendido', 'disponible'],
+];
+const areasA = [250, 250, 262.5, 250, 250, 237.5, 281.25];
+{
+  const x0 = 14, x1 = 306, w = (x1 - x0) / 7;
+  const filas = [[14, 57], [57, 100]];
+  let n = 1;
+  filas.forEach(([ya, yb], f) => {
+    for (let i = 0; i < 7; i++) {
+      const xa = r1(x0 + i * w), xb = r1(x0 + (i + 1) * w);
+      const num = String(n++).padStart(3, '0');
+      lotes.push({
+        codigo: `RDM-A-${num}`, num,
+        estado: estadosA[f][i],
+        area: areasA[i],
+        puntos: `${xa},${ya} ${xb},${ya} ${xb},${yb} ${xa},${yb}`,
+        cx: r1((xa + xb) / 2), cy: (ya + yb) / 2,
+      });
+    }
+  });
+}
+
+// Manzana B — lindero derecho en diagonal: los lotes salen como cuadriláteros irregulares
+const estadosB: Estado[][] = [
+  ['disponible', 'disponible', 'vendido', 'disponible', 'apartado', 'disponible'],
+  ['disponible', 'vendido', 'disponible', 'disponible', 'disponible', 'vendido'],
+];
+const areasB = [[312.4, 305.1, 297.85, 290.6, 283.3, 276.05], [268.8, 261.5, 254.25, 250, 239.75, 232.5]];
+{
+  const x0 = 14, yT = 124, yM = 170, yB = 216;
+  const xDer = (y: number) => 292 - ((y - yT) / (yB - yT)) * 26; // 292 arriba → 266 abajo
+  const xEn = (i: number, y: number) => r1(x0 + (i / 6) * (xDer(y) - x0));
+  let n = 1;
+  [[yT, yM], [yM, yB]].forEach(([ya, yb], f) => {
+    for (let i = 0; i < 6; i++) {
+      const num = String(n++).padStart(3, '0');
+      const xs = [xEn(i, ya), xEn(i + 1, ya), xEn(i + 1, yb), xEn(i, yb)];
+      lotes.push({
+        codigo: `RDM-B-${num}`, num,
+        estado: estadosB[f][i],
+        area: areasB[f][i],
+        puntos: `${xs[0]},${ya} ${xs[1]},${ya} ${xs[2]},${yb} ${xs[3]},${yb}`,
+        cx: r1((xs[0] + xs[1] + xs[2] + xs[3]) / 4), cy: (ya + yb) / 2,
+      });
+    }
+  });
+}
+
+const LOTE_INICIAL = 'RDM-B-010'; // 250.00 vr², disponible
+const loteSel   = lotes.find(l => l.codigo === LOTE_INICIAL)!;
+const valorSel  = loteSel.area * PLAN_DEMO.precio;
+const disponibles = lotes.filter(l => l.estado === 'disponible').length;
+
+const etiquetaEstado: Record<Estado, string> = { disponible: 'Disponible', apartado: 'Apartado', vendido: 'Vendido' };
+const notaEstado: Record<Estado, string> = {
+  disponible: 'Se puede apartar o vender desde aquí.',
+  apartado:   'Con seña. No se le vende a nadie más mientras esté vigente.',
+  vendido:    'Contrato firmado: precio y área congelados.',
+};
+
+/* ─────────────────────────────────────────────
+   Contenido
+───────────────────────────────────────────── */
+const svg = (d: string) =>
+  `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+
+// Proyectos en producción. Cada enlace es su plano público real (lo publica la
+// propia lotificadora). Autorizado por Mauricio el 19-sep-2026. Los totales de
+// lotes son los que muestra cada plano a esa fecha.
+// Miniatura de cada tarjeta: un plano DECORATIVO que evoca la forma del desarrollo
+// (franjas, manzanas, linderos en diagonal). No es el plano real ni muestra estados.
+interface Bloque { x: number; y: number; cols: number; rows: number; cw: number; ch: number; rot?: number; }
+const franjas = (xs: number[], y: number, cols: number, rows: number, cw: number, ch: number): Bloque[] =>
+  xs.map(x => ({ x, y, cols, rows, cw, ch }));
+
+const proyectos = [
+  { nombre: 'Residencial Altamira', lugar: 'Santa Rosa de Copán', lotes: 268,
+    url: 'https://app.inmobiliaria-maya.com/altamira', giro: -28,
+    bloques: franjas([4, 36, 68, 100, 132, 164], -14, 2, 8, 12, 17) },
+  { nombre: 'Residencial El Bambú', lugar: 'Santa Rosa de Copán', lotes: 84,
+    url: 'https://app.inmobiliaria-maya.com/el-bambu', giro: 0,
+    bloques: [
+      { x: 26,  y: 12, cols: 7, rows: 1, cw: 17, ch: 22, rot: -5 },
+      { x: 12,  y: 46, cols: 3, rows: 2, cw: 15, ch: 14 },
+      { x: 68,  y: 42, cols: 2, rows: 3, cw: 17, ch: 11 },
+      { x: 116, y: 30, cols: 6, rows: 2, cw: 12, ch: 14, rot: 22 },
+      { x: 22,  y: 86, cols: 6, rows: 2, cw: 14, ch: 11, rot: -4 },
+    ] },
+  { nombre: 'Residencial Praderas del Sol', lugar: 'El Corpus, Copán', lotes: 309,
+    url: 'https://praderasdelsol.cloud/plano/residencial-praderas-del-sol', giro: -5,
+    bloques: [4, 30, 56, 82].flatMap(y => franjas([14, 74, 134], y, 4, 2, 13, 10)) },
+  { nombre: 'Colonia Río Blanco', lugar: 'La Unión, Copán', lotes: 83,
+    url: 'https://praderasdelsol.cloud/plano/colonia-rio-blanco', giro: 0,
+    bloques: [
+      { x: 10,  y: 18, cols: 2, rows: 6, cw: 12, ch: 13, rot: -7 },
+      { x: 44,  y: 22, cols: 2, rows: 6, cw: 12, ch: 13, rot: -3 },
+      { x: 76,  y: 26, cols: 2, rows: 5, cw: 12, ch: 13, rot: 1 },
+      { x: 108, y: 22, cols: 2, rows: 6, cw: 12, ch: 13, rot: 5 },
+      { x: 142, y: 34, cols: 3, rows: 2, cw: 19, ch: 27, rot: -12 },
+    ] },
+  { nombre: 'Lotificación La Unión', lugar: 'La Unión, Copán', lotes: 95,
+    url: 'https://praderasdelsol.cloud/plano/lotificacion-la-union', giro: 9,
+    bloques: [
+      { x: 8,   y: 6,  cols: 10, rows: 2, cw: 12, ch: 12 },
+      { x: 2,   y: 38, cols: 10, rows: 2, cw: 12, ch: 12 },
+      { x: -4,  y: 70, cols: 9,  rows: 2, cw: 12, ch: 12 },
+      { x: 140, y: 4,  cols: 2,  rows: 3, cw: 15, ch: 12 },
+      { x: 136, y: 50, cols: 3,  rows: 2, cw: 14, ch: 18 },
+    ] },
+].map((p, semilla) => {
+  const rad = (g: number) => (g * Math.PI) / 180;
+  const girar = (px: number, py: number, ox: number, oy: number, g: number) => {
+    const c = Math.cos(rad(g)), s = Math.sin(rad(g));
+    return [ox + (px - ox) * c - (py - oy) * s, oy + (px - ox) * s + (py - oy) * c];
+  };
+  let i = 0;
+  const celdas = p.bloques.flatMap(b => {
+    const out: { puntos: string; tono: number; demora: number }[] = [];
+    for (let f = 0; f < b.rows; f++) for (let c = 0; c < b.cols; c++) {
+      const x0 = b.x + c * b.cw, y0 = b.y + f * b.ch;
+      const puntos = [[x0, y0], [x0 + b.cw, y0], [x0 + b.cw, y0 + b.ch], [x0, y0 + b.ch]]
+        .map(([px, py]) => girar(px, py, b.x, b.y, b.rot ?? 0))
+        .map(([px, py]) => girar(px, py, 100, 56, p.giro))
+        .map(([px, py]) => `${r1(px)},${r1(py)}`).join(' ');
+      // tono 0-1: lote normal · 2: resaltado · 3: brillante (parpadea)
+      const n = (i * 7 + semilla * 13 + f * 3) % 10;
+      out.push({ puntos, tono: n < 5 ? 0 : n < 7 ? 1 : n < 9 ? 2 : 3, demora: (i % 6) * 0.55 });
+      i++;
+    }
+    return out;
+  });
+  return { ...p, celdas };
+});
+const totalLotes   = proyectos.reduce((t, p) => t + p.lotes, 0);
+const lotesRedondo = Math.floor(totalLotes / 100) * 100; // "más de 800"
+
+const iconoPin = svg('<path d="M10 17.5s5.5-4.7 5.5-9a5.5 5.5 0 00-11 0c0 4.3 5.5 9 5.5 9z"/><circle cx="10" cy="8.5" r="2"/>');
+
+const hechoParaHN = [
+  'Varas o metros cuadrados', 'Recibos o factura con CAI', 'Todo tipo de pagos', 'Plano por WhatsApp',
+];
+
+const vidaDelLote = [
+  { n: '01', title: 'Disponible', desc: 'En el plano, con su área y su precio según el plazo.' },
+  { n: '02', title: 'Apartado',   desc: 'Con seña y vencimiento. Nadie más lo puede comprar.' },
+  { n: '03', title: 'Vendido',    desc: 'Contrato firmado: precio, plazo y prima congelados.' },
+  { n: '04', title: 'Cobranza',   desc: 'Cada cuota con su recibo. La mora se calcula sola.' },
+  { n: '05', title: 'Liquidado',  desc: 'Última cuota pagada y expediente cerrado.' },
+];
+
+const modVender = [
+  { icon: svg('<path d="M3 5l4.5-1.8 5 1.8L17 3.2v11.6L12.5 16.6l-5-1.8L3 16.6V5z"/><path d="M7.5 3.2v11.6M12.5 5v11.6"/>'),
+    title: 'Plano interactivo de lotes',
+    desc: 'El plano real de tu topógrafo, desde AutoCAD. Un clic en el lote para apartarlo o venderlo.' },
+  { icon: svg('<rect x="5.5" y="2" width="9" height="16" rx="2"/><path d="M8.5 15.2h3"/>'),
+    title: 'Plano público por WhatsApp',
+    desc: 'Tu comprador ve desde el celular lotes libres, precios y cuotas, con fotos 360° y cómo llegar.' },
+  { icon: svg('<circle cx="8" cy="7" r="3"/><path d="M2.5 17c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M15.5 6v5M13 8.5h5"/>'),
+    title: 'Prospectos que no se pierden',
+    desc: 'Quien pregunta por un lote queda guardado con su nombre y teléfono, aunque nunca escriba.' },
+  { icon: svg('<path d="M5.5 2.5h9v15L10 14.2 5.5 17.5v-15z"/><path d="M8 7h4"/>'),
+    title: 'Apartados con seña',
+    desc: 'Con vigencia, prórroga y devolución con acta. La seña cuenta como parte de la prima.' },
+  { icon: svg('<path d="M5 2.5h7l3.5 3.5v11.5H5V2.5z"/><path d="M12 2.5V6h3.5M7.5 10h5M7.5 13h5"/>'),
+    title: 'Ventas a plazos, a fechas pactadas o de contado',
+    desc: 'Varios lotes en un contrato, copropietarios y vista previa de las cuotas antes de firmar.' },
+  { icon: svg('<circle cx="10" cy="10" r="7.5"/><path d="M12.4 7.6c-.5-.8-1.3-1.2-2.4-1.2-1.4 0-2.4.7-2.4 1.8 0 2.6 5 1.2 5 3.8 0 1.1-1.1 1.9-2.6 1.9-1.2 0-2.1-.5-2.6-1.3M10 4.8v1.6M10 13.9v1.4"/>'),
+    title: 'Comisionistas',
+    desc: 'Comisión pactada al firmar: mitad a la firma y mitad al cancelar. Sabés cuánto se le debe a cada uno.' },
+];
+
+const modCobrar = [
+  { icon: svg('<rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="M2.5 8.5h15M5.5 12.5h3"/>'),
+    title: 'Cobrar en tres clics',
+    desc: 'Buscar, escribir el monto, imprimir. Efectivo, transferencia, depósito, tarjeta o remesa.' },
+  { icon: svg('<path d="M4 2.5h12v15l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3v-15z"/><path d="M7 7h6M7 10h6M7 13h3"/>'),
+    title: 'Recibos con correlativo',
+    desc: 'Números que no se saltan ni se repiten. La reimpresión sale como COPIA y nada se borra: se anula.' },
+  { icon: svg('<path d="M3 16.5V9M8 16.5V4M13 16.5v-6M18 16.5H2"/>'),
+    title: 'Planes de pago, interés y mora',
+    desc: 'Precio según el plazo, interés opcional y seis formas de cobrar la mora, con días de gracia.' },
+  { icon: svg('<path d="M10 3v14M5.5 7.5L10 3l4.5 4.5"/><path d="M4 17h12"/>'),
+    title: 'Abono a capital y pronto pago',
+    desc: 'Menos meses o cuota más baja: el cliente elige viendo el antes y el después.' },
+  { icon: svg('<path d="M5 2.5h7l3.5 3.5v11.5H5V2.5z"/><path d="M12 2.5V6h3.5"/><path d="M7.5 13.5l2-2.5 1.5 1.5 2-3"/>'),
+    title: 'Estado de cuenta al instante',
+    desc: 'Valor, pagado, saldo y cuotas por lote, listo para imprimir en ventanilla.' },
+  { icon: svg('<path d="M6.2 3.2l2 3.4-1.4 1.6c.9 1.9 2.3 3.3 4.2 4.200l1.6-1.4 3.4 2c-.3 2-1.7 3.2-3.4 3-5.8-.7-10.4-5.3-11.1-11.1-.2-1.7 1-3.1 3-3.400z"/>'),
+    title: 'Cobranza del día',
+    desc: 'A quién llamar hoy, ordenado por quién debe más. Registrás la llamada y qué prometió.' },
+];
+
+const modAdministrar = [
+  { icon: svg('<rect x="3" y="3" width="14" height="14" rx="2.5"/><path d="M6.5 10h7M6.5 6.800h4M6.5 13.200h5"/>'),
+    title: 'Recibos o facturación con CAI',
+    desc: 'Recibo interno o factura con CAI del SAR por proyecto, con aviso antes de que se agote el rango.' },
+  { icon: svg('<path d="M3 17V8l7-5 7 5v9"/><path d="M8 17v-5h4v5"/>'),
+    title: 'Varios proyectos en un solo sistema',
+    desc: 'Cada residencial con sus manzanas, sus lotes, sus precios y su serie de recibos.' },
+  { icon: svg('<path d="M10 2.500v15M14 6c-.6-1.2-2-2-4-2-2.2 0-3.8 1.1-3.8 2.8 0 4 8 2 8 6 0 1.8-1.8 3-4.2 3-2 0-3.5-.8-4.2-2.2"/>'),
+    title: 'Gastos, socios y cierre del mes',
+    desc: 'Gastos por rubro con comprobante. El cierre dice qué entró, qué salió y cuánto le toca a cada socio.' },
+  { icon: svg('<circle cx="7" cy="7" r="2.8"/><path d="M2 16.500c0-2.8 2.2-4.5 5-4.500s5 1.7 5 4.5"/><circle cx="14.5" cy="6.5" r="2.2"/><path d="M14 11.800c2.3.2 4 1.7 4 4.2"/>'),
+    title: 'Roles para oficina y ventanilla',
+    desc: 'Quien cobra no firma ventas, no anula recibos ni perdona mora.' },
+  { icon: svg('<path d="M10 2.500l6.5 2.500v4.500c0 4-2.7 6.8-6.5 8-3.8-1.2-6.5-4-6.5-8V5L10 2.500z"/><path d="M7.2 10l2 2 3.6-4"/>'),
+    title: 'Bitácora que nadie puede editar',
+    desc: 'Quién, cuándo, qué decía antes y qué dice ahora. De solo lectura para todos.' },
+  { icon: svg('<rect x="2.5" y="3" width="15" height="11" rx="2"/><path d="M7 17.500h6M10 14v3.5"/><path d="M6 10.500l2.5-3 2 2 3.5-4"/>'),
+    title: 'Escritorio del negocio',
+    desc: 'Cómo va cada proyecto y el corte de caja del día, apenas entrás.' },
+];
+
+const reglas = [
+  { title: 'Un pago no se borra: se anula',
+    desc: 'La anulación pide motivo y queda como otro registro. Siempre se puede reconstruir qué pasó y quién lo hizo.' },
+  { title: 'Lo firmado queda congelado',
+    desc: 'Subir el precio o encender la mora hoy no reescribe un contrato firmado ayer.' },
+  { title: 'No existen pagos sueltos',
+    desc: 'Todo lo que entra está atado a un lote y a un contrato, y queda escrito en el recibo.' },
+  { title: 'El dinero se aplica siempre igual',
+    desc: 'Primero la mora, después el interés y al final el capital. No depende de quién cobre.' },
+];
+
+const pasos = [
+  { n: '01', title: 'Presentación', desc: 'Nos reunimos, presencial o por videollamada, y ves el sistema funcionando.' },
+  { n: '02', title: 'Tu plano y tus precios', desc: 'Cargamos el plano de tu topógrafo y tu lista de precios por plazo.' },
+  { n: '03', title: 'Tu cartera actual', desc: 'Lo que ya vendiste se carga desde una plantilla: cada cliente arranca con su saldo real.' },
+  { n: '04', title: 'Capacitación y soporte', desc: 'Capacitamos a tu equipo, entregamos el manual y te damos soporte local.' },
+];
+
+// Pestañas de la sección de módulos (todo el contenido queda en el HTML; solo se muestra una a la vez)
+const pestanas = [
+  { id: 'vender',      label: 'Vender' },
+  { id: 'cobrar',      label: 'Cobrar' },
+  { id: 'administrar', label: 'Administrar' },
+  { id: 'control',     label: 'Control' },
+];
+
+const faqs = [
+  {
+    question: '¿Qué es Olympo Lotificaciones?',
+    answer: 'Es un sistema para lotificadoras y residenciales en Honduras, desarrollado por Olympo Code en Santa Rosa de Copán. Controla todo el ciclo de un lote: el plano interactivo, los apartados, la venta a plazos, las cuotas, la mora, los recibos, la cobranza diaria, las comisiones y el cierre mensual del proyecto.',
+  },
+  {
+    question: '¿Cuánto cuesta el sistema para lotificadoras?',
+    answer: 'Depende de cuántos proyectos y lotes maneja tu lotificadora y de lo que haya que migrar. Por eso primero hacemos una presentación: vemos cómo trabajás hoy, te mostramos el sistema funcionando y te entregamos una propuesta clara, sin compromiso.',
+  },
+  {
+    question: '¿Puedo pasar al sistema las ventas que ya tengo en Excel o en cuadernos?',
+    answer: 'Sí. El sistema incluye una carga de cartera: se llena una plantilla con los clientes, los lotes vendidos y lo que cada uno lleva pagado, y cada expediente arranca con su saldo real. No hay que volver a digitar años de recibos.',
+  },
+  {
+    question: '¿Funciona si vendo por varas cuadradas?',
+    answer: 'Sí. Cada proyecto se configura en varas cuadradas o en metros cuadrados. El valor del lote se calcula solo: área por precio de la vara² (o del m²) según el plazo que elija el cliente.',
+  },
+  {
+    question: '¿Cómo maneja el interés y la mora por atraso?',
+    answer: 'Los dos son opcionales y se configuran por plan de pago. El interés es una tasa anual sobre el saldo. Para la mora hay seis modalidades, desde monto fijo por cuota hasta tasa anual por días de atraso, todas con días de gracia. La mora se calcula sola al cobrar, se puede exonerar con motivo escrito y nunca genera mora sobre mora.',
+  },
+  {
+    question: '¿Mis clientes pueden ver los lotes disponibles desde el celular?',
+    answer: 'Sí. El plano público es un enlace que se comparte por WhatsApp: muestra qué lotes están libres, sus medidas, el precio y la cuota de cada plazo, con fotos 360° del terreno. No muestra datos de ningún cliente. Cuando alguien pregunta por un lote, queda guardado como prospecto.',
+  },
+  {
+    question: '¿Ustedes hacen los recorridos 360° de los lotes?',
+    answer: 'Sí. Además del sistema, hacemos el recorrido 360° de cada lote: lo capturamos en el terreno y lo cargamos al plano público para que el comprador lo vea desde su celular. Es un servicio aparte del sistema y se cotiza por separado.',
+  },
+  {
+    question: '¿El sistema emite facturas con CAI?',
+    answer: 'Cada proyecto puede trabajar con recibo interno o con factura bajo CAI del SAR, con facturación propia o compartida entre proyectos de la misma oficina. El sistema controla el rango autorizado y avisa con tiempo cuando se está agotando.',
+  },
+  {
+    question: '¿Dónde quedan los datos de mi lotificadora?',
+    answer: 'Cada lotificadora tiene su propia instalación: su servidor, su dominio, su base de datos, su logo y sus colores. Tu información no se mezcla con la de ninguna otra empresa, y se respalda con copias de seguridad automáticas.',
+  },
+  {
+    question: '¿Atienden lotificadoras fuera de Santa Rosa de Copán?',
+    answer: 'Sí. Nuestra sede está en Santa Rosa de Copán y trabajamos con lotificadoras en todo Honduras: Copán, San Pedro Sula, Tegucigalpa, Comayagua, La Ceiba y más. La presentación, la capacitación y el soporte pueden ser presenciales o remotos.',
+  },
+];
+
+// Schema del producto. Se usa Service y no SoftwareApplication a propósito:
+// Google exige precio y reseñas para SoftwareApplication y, sin ellos, Search
+// Console lo marca como error. No publicamos precio ni inventamos reseñas.
+const schemaProducto = [{
+  '@type':       'Service',
+  '@id':         `${URL_PAGINA}#servicio`,
+  name:          'Olympo Lotificaciones',
+  alternateName: ['Sistema para lotificadoras', 'Software para lotificadoras en Honduras'],
+  serviceType:   'Software de gestión para lotificadoras y venta de lotes a plazos',
+  category:      'Software inmobiliario',
+  url:           URL_PAGINA,
+  description:   'Sistema para lotificadoras en Honduras: plano interactivo de lotes, apartados, ventas a plazos, cuotas, interés y mora, recibos, cobranza diaria, comisiones, facturación con CAI y cierre mensual.',
+  provider:      { '@id': 'https://olympohn.com/#organization' },
+  areaServed:    { '@type': 'Country', name: 'Honduras' },
+  audience:      { '@type': 'BusinessAudience', audienceType: 'Lotificadoras, residenciales y desarrolladores inmobiliarios' },
+  inLanguage:    'es-HN',
+}];
+---
+
+<Layout
+  title="Sistema para Lotificadoras en Honduras | Olympo Lotificaciones"
+  description="Software para lotificadoras en Honduras: plano interactivo de lotes, ventas a plazos, cuotas, mora, recibos y cobranza diaria. Solicitá una presentación."
+  breadcrumbs={[
+    { name: 'Inicio', url: '/' },
+    { name: 'Sistema para Lotificadoras en Honduras', url: '/sistema-para-lotificadoras-honduras' },
+  ]}
+  faq={faqs}
+  schema={schemaProducto}
+>
+
+<div class="lt-page">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="lt-hero">
+    <div class="lt-hero-glow" aria-hidden="true"></div>
+    <div class="container lt-hero-grid">
+
+      <div class="lt-hero-copy">
+        <p class="label-tag">Olympo Lotificaciones · Honduras</p>
+        <h1 class="lt-title">
+          Sistema para lotificadoras<br/>
+          <span class="lt-em">del plano al último recibo.</span>
+        </h1>
+        <p class="lt-lead">
+          El software para lotificadoras y residenciales en Honduras. Vendé desde un plano
+          interactivo, controlá apartados, contratos, cuotas, mora y recibos, y sabé cada
+          mañana a quién hay que cobrarle. Sin Excel, sin cuadernos y sin recibos perdidos.
+        </p>
+        <div class="lt-actions">
+          <a href={CONTACTO} class="btn btn-primary btn-lg">Solicitar presentación</a>
+          <a href={WHATSAPP} class="btn btn-whatsapp btn-lg" target="_blank" rel="noopener nofollow">Escribir por WhatsApp →</a>
+        </div>
+        <p class="lt-hero-note">
+          <span class="lt-live-dot" aria-hidden="true"></span>
+          En producción · {proyectos.length} proyectos · más de {lotesRedondo} lotes en Honduras
+        </p>
+      </div>
+
+      <!-- Mockup: plano interactivo -->
+      <figure class="lt-mock" aria-label="Ejemplo del plano interactivo de Olympo Lotificaciones: lotes disponibles, apartados y vendidos, con el precio y la cuota del lote seleccionado">
+        <div class="lt-mock-bar" aria-hidden="true">
+          <div class="lt-dots"><span></span><span></span><span></span></div>
+          <div class="lt-mock-title">olympo — lotificaciones</div>
+          <div class="lt-mock-live"><span class="lt-live-dot"></span>plano</div>
+        </div>
+
+        <div class="lt-mock-body" aria-hidden="true">
+          <div class="lt-plano">
+            <div class="lt-plano-top">
+              <span class="lt-proy">Residencial Demo <small>▾</small></span>
+              <span class="lt-legend">
+                <i class="lg lg-disponible"></i>Disponible
+                <i class="lg lg-apartado"></i>Apartado
+                <i class="lg lg-vendido"></i>Vendido
+              </span>
+            </div>
+            <svg class="lt-svg" viewBox="0 0 320 230" id="lt-plano-svg">
+              <text x="14" y="9" class="lt-mz">MANZANA A</text>
+              <text x="160" y="115" class="lt-calle" text-anchor="middle">CALLE PRINCIPAL</text>
+              <text x="14" y="227" class="lt-mz">MANZANA B</text>
+              <polygon class="lt-verde" points="296,124 306,124 306,216 270,216" />
+              <text x="299" y="196" class="lt-verde-txt" transform="rotate(-90 299 196)">ÁREA VERDE</text>
+              {lotes.map(l => (
+                <polygon
+                  class:list={['lt-lot', `is-${l.estado}`, { 'is-sel': l.codigo === LOTE_INICIAL }]}
+                  points={l.puntos}
+                  data-codigo={l.codigo}
+                  data-estado={l.estado}
+                  data-area={l.area}
+                />
+              ))}
+              {lotes.map(l => (
+                <text x={l.cx} y={l.cy + 2.4} class="lt-lot-n" text-anchor="middle">{l.num}</text>
+              ))}
+            </svg>
+          </div>
+
+          <div class="lt-panel" id="lt-panel" data-precio={PLAN_DEMO.precio} data-meses={PLAN_DEMO.meses} data-prima={PRIMA_PCT}>
+            <div class="lt-panel-head">
+              <span class="lt-panel-code" id="lt-p-codigo">{loteSel.codigo}</span>
+              <span class:list={['lt-badge', `is-${loteSel.estado}`]} id="lt-p-estado">{etiquetaEstado[loteSel.estado]}</span>
+            </div>
+            <dl class="lt-panel-rows">
+              <div><dt>Área</dt><dd><span id="lt-p-area">{L(loteSel.area)}</span> vr²</dd></div>
+              <div><dt>Precio vr²</dt><dd>L {L(PLAN_DEMO.precio)}</dd></div>
+              <div class="lt-row-total"><dt>Valor</dt><dd>L <span id="lt-p-valor">{L(valorSel)}</span></dd></div>
+              <div><dt>Prima 30 %</dt><dd>L <span id="lt-p-prima">{L(valorSel * PRIMA_PCT)}</span></dd></div>
+              <div><dt>{PLAN_DEMO.meses} cuotas de</dt><dd class="lt-gold">L <span id="lt-p-cuota">{L(cuotaDe(valorSel, PLAN_DEMO.meses))}</span></dd></div>
+            </dl>
+            <p class="lt-panel-note" id="lt-p-nota">{notaEstado[loteSel.estado]}</p>
+            <div class="lt-panel-btns" id="lt-p-btns">
+              <span class="lt-pbtn">Apartar</span>
+              <span class="lt-pbtn lt-pbtn-gold">Vender →</span>
+            </div>
+          </div>
+        </div>
+        <figcaption class="lt-mock-cap"><span class="lt-cap-largo">Datos de demostración. </span>Tocá un lote para ver su precio y su cuota.</figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- Hecho para Honduras -->
+    <ul class="lt-chips" aria-label="Hecho para Honduras">
+      {hechoParaHN.map(c => <li class="lt-chip">{c}</li>)}
+    </ul>
+
+    <!-- ═══════════ AFILIADOS ═══════════ -->
+    <section class="lt-section lt-clientes reveal" id="afiliados">
+      <div class="lt-clientes-glow" aria-hidden="true"></div>
+      <p class="label-tag lt-center">Afiliados</p>
+      <h2 class="lt-h2">Lotificaciones que ya <span class="lt-em">trabajan con el sistema</span></h2>
+      <p class="lt-sub">
+        {proyectos.length} proyectos en Copán y más de {lotesRedondo} lotes entre todos. Sus planos públicos están
+        en línea: abrí cualquiera y mirá el sistema funcionando de verdad, con lotes reales.
+      </p>
+      <ul class="lt-proyectos">
+        {proyectos.map(p => (
+          <li>
+            <a href={p.url} class="lt-proyecto" target="_blank" rel="noopener" aria-label={`${p.nombre}, ${p.lugar}: ${p.lotes} lotes. Ver su plano público en vivo`}>
+              <span class="lt-proyecto-mapa" aria-hidden="true">
+                <svg class="lt-mini" viewBox="0 0 200 112" preserveAspectRatio="xMidYMid slice">
+                  {p.celdas.map(c => (
+                    <polygon points={c.puntos} class:list={['lt-celda', `t${c.tono}`]} style={c.tono === 3 ? `animation-delay:${c.demora}s` : undefined} />
+                  ))}
+                </svg>
+                <span class="lt-proyecto-live"><i></i>En línea</span>
+              </span>
+              <span class="lt-proyecto-body">
+                <span class="lt-proyecto-num"><b data-lt-count={p.lotes}>{p.lotes}</b><small>lotes</small></span>
+                <strong class="lt-proyecto-nombre">{p.nombre}</strong>
+                <span class="lt-proyecto-lugar"><span set:html={iconoPin} />{p.lugar}</span>
+                <span class="lt-proyecto-btn">Ver plano en vivo <span aria-hidden="true">↗</span></span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="lt-desliza" aria-hidden="true">Deslizá para ver los {proyectos.length} →</p>
+    </section>
+
+    <!-- ═══════════ LA VIDA DE UN LOTE (compacta) ═══════════ -->
+    <section class="lt-section reveal">
+      <p class="label-tag lt-center">Cómo funciona</p>
+      <h2 class="lt-h2">La vida de un lote, de principio a fin</h2>
+      <ol class="lt-flow">
+        {vidaDelLote.map(p => (
+          <li class="lt-flow-step">
+            <span class="lt-flow-n">{p.n}</span>
+            <div>
+              <h3 class="lt-flow-title">{p.title}</h3>
+              <p class="lt-flow-desc">{p.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- ═══════════ MÓDULOS (pestañas) ═══════════
+         Vender, Cobrar, Administrar y Control en una sola sección: la página queda corta
+         y todo el contenido sigue en el HTML (Google lo lee igual). -->
+    <section class="lt-section reveal" id="modulos">
+      <p class="label-tag lt-center">Qué incluye</p>
+      <h2 class="lt-h2">Todo el negocio de tu lotificadora, <span class="lt-em">en un solo sistema</span></h2>
+
+      <div class="lt-tabs" role="tablist" aria-label="Módulos del sistema">
+        {pestanas.map((t, i) => (
+          <button
+            type="button" role="tab" class="lt-tab"
+            id={`tab-${t.id}`} aria-controls={`panel-${t.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}
+          >{t.label}</button>
+        ))}
+      </div>
+
+      <!-- Vender -->
+      <div class="lt-tabpanel" role="tabpanel" id="panel-vender" aria-labelledby="tab-vender">
+        <div class="lt-split">
+          <div class="lt-split-copy">
+            <h3 class="lt-h3">Vendé lotes desde el plano, no desde una hoja de cálculo</h3>
+            <p class="lt-h3-sub">El plano es la pantalla de trabajo, y su versión pública es tu vitrina en el celular del comprador.</p>
+          <ul class="lt-feats">
+            {modVender.map(m => (
+              <li class="lt-feat">
+                <span class="lt-feat-icon" set:html={m.icon} />
+                <div>
+                  <h4 class="lt-feat-title">{m.title}</h4>
+                  <p class="lt-feat-desc">{m.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          </div>
+
+        <!-- Mockup: plano público en el teléfono -->
+        <figure class="lt-phone" aria-label="Ejemplo del plano público visto desde un celular, con el precio y la cuota de un lote según el plazo">
+          <div class="lt-phone-screen" aria-hidden="true">
+            <div class="lt-ph-head">
+              <strong>Residencial Demo</strong>
+              <span>{disponibles} lotes disponibles</span>
+            </div>
+            <svg class="lt-svg lt-ph-svg" viewBox="0 0 320 230">
+              <polygon class="lt-verde" points="296,124 306,124 306,216 270,216" />
+              {lotes.map(l => (
+                <polygon class:list={['lt-lot', `is-${l.estado}`, { 'is-sel': l.codigo === LOTE_INICIAL }]} points={l.puntos} />
+              ))}
+            </svg>
+            <div class="lt-ph-sheet">
+              <div class="lt-ph-sheet-head">
+                <strong>Lote B-010</strong>
+                <span>{L(loteSel.area)} vr²</span>
+              </div>
+              <ul class="lt-ph-planes">
+                {planes.map(p => {
+                  const valor = loteSel.area * p.precio;
+                  return (
+                    <li class:list={[{ 'is-on': p.meses === PLAN_DEMO.meses }]}>
+                      <span>{p.etiqueta}</span>
+                      <span>L {L(valor)}</span>
+                      <span class="lt-ph-cuota">{p.meses === 0 ? '—' : `L ${L(cuotaDe(valor, p.meses))}/mes`}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <span class="lt-ph-btn">Preguntar por este lote</span>
+            </div>
+          </div>
+        </figure>
+        </div>
+      </div>
+
+      <!-- Cobrar -->
+      <div class="lt-tabpanel" role="tabpanel" id="panel-cobrar" aria-labelledby="tab-cobrar" hidden>
+        <div class="lt-split">
+          <div class="lt-split-copy">
+            <h3 class="lt-h3">Control de cuotas y cobranza, todos los días</h3>
+            <p class="lt-h3-sub">«Por cobrar hoy» le dice a tu equipo a quién llamar, cuánto debe y qué contestó la última vez.</p>
+          <ul class="lt-feats">
+            {modCobrar.map(m => (
+              <li class="lt-feat">
+                <span class="lt-feat-icon" set:html={m.icon} />
+                <div>
+                  <h4 class="lt-feat-title">{m.title}</h4>
+                  <p class="lt-feat-desc">{m.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          </div>
+
+        <!-- Mockup: Por cobrar hoy -->
+        <figure class="lt-cobro" aria-label="Ejemplo de la pantalla Por cobrar hoy: clientes con cuotas vencidas o que vencen hoy y cuánto debe cada uno">
+          <div class="lt-mock-bar" aria-hidden="true">
+            <div class="lt-dots"><span></span><span></span><span></span></div>
+            <div class="lt-mock-title">Por cobrar hoy</div>
+            <div class="lt-mock-count">4 pendientes</div>
+          </div>
+          <div class="lt-cobro-body" aria-hidden="true">
+            <div class="lt-cobro-row lt-cobro-th">
+              <span>A quién llamar</span><span>Situación</span><span>Debe a hoy</span>
+            </div>
+            <div class="lt-cobro-row">
+              <span><b>CARLOS M.</b><small>EXP-000128</small></span>
+              <span><em class="lt-sit lt-sit-red">3 cuotas vencidas</em></span>
+              <span class="lt-num">L {L(3480 * 3)}</span>
+            </div>
+            <div class="lt-cobro-row">
+              <span><b>ANA R.</b><small>EXP-000093</small></span>
+              <span><em class="lt-sit lt-sit-red">2 cuotas vencidas</em></span>
+              <span class="lt-num">L {L(4930 * 2)}</span>
+            </div>
+            <div class="lt-cobro-row">
+              <span><b>JOSÉ L.</b><small>EXP-000141</small></span>
+              <span><em class="lt-sit lt-sit-amber">Le toca hoy</em></span>
+              <span class="lt-num">L {L(9480)}</span>
+            </div>
+            <div class="lt-cobro-row">
+              <span><b>MARTA S.</b><small>EXP-000077</small></span>
+              <span><em class="lt-sit lt-sit-amber">Le toca hoy</em></span>
+              <span class="lt-num">L {L(3410)}</span>
+            </div>
+            <div class="lt-cobro-foot">
+              <span class="lt-pbtn">Ya lo contacté</span>
+              <span class="lt-pbtn lt-pbtn-gold">Cobrar →</span>
+            </div>
+          </div>
+        </figure>
+        </div>
+      </div>
+
+      <!-- Administrar -->
+      <div class="lt-tabpanel" role="tabpanel" id="panel-administrar" aria-labelledby="tab-administrar" hidden>
+        <h3 class="lt-h3 lt-h3-center">Lo que el dueño necesita saber, sin pedírselo a nadie</h3>
+        <p class="lt-h3-sub lt-h3-center">Bajo qué autorización se factura, cuánto cuesta el desarrollo y quién hizo qué.</p>
+        <ul class="lt-feats lt-feats-3">
+            {modAdministrar.map(m => (
+              <li class="lt-feat">
+                <span class="lt-feat-icon" set:html={m.icon} />
+                <div>
+                  <h4 class="lt-feat-title">{m.title}</h4>
+                  <p class="lt-feat-desc">{m.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+      </div>
+
+      <!-- Control -->
+      <div class="lt-tabpanel" role="tabpanel" id="panel-control" aria-labelledby="tab-control" hidden>
+        <h3 class="lt-h3 lt-h3-center">Reglas que cuidan tu dinero</h3>
+        <p class="lt-h3-sub lt-h3-center">Lo que el sistema no deja hacer, para que dentro de tres años los números sigan cuadrando.</p>
+        <div class="lt-why-grid">
+          {reglas.map(r => (
+            <div class="lt-why-item">
+              <h4>{r.title}</h4>
+              <p>{r.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <noscript><style is:inline>.lt-tabpanel[hidden]{display:block!important;margin-top:3rem}.lt-tabs{display:none!important}</style></noscript>
+
+      <!-- CTA a media página: que contactar no dependa de llegar al final -->
+      <div class="lt-midcta">
+        <p><strong>¿Querés verlo con tus propios lotes?</strong> Te lo mostramos funcionando en una reunión corta.</p>
+        <div class="lt-actions">
+          <a href={CONTACTO} class="btn btn-primary">Solicitar presentación</a>
+          <a href={WHATSAPP} class="btn btn-whatsapp" target="_blank" rel="noopener nofollow">WhatsApp →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ IMPLEMENTACIÓN ═══════════ -->
+    <section class="lt-section reveal">
+      <p class="label-tag lt-center">Implementación</p>
+      <h2 class="lt-h2">Cómo lo ponemos a funcionar en tu lotificadora</h2>
+      <p class="lt-sub">
+        Cada lotificadora recibe su propia instalación: su servidor, su dominio, su base de
+        datos, su logo y sus colores.
+      </p>
+      <ol class="lt-flow lt-flow-4">
+        {pasos.map(p => (
+          <li class="lt-flow-step">
+            <span class="lt-flow-n">{p.n}</span>
+            <div>
+              <h3 class="lt-flow-title">{p.title}</h3>
+              <p class="lt-flow-desc">{p.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- ═══════════ SERVICIO ADICIONAL: RECORRIDOS 360° ═══════════
+         Es un servicio de Olympo que se contrata APARTE del sistema. No presentarlo como incluido. -->
+    <section class="lt-section reveal" id="recorridos-360">
+      <div class="lt-360">
+        <div class="lt-360-copy">
+          <p class="label-tag">Servicio adicional</p>
+          <h2 class="lt-h2 lt-360-title">Recorridos virtuales 360° <span class="lt-em">de cada lote</span></h2>
+          <p class="lt-360-lead">
+            Nuestro equipo visita tu proyecto, captura cada lote en 360° y lo integra a tu plano
+            público. Tus compradores recorren el terreno desde el celular, estén en Honduras o
+            en el extranjero.
+          </p>
+          <ul class="lt-360-list">
+            {beneficios360.map(b => <li>{b}</li>)}
+          </ul>
+          <div class="lt-360-cta">
+            <a href={WHATSAPP_360} class="btn btn-primary" target="_blank" rel="noopener nofollow">Solicitar información</a>
+            <span class="lt-360-nota">Se contrata aparte del sistema.</span>
+          </div>
+        </div>
+
+        <!-- Visor de demostración (ilustración, no es una foto real) -->
+        <figure class="lt-visor" aria-label="Ilustración de un recorrido virtual 360°: vista del terreno con el lote marcado">
+          <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="lt-cielo" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#090b10"/><stop offset="0.7" stop-color="#1f1a10"/><stop offset="1" stop-color="#7a5f2a"/>
+              </linearGradient>
+              <linearGradient id="lt-suelo" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2b2716"/><stop offset="1" stop-color="#0a0c08"/>
+              </linearGradient>
+              <radialGradient id="lt-sol" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" stop-color="#f0d080" stop-opacity="0.75"/><stop offset="0.35" stop-color="#c8a96e" stop-opacity="0.28"/><stop offset="1" stop-color="#c8a96e" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="400" height="130" fill="url(#lt-cielo)"/>
+            <circle cx="292" cy="128" r="78" fill="url(#lt-sol)"/>
+            <g class="lt-visor-lejos">
+              <path d="M-40 130 L-40 108 Q10 84 60 100 T150 92 T235 104 T330 86 T440 100 L440 130 Z" fill="#14140e"/>
+              <path d="M-40 130 L-40 118 Q30 102 95 114 T205 108 T300 116 T440 106 L440 130 Z" fill="#1c1a10"/>
+            </g>
+            <rect y="128" width="400" height="122" fill="url(#lt-suelo)"/>
+            <g stroke="rgba(200,169,110,0.2)" stroke-width="1">
+              <path d="M200 128L-240 250M200 128L-40 250M200 128L120 250M200 128L280 250M200 128L440 250M200 128L640 250"/>
+              <path d="M0 138H400M0 158H400M0 190H400M0 228H400"/>
+            </g>
+            <polygon points="180.3,158 219.7,158 265.6,228 134.4,228" fill="rgba(226,192,122,0.16)" stroke="#e2c07a" stroke-width="1.6" stroke-linejoin="round"/>
+            <g stroke="#e2c07a" stroke-width="1.4" stroke-linecap="round">
+              <path d="M180.3 158v-9M219.7 158v-9M265.6 228v-15M134.4 228v-15"/>
+            </g>
+            <path d="M200 176V132" stroke="#e2c07a" stroke-width="1" stroke-dasharray="2 3"/>
+            <circle cx="200" cy="178" r="3" fill="#e2c07a"/>
+            <g>
+              <rect x="122" y="106" width="156" height="24" rx="12" fill="rgba(8,8,8,0.82)" stroke="rgba(226,192,122,0.55)"/>
+              <text x="200" y="122" text-anchor="middle" class="lt-visor-txt">LOTE B-010 · 250.00 vr²</text>
+            </g>
+          </svg>
+          <span class="lt-visor-badge" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10c0-2.2 3.1-4 7-4s7 1.8 7 4-3.1 4-7 4"/><path d="M8 11.5L10.5 14 8 16.5"/></svg>
+            360°
+          </span>
+          <span class="lt-visor-hint" aria-hidden="true">‹ Arrastrá para mirar alrededor ›</span>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ═══════════ FAQ ═══════════ -->
+    <section class="lt-section lt-faq reveal">
+      <h2 class="lt-h2">Preguntas frecuentes sobre el sistema para lotificadoras</h2>
+      <div class="lt-faq-list">
+        {faqs.map(f => (
+          <details class="lt-faq-item">
+            <summary class="lt-faq-q">{f.question}</summary>
+            <p class="lt-faq-a">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- ═══════════ CTA ═══════════ -->
+    <section class="lt-cta reveal">
+      <h2 class="lt-cta-title">Mirá el sistema funcionando antes de decidir.</h2>
+      <p class="lt-cta-desc">
+        Pedí una presentación de Olympo Lotificaciones. Nos reunimos, presencial o por
+        videollamada, te mostramos cómo funciona y resolvemos tus dudas. Sin compromiso.
+      </p>
+      <div class="lt-actions lt-actions-center">
+        <a href={CONTACTO} class="btn btn-primary btn-lg">Solicitar presentación</a>
+        <a href={WHATSAPP} class="btn btn-whatsapp btn-lg" target="_blank" rel="noopener nofollow">Agendar por WhatsApp →</a>
+      </div>
+      <p class="lt-cta-links">
+        ¿Tu negocio es otro? Conocé nuestro
+        <a href="/sistema-pos-honduras">sistema punto de venta</a>, el
+        <a href="/sistema-para-restaurantes-honduras">sistema para restaurantes</a> o todo nuestro
+        <a href="/desarrollo-software-honduras">desarrollo de software en Honduras</a>.
+      </p>
+    </section>
+
+  </div>
+</div>
+
+</Layout>
+
+<script>
+  // Afiliados: el número de lotes cuenta desde cero cuando la tarjeta entra en pantalla.
+  // Sin JS (o con movimiento reducido) queda el número final, que ya viene en el HTML.
+  const contadores = document.querySelectorAll<HTMLElement>('[data-lt-count]');
+  if (contadores.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const verContador = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        verContador.unobserve(entrada.target);
+        const el  = entrada.target as HTMLElement;
+        const fin = Number(el.dataset.ltCount);
+        const t0  = performance.now();
+        const paso = (t: number) => {
+          const k = Math.min(1, (t - t0) / 1100);
+          el.textContent = String(Math.round(fin * (1 - Math.pow(1 - k, 3))));
+          if (k < 1) requestAnimationFrame(paso);
+        };
+        requestAnimationFrame(paso);
+      });
+    }, { threshold: 0.5 });
+    contadores.forEach((c) => verContador.observe(c));
+  }
+
+  // Pestañas de módulos: clic o flechas del teclado. Un solo panel visible a la vez.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.lt-tab'));
+  const activar = (tab: HTMLButtonElement, foco = false) => {
+    tabs.forEach((t) => {
+      const activa = t === tab;
+      t.setAttribute('aria-selected', String(activa));
+      t.tabIndex = activa ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls') ?? '');
+      if (panel) panel.hidden = !activa;
+    });
+    if (foco) tab.focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => activar(tab));
+    tab.addEventListener('keydown', (e) => {
+      const paso = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!paso) return;
+      e.preventDefault();
+      activar(tabs[(i + paso + tabs.length) % tabs.length], true);
+    });
+  });
+
+  // Plano de demostración: al tocar un lote, el panel muestra su precio y su cuota.
+  // Sin framework a propósito: son 26 polígonos y seis textos.
+  const plano = document.getElementById('lt-plano-svg');
+  const panel = document.getElementById('lt-panel');
+
+  if (plano && panel) {
+    const precio = Number(panel.dataset.precio);
+    const meses  = Number(panel.dataset.meses);
+    const prima  = Number(panel.dataset.prima);
+    const fmt    = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const set    = (id: string, txt: string) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+
+    const etiquetas: Record<string, string> = { disponible: 'Disponible', apartado: 'Apartado', vendido: 'Vendido' };
+    const notas: Record<string, string> = {
+      disponible: 'Se puede apartar o vender desde aquí.',
+      apartado:   'Con seña. No se le vende a nadie más mientras esté vigente.',
+      vendido:    'Contrato firmado: precio y área congelados.',
+    };
+
+    plano.addEventListener('click', (e) => {
+      const lote = (e.target as Element).closest<SVGPolygonElement>('.lt-lot');
+      if (!lote) return;
+
+      const estado = lote.dataset.estado ?? 'disponible';
+      const area   = Number(lote.dataset.area);
+      const valor  = area * precio;
+      const cuota  = Math.ceil(((valor * (1 - prima)) / meses) / 10) * 10;
+
+      plano.querySelectorAll('.lt-lot.is-sel').forEach(el => el.classList.remove('is-sel'));
+      lote.classList.add('is-sel');
+
+      set('lt-p-codigo', lote.dataset.codigo ?? '');
+      set('lt-p-area',   fmt(area));
+      set('lt-p-valor',  fmt(valor));
+      set('lt-p-prima',  fmt(valor * prima));
+      set('lt-p-cuota',  fmt(cuota));
+      set('lt-p-nota',   notas[estado]);
+
+      const badge = document.getElementById('lt-p-estado');
+      if (badge) {
+        badge.textContent = etiquetas[estado];
+        badge.className = badge.className.replace(/is-(disponible|apartado|vendido)/, `is-${estado}`);
+      }
+      const btns = document.getElementById('lt-p-btns');
+      if (btns) btns.classList.toggle('is-off', estado !== 'disponible');
+    });
+  }
+</script>
+
+<style>
+  .lt-page { padding: 0 0 7rem; }
+
+  /* ── Hero ── */
+  .lt-hero { position: relative; padding: 8.5rem 0 3.5rem; overflow: hidden; }
+  .lt-hero-glow {
+    position: absolute; top: -10%; right: -10%;
+    width: 60%; height: 90%;
+    background: radial-gradient(closest-side, rgba(200,169,110,0.10), transparent 70%);
+    pointer-events: none;
+  }
+  .lt-hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 3.5rem;
+    align-items: center;
+  }
+  @media (max-width: 960px) {
+    .lt-hero { padding-top: 7rem; }
+    .lt-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+    .lt-hero-copy { text-align: center; align-items: center; }
+  }
+
+  .lt-hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 1.1rem; }
+
+  .lt-title {
+    font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.06;
+    color: var(--text-1);
+  }
+  .lt-em {
+    font-style: italic;
+    padding-right: 0.08em;
+    background: linear-gradient(115deg, #f0d080, #c8a040 40%, #e8b860 70%, #9a6a28);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .lt-lead {
+    font-size: 1rem;
+    color: var(--text-2);
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 540px;
+  }
+  .lt-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .lt-actions-center { justify-content: center; }
+  @media (max-width: 960px) { .lt-actions { justify-content: center; } }
+
+  .lt-hero-note {
+    display: block; line-height: 1.7;
+    font-family: var(--font-mono);
+    font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3);
+    margin-top: 0.4rem;
+  }
+  .lt-live-dot {
+    display: inline-block; vertical-align: middle; margin-right: 0.45rem;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #22c55e; flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+  }
+
+  /* ── Mockup: ventana ── */
+  .lt-mock, .lt-cobro {
+    position: relative;
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    background: var(--bg-1);
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 60px rgba(200,169,110,0.08);
+  }
+  .lt-mock-bar {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.7rem 1rem;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .lt-dots { display: flex; gap: 5px; flex-shrink: 0; }
+  .lt-dots span { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+  .lt-dots span:nth-child(2) { background: #febc2e; }
+  .lt-dots span:nth-child(3) { background: #28c840; }
+  .lt-mock-title { flex: 1; text-align: center; font-size: 0.68rem; color: var(--text-3); font-family: var(--font-mono); }
+  .lt-mock-live, .lt-mock-count {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+    font-family: var(--font-mono); flex-shrink: 0;
+    border-radius: 100px; padding: 0.18rem 0.6rem;
+  }
+  .lt-mock-live  { color: #22c55e; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.18); }
+  .lt-mock-live .lt-live-dot { width: 5px; height: 5px; box-shadow: none; margin-right: 0; }
+  .lt-mock-count { color: var(--gold); background: var(--gold-subtle); border: 1px solid var(--border-gold); }
+
+  .lt-mock-body { display: grid; grid-template-columns: minmax(0, 1fr) 176px; }
+  @media (max-width: 560px) { .lt-mock-body { grid-template-columns: minmax(0, 1fr); } }
+
+  .lt-plano { padding: 0.8rem 0.9rem 0.9rem; min-width: 0; }
+  .lt-plano-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    flex-wrap: wrap; margin-bottom: 0.55rem;
+  }
+  .lt-proy {
+    font-size: 0.68rem; font-weight: 500; color: var(--text-1);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.22rem 0.55rem; background: var(--bg-3);
+  }
+  .lt-proy small { color: var(--text-3); margin-left: 0.2rem; }
+  .lt-legend {
+    display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;
+    font-size: 0.58rem; color: var(--text-3); font-family: var(--font-mono);
+  }
+  .lg { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-left: 0.35rem; }
+  .lg-disponible { background: rgba(34,197,94,0.55); }
+  .lg-apartado   { background: rgba(226,192,122,0.75); }
+  .lg-vendido    { background: rgba(248,113,113,0.6); }
+
+  .lt-svg { display: block; width: 100%; height: auto; }
+  .lt-mz, .lt-calle {
+    font-family: var(--font-mono); font-size: 6.5px; letter-spacing: 0.14em;
+    fill: var(--text-3);
+  }
+  .lt-calle { opacity: 0.7; }
+  .lt-lot-n {
+    font-family: var(--font-mono); font-size: 6px; fill: rgba(245,245,240,0.5);
+    pointer-events: none;
+  }
+  .lt-verde { fill: rgba(34,197,94,0.07); stroke: rgba(34,197,94,0.28); stroke-width: 0.8; stroke-dasharray: 3 2.5; }
+  .lt-verde-txt { font-family: var(--font-mono); font-size: 5px; letter-spacing: 0.12em; fill: rgba(74,222,128,0.6); }
+
+  .lt-lot {
+    stroke: var(--bg-1); stroke-width: 1.6; stroke-linejoin: round;
+    cursor: pointer;
+    transition: fill 0.15s ease;
+  }
+  .lt-lot.is-disponible { fill: rgba(34,197,94,0.26); }
+  .lt-lot.is-apartado   { fill: rgba(226,192,122,0.5); }
+  .lt-lot.is-vendido    { fill: rgba(248,113,113,0.26); }
+  .lt-lot.is-disponible:hover { fill: rgba(34,197,94,0.42); }
+  .lt-lot.is-apartado:hover   { fill: rgba(226,192,122,0.66); }
+  .lt-lot.is-vendido:hover    { fill: rgba(248,113,113,0.4); }
+  .lt-lot.is-sel { stroke: var(--gold-bright); stroke-width: 2; paint-order: fill; filter: drop-shadow(0 0 4px rgba(226,192,122,0.55)); }
+  .lt-ph-svg .lt-lot { cursor: default; pointer-events: none; }
+
+  .lt-panel {
+    border-left: 1px solid var(--border);
+    background: var(--bg-2);
+    padding: 0.9rem 0.85rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .lt-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; flex-wrap: wrap; }
+  .lt-panel-code { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 500; color: var(--text-1); }
+  .lt-badge {
+    font-size: 0.56rem; font-family: var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase;
+    border-radius: 100px; padding: 0.14rem 0.5rem; border: 1px solid transparent;
+  }
+  .lt-badge.is-disponible { color: #4ade80; background: rgba(34,197,94,0.1);  border-color: rgba(34,197,94,0.25); }
+  .lt-badge.is-apartado   { color: var(--gold-bright); background: var(--gold-subtle); border-color: var(--border-gold); }
+  .lt-badge.is-vendido    { color: #f87171; background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.25); }
+
+  .lt-panel-rows { display: flex; flex-direction: column; }
+  .lt-panel-rows > div {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem;
+    padding: 0.32rem 0; border-bottom: 1px dashed var(--border);
+    font-size: 0.66rem;
+  }
+  .lt-panel-rows dt { color: var(--text-3); }
+  .lt-panel-rows dd { color: var(--text-1); font-family: var(--font-mono); font-size: 0.66rem; white-space: nowrap; }
+  .lt-row-total dt, .lt-row-total dd { font-weight: 600; color: var(--text-1); }
+  .lt-gold { color: var(--gold-bright) !important; font-weight: 500; }
+  .lt-panel-note { font-size: 0.62rem; line-height: 1.5; color: var(--text-3); min-height: 2.8em; }
+  .lt-panel-btns { display: flex; gap: 0.4rem; margin-top: auto; }
+  .lt-panel-btns.is-off { opacity: 0.28; filter: grayscale(1); }
+  .lt-pbtn {
+    flex: 1; text-align: center;
+    font-size: 0.64rem; font-weight: 600;
+    padding: 0.42rem 0.4rem; border-radius: 6px;
+    border: 1px solid var(--border-hover); color: var(--text-2);
+  }
+  .lt-pbtn-gold { background: linear-gradient(135deg, #d9b978, #b8924e); color: #120d04; border-color: transparent; }
+
+  .lt-mock-cap {
+    font-size: 0.62rem; color: var(--text-3); text-align: center;
+    padding: 0.5rem 1rem 0.65rem; border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 560px) {
+    /* En celular el mockup ocupaba casi una pantalla entera: panel en dos columnas,
+       sin la fila de precio por vara², sin la nota y con el pie en una línea. */
+    .lt-panel { border-left: none; border-top: 1px solid var(--border); padding: 0.7rem 0.85rem 0.8rem; gap: 0.45rem; }
+    .lt-panel-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.1rem; }
+    .lt-panel-rows > div { padding: 0.28rem 0; }
+    .lt-panel-rows > div:nth-child(2), .lt-panel-note, .lt-cap-largo { display: none; }
+    .lt-panel-btns { margin-top: 0.15rem; }
+    .lt-pbtn { padding: 0.36rem 0.4rem; }
+    .lt-plano { padding: 0.65rem 0.7rem 0.5rem; }
+    .lt-mock-bar { padding: 0.55rem 0.8rem; }
+    .lt-mock-cap { padding: 0.4rem 0.8rem 0.5rem; font-size: 0.58rem; }
+    .lt-mock { max-width: 400px; margin: 0 auto; }
+  }
+
+  /* ── Chips ── */
+  .lt-chips {
+    list-style: none;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+    padding: 1.75rem 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .lt-chip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem; letter-spacing: 0.04em;
+    color: var(--text-2);
+    border: 1px solid var(--border); border-radius: 100px;
+    padding: 0.32rem 0.85rem; background: var(--bg-1);
+  }
+
+  /* ── Afiliados ── */
+  .lt-clientes { position: relative; padding-top: 4.5rem; }
+  .lt-clientes-glow {
+    position: absolute; left: 50%; top: 38%; transform: translateX(-50%);
+    width: min(1100px, 100%); height: 70%;
+    background: radial-gradient(ellipse at 50% 50%, rgba(200,169,110,0.11), transparent 65%);
+    pointer-events: none; z-index: 0;
+  }
+  .lt-clientes > *:not(.lt-clientes-glow) { position: relative; z-index: 1; }
+
+  .lt-proyectos {
+    list-style: none;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
+  }
+  .lt-proyectos li { display: flex; flex: 1 1 190px; max-width: 250px; }
+  /* 5 tarjetas: 5 en fila → 3 + 2 (nunca 4 + 1) → carrusel en celular */
+  @media (max-width: 1100px) { .lt-proyectos li { flex: 0 1 calc((100% - 2rem) / 3); max-width: none; } }
+  /* Celular: carrusel deslizable (5 tarjetas apiladas eran casi tres pantallas) */
+  @media (max-width: 760px) {
+    .lt-proyectos {
+      flex-wrap: nowrap; justify-content: flex-start;
+      overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin: 0 -1.25rem; padding: 0.5rem 1.25rem 1.4rem; scroll-padding: 0 1.25rem;
+    }
+    .lt-proyectos::-webkit-scrollbar { display: none; }
+    .lt-proyectos li { flex: 0 0 72%; max-width: 290px; scroll-snap-align: start; }
+  }
+  .lt-desliza {
+    display: none; text-align: center; margin-top: 0.1rem;
+    font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+  @media (max-width: 760px) { .lt-desliza { display: block; } }
+
+  .lt-proyecto {
+    flex: 1; display: flex; flex-direction: column;
+    border: 1px solid transparent; border-radius: 16px; overflow: hidden;
+    background:
+      linear-gradient(var(--bg-1), var(--bg-1)) padding-box,
+      linear-gradient(155deg, rgba(226,192,122,0.6), rgba(200,169,110,0.1) 42%, rgba(200,169,110,0.08) 60%, rgba(226,192,122,0.38)) border-box;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .lt-proyecto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.5), 0 0 44px rgba(200,169,110,0.2);
+  }
+
+  /* Miniatura del plano */
+  .lt-proyecto-mapa {
+    position: relative; display: block; height: 116px; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 120%, rgba(200,169,110,0.16), transparent 70%),
+      var(--bg-2);
+    border-bottom: 1px solid var(--border-gold);
+  }
+  .lt-proyecto-mapa::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(13,13,13,0.85));
+    pointer-events: none;
+  }
+  .lt-mini { display: block; width: 100%; height: 100%; transition: transform 0.6s ease; }
+  .lt-proyecto:hover .lt-mini { transform: scale(1.07); }
+  .lt-celda { stroke: var(--bg-2); stroke-width: 1.3; stroke-linejoin: round; transition: fill 0.3s ease; }
+  .lt-celda.t0 { fill: rgba(200,169,110,0.13); }
+  .lt-celda.t1 { fill: rgba(200,169,110,0.24); }
+  .lt-celda.t2 { fill: rgba(200,169,110,0.42); }
+  .lt-celda.t3 { fill: #e2c07a; animation: lt-brillo 3.3s ease-in-out infinite; }
+  .lt-proyecto:hover .lt-celda.t0 { fill: rgba(200,169,110,0.22); }
+  .lt-proyecto:hover .lt-celda.t1 { fill: rgba(200,169,110,0.36); }
+  @keyframes lt-brillo { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  .lt-proyecto-live {
+    position: absolute; top: 0.6rem; left: 0.6rem; z-index: 1;
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #4ade80; background: rgba(8,8,8,0.72); border: 1px solid rgba(34,197,94,0.3);
+    border-radius: 100px; padding: 0.16rem 0.5rem;
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  }
+  .lt-proyecto-live i {
+    width: 5px; height: 5px; border-radius: 50%; background: #22c55e;
+    animation: lt-pulso 2s ease infinite;
+  }
+  @keyframes lt-pulso {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+    50%      { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+  }
+
+  /* Cuerpo */
+  .lt-proyecto-body { flex: 1; display: flex; flex-direction: column; padding: 0.95rem 1.05rem 1.05rem; }
+  .lt-proyecto-num { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.35rem; }
+  .lt-proyecto-num b {
+    font-size: 2.1rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(115deg, #f0d080, #c8a040 45%, #e8b860 75%, #9a6a28);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .lt-proyecto-num small {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .lt-proyecto-nombre { font-size: 0.98rem; font-weight: 600; color: var(--text-1); line-height: 1.3; }
+  .lt-proyecto-lugar  {
+    display: flex; align-items: center; gap: 0.3rem;
+    font-size: 0.78rem; color: var(--text-2); font-weight: 300; margin-top: 0.3rem;
+  }
+  .lt-proyecto-lugar > span { display: inline-flex; color: var(--gold); }
+  .lt-proyecto-lugar :global(svg) { width: 13px; height: 13px; }
+  .lt-proyecto-btn {
+    margin-top: auto;
+    display: block; text-align: center;
+    font-size: 0.76rem; font-weight: 600; color: var(--gold-bright);
+    border: 1px solid var(--border-gold); border-radius: 9px;
+    padding: 0.5rem 0.6rem;
+    background: var(--gold-subtle);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .lt-proyecto-body .lt-proyecto-lugar { margin-bottom: 0.95rem; }
+  .lt-proyecto:hover .lt-proyecto-btn {
+    background: linear-gradient(135deg, #e2c07a, #b8924e); color: #120d04; border-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lt-celda.t3, .lt-proyecto-live i { animation: none; }
+    .lt-celda.t3 { opacity: 0.85; }
+  }
+
+  /* ── Secciones ── */
+  .lt-section { padding-top: 4.75rem; }
+  .lt-center { display: flex; justify-content: center; margin-bottom: 0.9rem; }
+  .lt-h2 {
+    font-size: clamp(1.5rem, 3.1vw, 2.15rem);
+    font-weight: 700; letter-spacing: -0.03em; line-height: 1.15;
+    color: var(--text-1); text-align: center;
+    max-width: 760px; margin: 0 auto 1rem;
+  }
+  .lt-sub {
+    font-size: 0.95rem; color: var(--text-2); line-height: 1.75; font-weight: 300;
+    text-align: center; max-width: 640px; margin: 0 auto 2.25rem;
+  }
+
+  /* Flujo / pasos: una franja compacta, no tarjetas altas */
+  .lt-flow {
+    list-style: none; margin-top: 2rem;
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid var(--border); border-radius: 14px; background: var(--bg-1);
+    overflow: hidden;
+  }
+  .lt-flow-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; }
+  .lt-flow-step { padding: 1.2rem 1.15rem; border-left: 1px solid var(--border); }
+  .lt-flow-step:first-child { border-left: none; }
+  .lt-flow-n {
+    display: block;
+    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+    color: var(--gold); margin-bottom: 0.55rem;
+  }
+  .lt-flow-title { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.3rem; }
+  .lt-flow-desc  { font-size: 0.8rem; color: var(--text-2); line-height: 1.6; font-weight: 300; }
+  @media (max-width: 900px) {
+    /* lista vertical: número a la izquierda, texto a la derecha */
+    .lt-flow, .lt-flow-4 { grid-template-columns: minmax(0, 1fr); }
+    .lt-flow-step {
+      display: flex; gap: 0.9rem; align-items: baseline;
+      padding: 0.85rem 1rem; border-left: none; border-top: 1px solid var(--border);
+    }
+    .lt-flow-step:first-child { border-top: none; }
+    .lt-flow-n { margin-bottom: 0; flex-shrink: 0; }
+    .lt-flow-title { margin-bottom: 0.15rem; }
+  }
+
+  /* Pestañas */
+  .lt-tabs {
+    display: flex; justify-content: center; gap: 0.3rem;
+    width: fit-content; max-width: 100%; margin: 1.5rem auto 2.5rem;
+    padding: 0.3rem; border: 1px solid var(--border); border-radius: 100px; background: var(--bg-1);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .lt-tabs::-webkit-scrollbar { display: none; }
+  .lt-tab {
+    font-family: var(--font-sans); font-size: 0.85rem; font-weight: 500;
+    color: var(--text-2); background: transparent;
+    border: 1px solid transparent; border-radius: 100px;
+    padding: 0.5rem 1.15rem; cursor: pointer; white-space: nowrap;
+    transition: color 0.18s ease, background 0.18s ease;
+  }
+  .lt-tab:hover { color: var(--text-1); }
+  .lt-tab[aria-selected='true'] {
+    color: #120d04; font-weight: 600;
+    background: linear-gradient(135deg, #e2c07a, #b8924e);
+  }
+  .lt-tab:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+  @media (max-width: 420px) { .lt-tab { padding: 0.48rem 0.8rem; font-size: 0.8rem; } }
+
+  .lt-tabpanel:not([hidden]) { animation: lt-panel-in 0.35s ease; }
+  @keyframes lt-panel-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .lt-tabpanel:not([hidden]) { animation: none; } }
+
+  .lt-h3 {
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.2;
+    color: var(--text-1); margin-bottom: 0.6rem;
+  }
+  .lt-h3-sub { font-size: 0.92rem; color: var(--text-2); line-height: 1.7; font-weight: 300; margin-bottom: 1.75rem; max-width: 560px; }
+  .lt-h3-center { text-align: center; margin-left: auto; margin-right: auto; }
+
+  /* Split */
+  .lt-split {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 3rem; align-items: center;
+  }
+  @media (max-width: 960px) { .lt-split { grid-template-columns: minmax(0, 1fr); gap: 2.25rem; } }
+
+  /* Funciones: filas compactas (ícono + título + una línea) */
+  .lt-feats { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.75rem; }
+  .lt-feats-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0.5rem; }
+  @media (max-width: 960px) { .lt-feats-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .lt-feats, .lt-feats-3 { grid-template-columns: minmax(0, 1fr); gap: 1.05rem; } }
+  .lt-feat { display: flex; gap: 0.8rem; align-items: flex-start; }
+  .lt-feat-icon {
+    width: 36px; height: 36px; flex-shrink: 0; border-radius: 9px;
+    border: 1px solid var(--border); background: var(--bg-3);
+    display: flex; align-items: center; justify-content: center; color: var(--gold);
+  }
+  .lt-feat-icon :global(svg) { width: 17px; height: 17px; }
+  .lt-feat-title { font-size: 0.9rem; font-weight: 600; color: var(--text-1); line-height: 1.3; margin-bottom: 0.2rem; }
+  .lt-feat-desc  { font-size: 0.8rem; color: var(--text-2); line-height: 1.6; font-weight: 300; }
+
+  /* Servicio adicional: recorridos virtuales 360° */
+  .lt-360 {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: center;
+    border: 1px solid transparent; border-radius: 20px;
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(200,169,110,0.10), transparent 55%) padding-box,
+      linear-gradient(var(--bg-1), var(--bg-1)) padding-box,
+      linear-gradient(150deg, rgba(226,192,122,0.55), rgba(200,169,110,0.08) 40%, rgba(200,169,110,0.08) 65%, rgba(226,192,122,0.35)) border-box;
+    padding: 2.25rem;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  }
+  @media (max-width: 900px) { .lt-360 { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; padding: 1.4rem; } }
+  .lt-360-title { text-align: left; margin: 0.9rem 0 0.9rem; max-width: none; font-size: clamp(1.4rem, 2.7vw, 1.9rem); }
+  .lt-360-lead  { font-size: 0.95rem; color: var(--text-2); line-height: 1.75; font-weight: 300; margin-bottom: 1.25rem; }
+  .lt-360-list  { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.6rem; }
+  .lt-360-list li {
+    position: relative; padding-left: 1.6rem;
+    font-size: 0.88rem; color: var(--text-1); line-height: 1.55; font-weight: 400;
+  }
+  .lt-360-list li::before {
+    content: ''; position: absolute; left: 0; top: 0.32em;
+    width: 0.95rem; height: 0.95rem; border-radius: 50%;
+    background: var(--gold-subtle); border: 1px solid var(--border-gold);
+  }
+  .lt-360-list li::after {
+    content: ''; position: absolute; left: 0.32rem; top: calc(0.32em + 0.26rem);
+    width: 0.32rem; height: 0.18rem;
+    border-left: 1.5px solid var(--gold-bright); border-bottom: 1.5px solid var(--gold-bright);
+    transform: rotate(-45deg);
+  }
+  .lt-360-cta  { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .lt-360-nota { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); }
+
+  .lt-visor {
+    position: relative; overflow: hidden;
+    border-radius: 14px; border: 1px solid var(--border-gold);
+    aspect-ratio: 16 / 10; background: #0a0c08;
+    box-shadow: 0 18px 44px rgba(0,0,0,0.5);
+  }
+  .lt-visor > svg { display: block; width: 100%; height: 100%; }
+  .lt-visor::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 55%, transparent 55%, rgba(0,0,0,0.55));
+  }
+  .lt-visor-lejos { animation: lt-paneo 14s ease-in-out infinite alternate; }
+  @keyframes lt-paneo { from { transform: translateX(-16px); } to { transform: translateX(16px); } }
+  .lt-visor-txt { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; fill: #f0d9a0; }
+  .lt-visor-badge {
+    position: absolute; top: 0.7rem; left: 0.7rem; z-index: 1;
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.04em;
+    color: var(--gold-bright); background: rgba(8,8,8,0.75); border: 1px solid var(--border-gold);
+    border-radius: 100px; padding: 0.2rem 0.6rem;
+  }
+  .lt-visor-hint {
+    position: absolute; left: 50%; bottom: 0.7rem; transform: translateX(-50%); z-index: 1;
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.06em; white-space: nowrap;
+    color: rgba(245,245,240,0.75); background: rgba(8,8,8,0.6);
+    border-radius: 100px; padding: 0.22rem 0.7rem;
+  }
+  @media (prefers-reduced-motion: reduce) { .lt-visor-lejos { animation: none; } }
+
+  /* CTA a media página */
+  .lt-midcta {
+    margin-top: 3rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap;
+    border: 1px solid var(--border-gold); border-radius: 14px;
+    background: radial-gradient(ellipse at 0% 50%, rgba(200,169,110,0.10), transparent 60%), var(--bg-1);
+    padding: 1.15rem 1.4rem;
+  }
+  .lt-midcta p { font-size: 0.92rem; color: var(--text-2); font-weight: 300; line-height: 1.6; flex: 1 1 320px; }
+  .lt-midcta strong { color: var(--text-1); font-weight: 600; }
+  .lt-midcta .lt-actions { margin-top: 0; }
+
+  /* ── Mockup: teléfono ── */
+  .lt-phone {
+    justify-self: center;
+    width: min(100%, 290px);
+    border: 1px solid var(--border-hover);
+    border-radius: 34px;
+    padding: 9px;
+    background: linear-gradient(160deg, #1b1b1b, #0c0c0c);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 60px rgba(200,169,110,0.07);
+  }
+  .lt-phone-screen {
+    border-radius: 26px; overflow: hidden;
+    background: var(--bg-1); border: 1px solid var(--border);
+  }
+  .lt-ph-head { padding: 1rem 1rem 0.6rem; display: flex; flex-direction: column; gap: 0.1rem; }
+  .lt-ph-head strong { font-size: 0.86rem; color: var(--text-1); font-weight: 600; }
+  .lt-ph-head span   { font-size: 0.66rem; color: #4ade80; font-family: var(--font-mono); }
+  .lt-ph-svg { padding: 0 0.7rem; }
+  .lt-ph-sheet {
+    margin-top: 0.7rem;
+    border-top: 1px solid var(--border-gold);
+    border-radius: 16px 16px 0 0;
+    background: var(--bg-2);
+    padding: 0.9rem 0.9rem 1rem;
+  }
+  .lt-ph-sheet-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.55rem; }
+  .lt-ph-sheet-head strong { font-size: 0.82rem; color: var(--text-1); }
+  .lt-ph-sheet-head span   { font-size: 0.68rem; color: var(--text-2); font-family: var(--font-mono); }
+  .lt-ph-planes { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 0.75rem; }
+  .lt-ph-planes li {
+    display: grid; grid-template-columns: 5.4em 1fr auto; gap: 0.4rem; align-items: baseline; white-space: nowrap;
+    font-size: 0.62rem; color: var(--text-2);
+    padding: 0.34rem 0.5rem; border-radius: 6px; border: 1px solid transparent;
+  }
+  .lt-ph-planes li span:nth-child(2) { font-family: var(--font-mono); color: var(--text-3); }
+  .lt-ph-cuota { font-family: var(--font-mono); color: var(--text-1); text-align: right; }
+  .lt-ph-planes li.is-on { border-color: var(--border-gold); background: var(--gold-subtle); color: var(--text-1); }
+  .lt-ph-planes li.is-on .lt-ph-cuota { color: var(--gold-bright); }
+  .lt-ph-btn {
+    display: block; text-align: center;
+    font-size: 0.72rem; font-weight: 600;
+    padding: 0.6rem; border-radius: 9px;
+    background: #25d366; color: #04210f;
+  }
+
+  /* ── Mockup: por cobrar hoy ── */
+  .lt-cobro-body { padding: 0.35rem 0 0; }
+  .lt-cobro-row {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.1fr) auto;
+    gap: 0.6rem; align-items: center;
+    padding: 0.62rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.7rem; color: var(--text-2);
+  }
+  .lt-cobro-th {
+    font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3); padding-top: 0.5rem; padding-bottom: 0.5rem;
+  }
+  .lt-cobro-row b { display: block; color: var(--text-1); font-weight: 600; font-size: 0.7rem; }
+  .lt-cobro-row small { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-3); }
+  .lt-sit {
+    font-style: normal; display: inline-block;
+    font-size: 0.6rem; border-radius: 100px; padding: 0.16rem 0.55rem; border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .lt-sit-red   { color: #f87171; background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.22); }
+  .lt-sit-amber { color: var(--gold-bright); background: var(--gold-subtle); border-color: var(--border-gold); }
+  .lt-num { font-family: var(--font-mono); color: var(--text-1); text-align: right; white-space: nowrap; }
+  .lt-cobro-foot { display: flex; justify-content: flex-end; gap: 0.5rem; padding: 0.8rem 1rem; }
+  .lt-cobro-foot .lt-pbtn { flex: 0 0 auto; padding: 0.42rem 0.9rem; }
+
+  /* ── Reglas ── */
+  .lt-why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+  .lt-why-item { padding: 0.25rem 1.5rem; border-left: 2px solid var(--gold); }
+  .lt-why-item h4 { font-size: 0.95rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.5rem; }
+  .lt-why-item p  { font-size: 0.83rem; color: var(--text-2); line-height: 1.7; font-weight: 300; }
+
+  /* ── FAQ ── */
+  .lt-faq { max-width: 760px; margin-left: auto; margin-right: auto; }
+  .lt-faq .lt-h2 { margin-bottom: 2rem; }
+  .lt-faq-list { display: flex; flex-direction: column; }
+  .lt-faq-item { border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
+  .lt-faq-q {
+    font-size: 0.95rem; font-weight: 500; color: var(--text-1);
+    cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .lt-faq-q::-webkit-details-marker { display: none; }
+  .lt-faq-q::after { content: '+'; font-size: 1.2rem; color: var(--text-3); flex-shrink: 0; margin-left: 1rem; }
+  details[open] .lt-faq-q::after { content: '−'; }
+  .lt-faq-a { font-size: 0.86rem; color: var(--text-2); line-height: 1.75; font-weight: 300; margin-top: 0.75rem; padding-right: 2rem; }
+
+  /* ── CTA ── */
+  .lt-cta {
+    margin-top: 6rem; text-align: center;
+    padding: 3.25rem 1.5rem;
+    border: 1px solid var(--border-gold); border-radius: 16px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(200,169,110,0.10), transparent 60%),
+      var(--bg-1);
+  }
+  .lt-cta-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; color: var(--text-1); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .lt-cta-desc  { font-size: 0.92rem; color: var(--text-2); line-height: 1.7; font-weight: 300; max-width: 520px; margin: 0 auto 1.6rem; }
+  .lt-cta-links { font-size: 0.8rem; color: var(--text-3); margin-top: 1.75rem; font-weight: 300; line-height: 1.7; }
+  .lt-cta-links a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+</style>

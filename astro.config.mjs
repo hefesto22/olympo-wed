@@ -28,6 +28,8 @@ export default defineConfig({
           return { ...item, priority: 0.9, changefreq: 'monthly' };
         if (item.url.includes('/sistema-para-restaurantes'))
           return { ...item, priority: 0.9, changefreq: 'monthly' };
+        if (item.url.includes('/sistema-para-lotificadoras'))
+          return { ...item, priority: 0.9, changefreq: 'monthly' };
 
         // Landing pages geo-targeted — prioridad alta
         if (item.url.includes('/desarrollo-software-santa-rosa'))
